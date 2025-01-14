@@ -6,7 +6,7 @@
         recursive = true;
     };
 
-    # home.file."hello_1" = {
-    #     source = ./.config/alacritty/alacritty.toml;
-    # };
+    home.file."hello_2" = {
+        source = ./.config/alacritty/alacritty.toml;
+    };
 }
