@@ -1,0 +1,4 @@
+{
+    hostname = "kotfindPC";
+    username = "kotfind";
+}

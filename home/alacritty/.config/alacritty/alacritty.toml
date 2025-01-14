@@ -1,0 +1,16 @@
+[general]
+import = [
+	"dark_theme.toml"
+	# "light_theme.toml"
+]
+
+[font]
+size = 11.0
+
+[keyboard]
+bindings = [
+	{ mods = "Control|Shift", key = "Return", action = "SpawnNewInstance" },
+]
+
+[window]
+padding = { x = 2, y = 2 }
