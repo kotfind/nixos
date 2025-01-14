@@ -6,7 +6,11 @@
         recursive = true;
     };
 
-    home.file."hello_2" = {
-        source = ./.config/alacritty/alacritty.toml;
+    home.file."hello_10" = {
+        text = ''
+            #!/usr/bin/env bash
+            echo "hello_10"
+        '';
+        executable = true;
     };
 }

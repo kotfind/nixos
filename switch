@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+set -x
+
+sudo nixos-rebuild switch --flake .#system --verbose
+gen="$(awk '/ExecStart=/ { print $2; }' /etc/systemd/system/home-manager-kotfind.service)"
+sudo -u kotfind "$gen/activate"
