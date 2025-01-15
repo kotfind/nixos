@@ -7,18 +7,15 @@ run() {
     $* &
 }
 
-xkbcomp ~/.config/xkb/my $DISPLAY > /dev/null 2>&1
+run xss-lock xlock
 
-xrdb ~/.Xresources
-
-run xss-lock slock
 run batsignal
-run /usr/lib/notification-daemon-1.0/notification-daemon
+
 run lxqt-policykit-agent
+
 run fcitx5
 
-export SXHKD_SHELL=sh
-run sxhkd
+SXHKD_SHELL=sh run sxhkd
 
 run ~/.config/lemonbar/lemonbar.sh
 
