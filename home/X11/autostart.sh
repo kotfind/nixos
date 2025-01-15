@@ -7,7 +7,7 @@ run() {
     $* &
 }
 
-run xss-lock xlock
+run xss-lock xlock -echokeys
 
 run batsignal
 
