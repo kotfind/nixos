@@ -3,7 +3,7 @@
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
 
-    networking.hostName = "kotfindPC";
+    networking.hostName = cfg.hostname;
     networking.networkmanager.enable = true;
 
     time.timeZone = "Europe/Moscow";
