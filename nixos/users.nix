@@ -3,6 +3,10 @@
     # Note: don't forget `passwd`
     users.users.${cfg.username} = {
         isNormalUser = true;
-        extraGroups = [ "wheel" "networkmanager" ];
+        extraGroups = [
+            "wheel"
+            "networkmanager"
+            "pipewire"
+        ];
     };
 }
