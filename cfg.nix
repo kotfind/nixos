@@ -1,7 +1,9 @@
 rec {
-    hostname = "kotfindPC";
-    username = "kotfind";
-    email = "kotfind@yandex.ru";
+    # Define these
+    hostname = (throw "cfg.hostname should be defined in cfg.nix");
+    username = (throw "cfg.username should be defined in cfg.nix");
+    email = (throw "cfg.username should be defined in cfg.nix");
 
-    fullname = "${username}@${hostname}"; # DON'T CHANGE
+    # Don't change these:
+    fullname = "${username}@${hostname}";
 }
