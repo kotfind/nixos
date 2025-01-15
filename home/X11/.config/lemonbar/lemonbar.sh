@@ -4,7 +4,7 @@ set -Eeuo pipefail
 
 clock() {
     local date="$(date "+%F %T")"
-    echo -en "\uf017$date"
+    echo -en "\uf017 $date"
 }
 
 window_title() {
@@ -15,13 +15,13 @@ window_title() {
 
 cpu_usage() {
     local cpu="$(top -b -n 1 | grep Cpu | awk '{ printf "%2.0f", $2 }')"
-    echo -en "\uf233 $cpu%"
+    echo -en "\uf2db $cpu%"
 }
 
 mem_usage() {
     local mem="$(free | grep Mem | awk '{ printf("%2.0f", $3 / $2 * 100.0) }')"
     local swap="$(free | grep Swap | awk '{ printf("%2.0f", $3 / $2 * 100.0) }')"
-    echo -ne "\uf1c0: $mem% ($swap%)"
+    echo -ne "\uf1c0 $mem% ($swap%)"
 }
 
 desktops() {
@@ -57,8 +57,10 @@ fmt() {
 # -------------------- Implementation --------------------
 
 fonts=(
-    'DejaVu Sans Mono 8'
-    'Font Awesome 6 Free'
+    # 'DejaVu Sans Mono 8'
+    # 'Font Awesome 6 Free'
+    'FiraCode'
+    'FiraCode Nerd Font'
 )
 
 sleep_for=0.1

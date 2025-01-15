@@ -5,16 +5,18 @@
         lxqt.lxqt-policykit
         xorg.xinit
 
-	# bspwm
-	bspwm
+        # bspwm
+        bspwm
 
         # lemonbar
         lemonbar-xft
         xtitle
         trayer
+        fira-code
+        fira-code-nerdfont
 
         # for sxhkd
-	sxhkd
+        sxhkd
         scrot
         rofi
     ];

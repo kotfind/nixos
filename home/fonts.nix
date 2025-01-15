@@ -6,10 +6,9 @@
         enable = true;
         defaultFonts = {
             monospace = [
-                "DejaVu Sans Mono"
+                "FiraCode"
                 "IPAGothic"
-                "Font Awesome 6 Free"
-                "Font Awesome 6 Brands"
+                "FiraCode Nerd Font Mono"
             ];
             sansSerif = [
                 "DejaVu Sans"
@@ -26,6 +25,7 @@
         ipafont
         kochi-substitute
         dejavu_fonts
-        font-awesome
+        fira-code
+        fira-code-nerdfont
     ];
 }
