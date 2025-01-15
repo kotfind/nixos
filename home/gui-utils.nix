@@ -7,4 +7,6 @@
         sxiv
         telegram-desktop
     ];
+
+    programs.zathura.enable = true;
 }
