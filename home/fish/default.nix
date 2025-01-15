@@ -1,8 +1,11 @@
 { pkgs, ... }:
 {
-    programs.fish.enable = true;
+    home.file.".config/fish/config.fish".source = ./.config/fish/config.fish;
 
-    # home.file.".config/fish/config.fish".source = ./.config/fish/config.fish;
+    home.packages = with pkgs; [
+    	fish
+        eza
+    ];
 
     # fish as a default interactive shell
     programs.bash = {

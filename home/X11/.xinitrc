@@ -1,13 +1,5 @@
-export XMODIFIERS="@im=fcitx"
-export XMODIFIER="@im=fcitx"
-export GTK_IM_MODULE="fcitx"
-export QT_IM_MODULE="fcitx"
-
-## uncomment to enable dark theme
-# # theme
-# export GTK_THEME=Adwaita:dark
-# export GTK2_RC_FILES=/usr/share/themes/Adwaita-dark/gtk-2.0/gtkrc
-# export QT_STYLE_OVERRIDE=Adwaita-Dark
+# for some nixos stuff to work
+source ~/.xsession
 
 # for some java gui apps to work:
 export _JAVA_AWT_WM_NONREPARENTING=1
