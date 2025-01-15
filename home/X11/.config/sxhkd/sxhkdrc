@@ -152,6 +152,7 @@ XF86MonBrightness{Up,Down}
 # media
 #
 
+# TODO: FIXME: Unkown keysym name: ...
 XF86{Play,Stop,Pause,Next,Prev}
     playerctl {play-pause,play-pause,play-pause,next,previous}
 
