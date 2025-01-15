@@ -10,4 +10,6 @@ sudo nixos-rebuild switch --flake .#system --verbose
 username="$(nix eval --impure --raw --expr "(import ./cfg.nix).username")"
 gen="$(awk '/ExecStart=/ { print $2; }' /etc/systemd/system/home-manager-"$username".service)"
 
+rm "/home/$username/.config/fcitx5/profile"
+
 sudo -u "$username" "$gen/activate"
