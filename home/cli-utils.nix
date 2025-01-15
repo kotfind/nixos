@@ -1,19 +1,37 @@
-{ pkgs, ... }:
+{ cfg, pkgs, ... }:
 {
     home.packages = with pkgs; [
-        gh
         wget
         curl
-        fd
-        ripgrep
-        htop
-        xclip
         killall
         cached-nix-shell
-        jq
         p7zip
         imagemagick
     ];
 
-    programs.man.enable = true;
+    programs = {
+        man.enable = true;
+        fd.enable = true;
+        ripgrep.enable = true;
+        jq.enable = true;
+
+        git = {
+            enable = true;
+            userName = cfg.username;
+            userEmail = cfg.email;
+
+            # TODO: add keys
+        };
+
+        gh = {
+            enable = true;
+            settings.git_protocol = "ssh";
+        };
+
+        htop = {
+            enable = true;
+
+            # TODO: configure
+        };
+    };
 }
