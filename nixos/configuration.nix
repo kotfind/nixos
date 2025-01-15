@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, cfg, ... }:
 {
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
@@ -48,8 +48,7 @@
     services.libinput.enable = true;
 
     # Note: don't forget `passwd`
-    users.users.kotfind = {
-    # users.users.${cfg.username} = {
+    users.users.${cfg.username} = {
         isNormalUser = true;
         extraGroups = [ "wheel" "networkmanager" ];
     };
@@ -104,6 +103,8 @@
         scrot
         eza
         jq
+        transmission_4-qt
+        chromium
     ];
 
     # List fonts:

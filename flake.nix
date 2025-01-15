@@ -36,8 +36,7 @@
                         useGlobalPkgs = true;
                         useUserPackages = true;
                         extraSpecialArgs = specialArgs;
-                        # users."${cfg.username}" = import ./home;
-                        users.kotfind = import ./home;
+                        users.${cfg.username} = import ./home;
                     };
                 }
             ];

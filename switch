@@ -3,6 +3,8 @@
 set -euo pipefail
 set -x
 
+username="kotfind"
+
 sudo nixos-rebuild switch --flake .#system --verbose
-gen="$(awk '/ExecStart=/ { print $2; }' /etc/systemd/system/home-manager-kotfind.service)"
-sudo -u kotfind "$gen/activate"
+gen="$(awk '/ExecStart=/ { print $2; }' /etc/systemd/system/home-manager-"$username".service)"
+sudo -u "$username" "$gen/activate"

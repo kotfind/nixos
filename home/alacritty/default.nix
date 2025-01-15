@@ -6,10 +6,10 @@
         recursive = true;
     };
 
-    home.file."hello_10" = {
+    home.file."hello_abc" = {
         text = ''
             #!/usr/bin/env bash
-            echo "hello_10"
+            echo "hello_abc"
         '';
         executable = true;
     };
