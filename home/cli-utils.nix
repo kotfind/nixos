@@ -7,6 +7,7 @@
         cached-nix-shell
         p7zip
         imagemagick
+        gh
     ];
 
     programs = {
@@ -23,10 +24,11 @@
             # TODO: add keys
         };
 
-        gh = {
-            enable = true;
-            settings.git_protocol = "ssh";
-        };
+        # TODO: fixme
+        # gh = {
+        #     enable = true;
+        #     settings.git_protocol = "ssh";
+        # };
 
         htop = {
             enable = true;
