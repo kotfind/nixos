@@ -2,12 +2,9 @@
 {
     programs.fish.enable = true;
 
-    home.file.".config/fish" = {
-        source = ./.config/fish;
-        recursive = true;
-    };
+    # home.file.".config/fish/config.fish".source = ./.config/fish/config.fish;
 
-    # fish as a default shell
+    # fish as a default interactive shell
     programs.bash = {
         enable = true;
         bashrcExtra = ''

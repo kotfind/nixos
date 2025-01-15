@@ -1,8 +1,15 @@
 { cfg, ... }:
 {
     imports = [
-        ./fish
+        ./X11
         ./alacritty
+        ./fcitx5.nix
+        ./fish
+        ./mime
+        ./nvim
+        ./rust
+        ./sqlite
+        ./tmux
     ];
 
     home = {

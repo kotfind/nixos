@@ -5,12 +5,4 @@
         source = ./.config/alacritty;
         recursive = true;
     };
-
-    home.file."hello_abc" = {
-        text = ''
-            #!/usr/bin/env bash
-            echo "hello_abc"
-        '';
-        executable = true;
-    };
 }
