@@ -1,4 +1,4 @@
-{ pkgs, cfg, ... }:
+{ cfg, ... }:
 {
     imports = [
         ./X11
@@ -17,6 +17,7 @@
         ./rust
         ./sqlite
         ./tmux
+        ./obs.nix
 
         # TODO:
         # pkgs.libs.lists.optionals (cfg.fullname == "kotfind@kotfindPC") [ ./gallery-dl.nix ]
