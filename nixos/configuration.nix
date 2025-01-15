@@ -8,8 +8,26 @@
 
     time.timeZone = "Europe/Moscow";
 
-    i18n.defaultLocale = "en_US.UTF-8";
     console.useXkbConfig = true;
+
+    i18n = {
+        defaultLocale = "en_US.UTF-8";
+
+        inputMethod = {
+            type = "fcitx5";
+            enable = true;
+            fcitx5.addons = with pkgs; [
+                fcitx5-anthy
+                fcitx5-gtk
+            ];
+        };
+    };
+
+    services.xserver.xkb = {
+        # layout = "us,ru";
+        # options = "caps:swapescape,grp:alt_shift_toggle";
+        options = "caps:swapescape";
+    };
 
     services.xserver = {
         enable = true;

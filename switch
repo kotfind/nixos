@@ -3,11 +3,11 @@
 set -euo pipefail
 set -x
 
-CFG_FILE="cfg.nix"
+cd "$(dirname "$0")"
 
 sudo nixos-rebuild switch --flake .#system --verbose
 
-username="$(nix eval --impure --raw --expr "(import ./$CFG_FILE).username")"
+username="$(nix eval --impure --raw --expr "(import ./cfg.nix).username")"
 gen="$(awk '/ExecStart=/ { print $2; }' /etc/systemd/system/home-manager-"$username".service)"
 
 sudo -u "$username" "$gen/activate"

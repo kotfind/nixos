@@ -9,7 +9,7 @@
         ./fish
         ./fonts.nix
         ./gui-utils.nix
-        ./keyboard.nix
+        ./keyboard
         ./mime
         ./nvim
         ./pass.nix
@@ -18,6 +18,7 @@
         ./sqlite
         ./tmux
 
+        # TODO:
         # pkgs.libs.lists.optionals (cfg.fullname == "kotfind@kotfindPC") [ ./gallery-dl.nix ]
     ];
 
