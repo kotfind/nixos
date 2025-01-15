@@ -1,18 +1,15 @@
+# Dummy
 if not status is-interactive
     exit 0
 end
 
-# Variables
-set -gx EDITOR nvim
-set -gx ANDROID_HOME /opt/android-sdk/
-
-# Path
-fish_add_path /usr/lib/qt6/
-fish_add_path /usr/lib/qt6/bin
-fish_add_path /opt
-fish_add_path ~/.cargo/bin
-fish_add_path /opt/android-sdk/cmdline-tools/latest/bin
-fish_add_path ~/.nix-profile/bin/
+# TODO: move to nix bash config
+# Start X at login
+if status is-login
+    if test -z "$DISPLAY" -a "$XDG_VTNR" = 1
+        exec startx -- -keeptty
+    end
+end
 
 # Reset abbreviations
 set -g fish_user_abbreviations
@@ -20,7 +17,6 @@ set -g fish_user_abbreviations
 # Aliases
 alias p3 'python3'
 alias e 'exec'
-alias vim 'nvim'
 
 # Eza aliases
 alias ls 'eza --group-directories-first --color=always --git-ignore'
@@ -88,12 +84,6 @@ function fish_right_prompt
     set_color normal
 end
 
-# Start X at login
-if status is-login
-    if test -z "$DISPLAY" -a "$XDG_VTNR" = 1
-        exec startx -- -keeptty
-    end
-end
 
 # Disable greeting and not_found
 function fish_command_not_found
@@ -113,16 +103,6 @@ function tempcd
     set dir (mktemp -d)
     echo $dir
     cd $dir
-end
-
-# Yazi
-function y
-	set tmp (mktemp -t "yazi-cwd.XXXXXX")
-	yazi $argv --cwd-file="$tmp"
-	if set cwd (command cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
-		builtin cd -- "$cwd"
-	end
-	rm -f -- "$tmp"
 end
 
 function nsh

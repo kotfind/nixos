@@ -1,11 +1,16 @@
 { pkgs, ... }:
 {
-    home.file.".config/fish/config.fish".source = ./.config/fish/config.fish;
-
-    home.packages = with pkgs; [
-    	fish
-        eza
-    ];
+    programs = {
+        fish = {
+            enable = true;
+            interactiveShellInit = builtins.readFile ./.config/fish/config.fish;
+        };
+        eza.enable = true;
+        yazi = {
+            enable = true;
+            enableFishIntegration = true;
+        };
+    };
 
     # fish as a default interactive shell
     programs.bash = {
