@@ -14,4 +14,6 @@
         p7zip
         imagemagick
     ];
+
+    programs.man.enable = true;
 }
