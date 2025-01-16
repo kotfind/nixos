@@ -18,9 +18,7 @@
         ./sqlite
         ./tmux
         ./obs.nix
-
-        # TODO:
-        # pkgs.libs.lists.optionals (cfg.fullname == "kotfind@kotfindPC") [ ./gallery-dl.nix ]
+        ./gallery-dl.nix
     ];
 
     home = {
