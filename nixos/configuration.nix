@@ -8,6 +8,10 @@
 
     time.timeZone = "Europe/Moscow";
 
+    nix.nixPath = [
+        "nixpkgs=${pkgs.path}"
+    ];
+
     console.useXkbConfig = true;
 
     i18n = {
@@ -23,11 +27,7 @@
         };
     };
 
-    services.xserver.xkb = {
-        # layout = "us,ru";
-        # options = "caps:swapescape,grp:alt_shift_toggle";
-        options = "caps:swapescape";
-    };
+    services.xserver.xkb.options = "caps:swapescape";
 
     services.xserver = {
         enable = true;
