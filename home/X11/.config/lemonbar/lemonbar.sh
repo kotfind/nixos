@@ -24,6 +24,16 @@ mem_usage() {
     echo -ne "\uf1c0 $mem% ($swap%)"
 }
 
+volume() {
+    local value=""
+    if pactl get-sink-mute @DEFAULT_SINK@ | grep 'yes' &> /dev/null; then
+        echo -en " MUTE "
+    else
+        local volume="$(pactl get-sink-volume @DEFAULT_SINK@ | awk '/Volume:/ { printf("%3s", $5); }')"
+        printf "V: %s" $volume
+    fi
+}
+
 desktops() {
     local desktops=($(bspc query -D -m .focused --names))
     local current_desktop="$(bspc query -D -d  .focused --names)"
@@ -43,14 +53,14 @@ desktops() {
             text=" $text "
         fi
 
-        echo -n "%{A:bspc desktop $desktop -f:}$text%{A} "
+        echo -n "%{A:bspc desktop $desktop -f:}$text%{A}"
     done
 }
 
 fmt() {
     local left="$(desktops)"
-    local center="$(window_title)"
-    local right="[ $(clock) ] [ $(cpu_usage) ] [ $(mem_usage) ]"
+    local center="" #"$(window_title)"
+    local right="[ $(volume) ] [ $(clock) ] [ $(cpu_usage) ] [ $(mem_usage) ]"
     echo -e "%{l}$left %{c}$center %{r}$right"
 }
 
