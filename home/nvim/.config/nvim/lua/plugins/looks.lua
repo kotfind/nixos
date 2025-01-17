@@ -92,18 +92,26 @@ return {
 
     {
         'jinh0/eyeliner.nvim',
-        opts = {
-            highlight_on_key = true,
-        },
+        main = 'eyeliner.nvim',
+        -- opts = {
+        --     highlight_on_key = true,
+        -- },
+        config = function()
+            require 'eyeliner.nvim'.setup {
+                highlight_on_key = true,
+            }
+        end
     },
 
     {
         'sphamba/smear-cursor.nvim',
+        main = 'sphamba/smear-cursor.nvim',
         opts = {},
     },
 
     {
         'karb94/neoscroll.nvim',
+	main = 'neoscroll.nvim',
         opts = {},
     },
 }

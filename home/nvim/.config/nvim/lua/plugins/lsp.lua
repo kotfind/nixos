@@ -187,22 +187,23 @@ return {
         }
     },
 
-    {
-        'williamboman/mason.nvim',
-        opts = {}
-    },
+    -- {
+    --     'williamboman/mason.nvim',
+    --     opts = {}
+    -- },
 
-    {
-        'williamboman/mason-lspconfig.nvim',
-        config = setup_mason_lspconfig,
-        dependencies = {
-            'williamboman/mason.nvim',
-            'neovim/nvim-lspconfig',
-        }
-    },
+    -- {
+    --     'williamboman/mason-lspconfig.nvim',
+    --     config = setup_mason_lspconfig,
+    --     dependencies = {
+    --         'williamboman/mason.nvim',
+    --         'neovim/nvim-lspconfig',
+    --     }
+    -- },
 
     {
         'j-hui/fidget.nvim',
+        main = 'fidget.nvim',
         opts = {},
     },
 
@@ -213,6 +214,7 @@ return {
 
     {
         'stevearc/dressing.nvim',
+        main = 'dressing.nvim',
         opts = {},
     },
 
