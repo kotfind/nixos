@@ -67,7 +67,13 @@
 
     programs.git.enable = true;
 
-    services.openssh.enable = true;
+    services.openssh = {
+        enable = true;
+        settings = {
+            PasswordAuthentication = false;
+            KbdInteractiveAuthentication = false;
+        };
+    };
 
     networking.firewall.enable = false;
 
