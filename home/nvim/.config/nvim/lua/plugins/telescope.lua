@@ -40,13 +40,15 @@ local function setup_telescope()
 end
 
 return {
-    'nvim-telescope/telescope.nvim',
-    config = setup_telescope,
-    dependencies = {
-        'nvim-lua/popup.nvim',
-        'nvim-lua/plenary.nvim',
-        'kyazdani42/nvim-web-devicons',
-        'nvim-telescope/telescope-symbols.nvim',
-        'debugloop/telescope-undo.nvim',
+    {
+        'nvim-telescope/telescope.nvim',
+        config = setup_telescope,
+        dependencies = {
+            'nvim-lua/popup.nvim',
+            'nvim-lua/plenary.nvim',
+            'kyazdani42/nvim-web-devicons',
+            'nvim-telescope/telescope-symbols.nvim',
+            'debugloop/telescope-undo.nvim',
+        },
     },
 }
