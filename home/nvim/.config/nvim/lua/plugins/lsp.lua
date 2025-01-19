@@ -88,44 +88,28 @@ local function setup_diagnostics()
     Map('n', '<leader>tl', lsp_lines.toggle)
 end
 
-local function setup_lsp()
-    -- Mappings
-    Map('n', '[d', vim.diagnostic.goto_prev)
-    Map('n', ']d', vim.diagnostic.goto_next)
-    Map('n', '<leader>ld', vim.diagnostic.open_float)
-    Map('n', '<leader>lD', vim.diagnostic.setloclist)
-
-    -- Format on save
-    vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
-        callback = function()
-            if vim.bo.filetype ~= 'cpp' and vim.bo.filetype ~= 'c' and vim.bo.filetype ~= 'kotlin' then
-                vim.lsp.buf.format()
-            end
-        end
-    })
-end
-
-local function setup_mason_lspconfig()
-    local mason_lspconfig = require 'mason-lspconfig'
+local function setup_lspconfig()
     local lspconfig = require 'lspconfig'
 
-    mason_lspconfig.setup {
-        ensure_installed = {
-            'pyright',
-            'clangd',
-            'rust_analyzer',
-            'lua_ls',
-            'cssls',
-            'tinymist',
-            -- 'pest_ls',
-            'bashls',
-            'kotlin_language_server',
-            'nil_ls',
-        },
+    -- Lspconfig server name list:
+    -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+    local lsp_server_names = {
+        'pyright',
+        'clangd',
+        'rust_analyzer',
+        'lua_ls',
+        'tinymist',
+        'bashls',
+        'cssls',
+        'eslint',
+        'html',
+        'jsonls',
+        'kotlin_language_server',
+        'nil_ls',
     }
 
-    mason_lspconfig.setup_handlers {
-        function(server_name)
+    local server_config = {
+        ['__default__'] = function(server_name)
             lspconfig[server_name].setup {
                 on_attach = on_attach,
                 capabilities = capabilities(),
@@ -176,6 +160,35 @@ local function setup_mason_lspconfig()
         --     }
         -- end
     }
+
+    for _, server_name in ipairs(lsp_server_names) do
+        local cfg = server_config[server_name]
+        if cfg == nil then
+            server_config['__default__'](server_name)
+        else
+            cfg()
+        end
+    end
+end
+
+local function setup_lsp()
+    -- Mappings
+    Map('n', '[d', vim.diagnostic.goto_prev)
+    Map('n', ']d', vim.diagnostic.goto_next)
+    Map('n', '<leader>ld', vim.diagnostic.open_float)
+    Map('n', '<leader>lD', vim.diagnostic.setloclist)
+
+    -- Format on save
+    vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
+        callback = function()
+            if vim.bo.filetype ~= 'cpp' and vim.bo.filetype ~= 'c' and vim.bo.filetype ~= 'kotlin' then
+                vim.lsp.buf.format()
+            end
+        end
+    })
+
+    -- Setup servers
+    setup_lspconfig()
 end
 
 return {

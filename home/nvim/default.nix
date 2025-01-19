@@ -63,9 +63,10 @@ let
         telescope-nvim # NOTE: extentions don't seem to work
         telescope-symbols-nvim
         telescope-undo-nvim
+        cmp-nvim-lsp
     ];
 
-    treesitter-parsers = with pkgs.vimPlugins.nvim-treesitter-parsers; [
+    treesitterParsers = with pkgs.vimPlugins.nvim-treesitter-parsers; [
         bash
         c
         cpp
@@ -91,6 +92,22 @@ let
         gitcommit
         comment
     ];
+
+    lspServers = with pkgs; [
+        pyright
+        libclang
+        rust-analyzer
+        luajitPackages.lua-lsp
+        tinymist
+        bash-language-server
+        vscode-langservers-extracted
+        kotlin-language-server
+        nil
+    ];
+
+    packages = with pkgs; [
+        xclip
+    ];
 in {
     programs.neovim = {
         enable = true;
@@ -98,50 +115,45 @@ in {
         vimAlias = true;
         vimdiffAlias = true;
         viAlias = true;
-        withNodeJs = true; # delete me
 
-        plugins = plugins ++ treesitter-parsers;
+        plugins = plugins ++ treesitterParsers;
+
+        extraPackages = packages ++ lspServers;
 
         extraLuaConfig = let
-            dirs = pkgs.neovim.passthru.packpathDirs;
-            installPath = "${pkgs.vimUtils.packDir dirs}/pack/myNeovimPackages/start";
-        in ''
-            -- this file was generatred by nix
-            -- require actual init file
-            require 'main'
+                dirs = pkgs.neovim.passthru.packpathDirs;
+                installPath = "${pkgs.vimUtils.packDir dirs}/pack/myNeovimPackages/start";
+            in ''
+                -- this file was generatred by nix
+                -- require actual init file
+                require 'main'
 
-            -- Init lazy
-            require 'lazy'.setup('plugins', {
-                performance = {
-                    reset_packpath = false,
-                    rtp = { reset = false, },
-                },
-                dev = {
-                    path = "${installPath}",
-                    patterns = { "" },
-                },
-                install = {
-                    missing = false,
-                    colorscheme = {},
-                },
-                spec = {
-                    { import = "plugins", },
-                },
-                checker = {
-                    enabled = false,
-                },
-            })
-
-            -- vim.opt.rtp:prepend("${installPath}/lazy/lazy.nvim")
-        '';
+                -- Init lazy
+                require 'lazy'.setup('plugins', {
+                    performance = {
+                        reset_packpath = false,
+                        rtp = { reset = false, },
+                    },
+                    dev = {
+                        path = "${installPath}",
+                        patterns = { "" },
+                    },
+                    install = {
+                        missing = false,
+                        colorscheme = {},
+                    },
+                    spec = {
+                        { import = "plugins", },
+                    },
+                    checker = {
+                        enabled = false,
+                    },
+                })
+            '';
     };
 
     home.file.".config/nvim" = {
         source = ./.config/nvim;
         recursive = true;
     };
-
-    home.packages = with pkgs; [
-        xclip
-    ];
 }
