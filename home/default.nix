@@ -1,7 +1,7 @@
 { cfg, ... }:
 {
     imports = [
-        ./X11
+        ./xorg
         ./alacritty
         ./chromium.nix
         ./cli-utils.nix
