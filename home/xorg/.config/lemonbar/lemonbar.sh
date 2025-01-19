@@ -120,7 +120,11 @@ run() {
             -g "$(bar_width)x${height}x0x1000" \
             "${argv[@]}" \
         | bash &
+    local lemonbar_pid="$!"
     run_trayer &
+    local trayer_pid="$!"
+    wait "$lemonbar_pid"
+    wait "$trayer_pid"
 }
 
 run

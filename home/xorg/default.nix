@@ -1,6 +1,48 @@
-{ pkgs, ... }:
+{ pkgs, cfg, ... }:
 {
-    home.file.".config/lemonbar/lemonbar.sh".source = ./.config/lemonbar/lemonbar.sh;
+    home.file.".config/lemonbar/lemonbar.sh" = {
+        source = ./.config/lemonbar/lemonbar.sh;
+        executable = true;
+    };
+
+    systemd.user.services = {
+        lemobar = {
+            Install = {
+                WantedBy = [ "graphical-session.target" ];
+            };
+
+            Service = {
+                # FIXME: hardcoded home directory
+                ExecStart = "${pkgs.bash}/bin/bash /home/${cfg.username}/.config/lemonbar/lemonbar.sh";
+                Type = "simple";
+                # RemainAfterExit = true;
+                # Type = "oneshot";
+                Environment = let
+                        path = pkgs.lib.concatMapStringsSep
+                            ":"
+                            (pkg: "${pkg}/bin")
+                            (with pkgs; [
+                                bash
+                                lemonbar-xft
+                                xtitle
+                                trayer
+                                fira-code
+                                fira-code-nerdfont
+                                gawk
+                                toybox
+                                pulseaudio
+                                bspwm
+                                xorg.xrandr
+                            ]);
+                    in [ "PATH=${path}" ];
+            };
+
+            Unit = {
+                After = [ "graphical-session-pre.target" ];
+                PartOf = [ "graphical-session.target" ];
+            };
+        };
+    };
 
     xsession = {
         enable = true;
