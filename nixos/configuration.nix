@@ -14,20 +14,7 @@
 
     console.useXkbConfig = true;
 
-    i18n = {
-        defaultLocale = "en_US.UTF-8";
-
-        inputMethod = {
-            type = "fcitx5";
-            enable = true;
-            fcitx5.addons = with pkgs; [
-                fcitx5-anthy
-                fcitx5-gtk
-            ];
-        };
-    };
-
-    services.xserver.xkb.options = "caps:swapescape";
+    i18n.defaultLocale = "en_US.UTF-8";
 
     services.xserver = {
         enable = true;
