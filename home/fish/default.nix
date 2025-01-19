@@ -12,6 +12,10 @@
         };
     };
 
+    home.packages = with pkgs; [
+        ueberzugpp # for yazi image preview
+    ];
+
     # fish as a default interactive shell
     programs.bash = {
         enable = true;
