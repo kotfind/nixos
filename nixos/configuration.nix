@@ -53,7 +53,14 @@
     environment.systemPackages = with pkgs; [
         podman-compose
         pavucontrol
+
+        # more man pages:
+        man-pages
+        man-pages-posix
     ];
+
+    # even more man pages
+    documentation.dev.enable = true;
 
     virtualisation = {
         containers.enable = true;
