@@ -31,7 +31,25 @@
 
     services.xserver = {
         enable = true;
-        displayManager.startx.enable = true;
+        displayManager = {
+            # autoLogin = {
+            #     enable = true;
+            #     user = cfg.username;
+            # };
+            lightdm = {
+                enable = true;
+                # greeter.enable = false;
+                greeter.enable = true;
+            };
+            defaultSession = "xsession";
+            session = [{
+                manage = "desktop";
+                name = "xsession";
+                start = ''
+                    exec $HOME/.session
+                '';
+            }];
+        };
     };
 
     services.pipewire = {

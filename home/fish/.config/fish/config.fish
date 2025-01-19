@@ -3,13 +3,13 @@ if not status is-interactive
     exit 0
 end
 
-# TODO: move to nix bash config
-# Start X at login
-if status is-login
-    if test -z "$DISPLAY" -a "$XDG_VTNR" = 1
-        exec startx -- -keeptty
-    end
-end
+# # TODO: move to nix bash config
+# # Start X at login
+# if status is-login
+#     if test -z "$DISPLAY" -a "$XDG_VTNR" = 1
+#         exec startx -- -keeptty
+#     end
+# end
 
 # Reset abbreviations
 set -g fish_user_abbreviations

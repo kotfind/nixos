@@ -1,15 +1,23 @@
 { pkgs, ... }:
 {
-    home.file.".xinitrc".source = ./.xinitrc;
-    home.file."autostart.sh".source = ./autostart.sh;
-    home.file.".config/bspwm/bspwmrc".source = ./.config/bspwm/bspwmrc;
+    # home.file.".xinitrc".source = ./.xinitrc;
+    # home.file."autostart.sh".source = ./autostart.sh;
     home.file.".config/lemonbar/lemonbar.sh".source = ./.config/lemonbar/lemonbar.sh;
-    home.file.".config/sxhkd/sxhkdrc".source = ./.config/sxhkd/sxhkdrc;
+
+    xsession = {
+        enable = true;
+        windowManager.bspwm = {
+            enable = true;
+            extraConfig = builtins.readFile ./.config/bspwm/bspwmrc;
+        };
+    };
+
+    services.sxhkd = {
+        enable = true;
+        extraConfig = builtins.readFile ./.config/sxhkd/sxhkdrc;
+    };
 
     home.packages = with pkgs; [
-        # bspwm
-        bspwm
-
         # lemonbar
         lemonbar-xft
         xtitle
@@ -18,7 +26,6 @@
         fira-code-nerdfont
 
         # for sxhkd
-        sxhkd
         scrot
         rofi
         pulseaudio # for pactl
