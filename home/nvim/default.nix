@@ -97,7 +97,7 @@ let
         pyright
         libclang
         rust-analyzer
-        luajitPackages.lua-lsp
+        lua-language-server
         tinymist
         bash-language-server
         vscode-langservers-extracted
@@ -130,6 +130,9 @@ in {
 
                 -- Init lazy
                 require 'lazy'.setup('plugins', {
+                    spec = {
+                        { import = "plugins", },
+                    },
                     performance = {
                         reset_packpath = false,
                         rtp = { reset = false, },
@@ -141,9 +144,6 @@ in {
                     install = {
                         missing = false,
                         colorscheme = {},
-                    },
-                    spec = {
-                        { import = "plugins", },
                     },
                     checker = {
                         enabled = false,
