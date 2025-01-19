@@ -156,4 +156,8 @@ in {
         source = ./.config/nvim;
         recursive = true;
     };
+
+    home.sessionVariables = {
+        MANPAGER = "nvim +Man!";
+    };
 }
