@@ -1,7 +1,5 @@
 { pkgs, ... }:
 {
-    # home.file.".xinitrc".source = ./.xinitrc;
-    # home.file."autostart.sh".source = ./autostart.sh;
     home.file.".config/lemonbar/lemonbar.sh".source = ./.config/lemonbar/lemonbar.sh;
 
     xsession = {
