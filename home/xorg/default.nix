@@ -101,4 +101,14 @@ in
         # for some java gui apps to work:
         _JAVA_AWT_WM_NONREPARENTING = 1;
     };
+
+    systemd.user.tmpfiles.rules = let
+            user = cfg.username;
+            home = "/home/${user}"; # FIXME: hardcoded home direcory
+        in [
+            # Type  Path               Mode  User     Group   Age  Argument
+            "d      /tmp/downloads     0755  ${user}  users   -    -"
+            "d      /tmp/screenshots   0755  ${user}  users   -    -"
+            "L+     ${home}/Downloads  -     -        -       -    /tmp/downloads"
+        ];
 }
