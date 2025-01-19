@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, cfg, ... }:
 let
     autostartService =
         {
@@ -73,7 +73,7 @@ in
     };
 
     services.batsignal = {
-        enable = true;
+        enable = cfg.fullname == "kotfind@kotfindLT";
         extraArgs = [
             "-f" "99"
             "-w" "30"
