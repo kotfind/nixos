@@ -1,40 +1,30 @@
-{ pkgs, cfg, ... }:
-{
-    home.file.".config/lemonbar/lemonbar.sh" = {
-        source = ./.config/lemonbar/lemonbar.sh;
-        executable = true;
-    };
-
-    systemd.user.services = {
-        lemobar = {
+{ pkgs, ... }:
+let
+    autostartService =
+        {
+            cmd,
+            executor ? "",
+            packages ? [],
+            isOneshot ? false,
+            remainAfterExit ? isOneshot,
+        } : {
             Install = {
                 WantedBy = [ "graphical-session.target" ];
             };
 
             Service = {
-                # FIXME: hardcoded home directory
-                ExecStart = "${pkgs.bash}/bin/bash /home/${cfg.username}/.config/lemonbar/lemonbar.sh";
-                Type = "simple";
-                # RemainAfterExit = true;
-                # Type = "oneshot";
+                ExecStart = "${executor} ${cmd}";
+
                 Environment = let
                         path = pkgs.lib.concatMapStringsSep
                             ":"
                             (pkg: "${pkg}/bin")
-                            (with pkgs; [
-                                bash
-                                lemonbar-xft
-                                xtitle
-                                trayer
-                                fira-code
-                                fira-code-nerdfont
-                                gawk
-                                toybox
-                                pulseaudio
-                                bspwm
-                                xorg.xrandr
-                            ]);
+                            packages;
                     in [ "PATH=${path}" ];
+
+                RemainAfterExit = remainAfterExit;
+
+                Type = if isOneshot then "oneshot" else "simple";
             };
 
             Unit = {
@@ -42,8 +32,8 @@
                 PartOf = [ "graphical-session.target" ];
             };
         };
-    };
-
+in
+{
     xsession = {
         enable = true;
         windowManager.bspwm = {
@@ -57,28 +47,58 @@
         extraConfig = builtins.readFile ./.config/sxhkd/sxhkdrc;
     };
 
-    home.packages = with pkgs; [
-        # lemonbar
-        lemonbar-xft
-        xtitle
-        trayer
-        fira-code
-        fira-code-nerdfont
+    systemd.user.services = {
+        lemonbar = autostartService {
+            cmd = ./.config/lemonbar/lemonbar.sh;
+            executor = "${pkgs.bash}/bin/bash -c";
+            packages = with pkgs; [
+                bash
+                lemonbar-xft
+                xtitle
+                trayer
+                fira-code
+                fira-code-nerdfont
+                gawk
+                toybox
+                pulseaudio
+                bspwm
+                xorg.xrandr
+            ];
+        };
 
+        polkit = autostartService {
+            cmd = "${pkgs.lxqt.lxqt-policykit}/bin/lxqt-policykit-agent";
+            packages = [ pkgs.lxqt.lxqt-policykit ];
+        };
+    };
+
+    services.batsignal = {
+        enable = true;
+        extraArgs = [
+            "-f" "99"
+            "-w" "30"
+            "-c" "10"
+            "-d" "5"
+            "-p"
+        ];
+    };
+
+    services.screen-locker = {
+        enable = true;
+        lockCmd = "${pkgs.xlockmore}/bin/xlock -echokeys";
+    };
+
+    home.packages = with pkgs; [
         # for sxhkd
         scrot
         rofi
-        pulseaudio # for pactl
+        pulseaudio
         light # TODO: for laptop only
         playerctl
-
-        # for init & autostart
-        xorg.xinit
-        lxqt.lxqt-policykit
-        batsignal
-        xss-lock
-        xlockmore
     ];
 
-    # TODO: startx on login
+    home.sessionVariables = {
+        # for some java gui apps to work:
+        _JAVA_AWT_WM_NONREPARENTING = 1;
+    };
 }
