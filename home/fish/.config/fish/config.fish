@@ -52,7 +52,7 @@ function fish_prompt
     # Status
     if [ $last_status -ne 0 ]
         set_color --bold $fish_color_error
-        echo -n ' ['$last_status']'
+        echo -n "[$last_status]"
     end
 
     # Suffix
@@ -62,15 +62,22 @@ function fish_prompt
     end
 
     set_color normal
-    echo -n ' '$suffix' '
+    echo -n " $suffix "
 end
 
 function fish_right_prompt
-    set_color normal
+    # User and host
+    set_color normal 
     echo -n (prompt_login)
-    set_color normal
-end
 
+    # Nix Shell
+    if set -q IN_NIX_SHELL
+        set_color $fish_color_cwd
+        echo -n " [nix]"
+    end
+
+    set_color normal 
+end
 
 # Disable greeting and not_found
 function fish_command_not_found
