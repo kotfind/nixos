@@ -150,6 +150,16 @@ in {
                     checker = {
                         enabled = false,
                     },
+                    readme = {
+                        enabled = false,
+                    },
+                    profiling = {
+                        loader = true,
+                        require = true,
+                    },
+                    pkg = {
+                        sources = { 'lazy' },
+                    },
                 })
             '';
     };
