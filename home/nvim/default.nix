@@ -91,6 +91,7 @@ let
         toml
         gitcommit
         comment
+        java
     ];
 
     lspServers = with pkgs; [
@@ -102,6 +103,7 @@ let
         bash-language-server
         vscode-langservers-extracted
         kotlin-language-server
+        java-language-server
         nil
     ];
 

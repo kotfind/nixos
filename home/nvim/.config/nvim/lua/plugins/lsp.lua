@@ -106,6 +106,7 @@ local function setup_lspconfig()
         'jsonls',
         'kotlin_language_server',
         'nil_ls',
+        'java_language_server',
     }
 
     local server_config = {
@@ -146,6 +147,14 @@ local function setup_lspconfig()
                         },
                     },
                 },
+            }
+        end,
+
+        ['java_language_server'] = function()
+            lspconfig.lua_ls.setup {
+                on_attach = on_attach,
+                capabilities = capabilities(),
+                cmd = { 'java-language-server' },
             }
         end,
 
