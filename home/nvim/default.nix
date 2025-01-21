@@ -1,34 +1,7 @@
 { pkgs, ... }:
 let
     plugins = with pkgs.vimPlugins; [
-    ];
-
-    treesitterParsers = with pkgs.vimPlugins.nvim-treesitter-parsers; [
-        bash
-        c
-        cpp
-        diff
-        html
-        css
-        javascript
-        json
-        lua
-        markdown
-        markdown_inline
-        python
-        query
-        toml
-        vim
-        vimdoc
-        xml
-        yaml
-        rust
-        nasm
-        typst
-        toml
-        gitcommit
-        comment
-        java
+        nvim-treesitter.withAllGrammars
     ];
 
     lspServers = with pkgs; [
@@ -50,13 +23,18 @@ let
 in {
     programs.neovim = {
         enable = true;
+
         defaultEditor = true;
+
         vimAlias = true;
         vimdiffAlias = true;
         viAlias = true;
 
-        plugins = plugins ++ treesitterParsers;
+        withNodeJs = false;
+        withPython3 = false;
+        withRuby = false;
 
+        plugins = plugins;
         extraPackages = packages ++ lspServers;
 
         extraLuaConfig = ''
