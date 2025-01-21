@@ -1,69 +1,6 @@
 { pkgs, ... }:
 let
-    # https://github.com/NixOS/nixpkgs/blob/nixos-24.11/doc/languages-frameworks/vim.section.md#what-if-your-favourite-vim-plugin-isnt-already-packaged-what-if-your-favourite-vim-plugin-isnt-already-packaged
-    smear-cursor-nvim = pkgs.vimUtils.buildVimPlugin {
-        name = "smear-cursor.nvim";
-        # TODO: try to use flakes here
-        src = pkgs.fetchFromGitHub {
-            owner = "sphamba";
-            repo = "smear-cursor";
-            rev = "005b50b891d662bdd3160dc2a143939066b5cc17";
-            hash = "sha256-bL6lv+h6TgTo4YXu/gBnfw31GEKQnMUlxB0ZTVpWF1A=";
-        };
-    };
-    
     plugins = with pkgs.vimPlugins; [
-        # NOTE:
-        # - If plugin's name is `nvim-SMTH`, then
-        #   lazy's plugin spec should contain `main = 'nvim-SMTH'`.
-        # - If plugin's name is `SMTH.nvim`, then
-        #   lazy's plugin spec should contain `main = 'SMTH'`.
-        # Example:
-        # ```
-        # {
-        #     'm4xshen/autoclose.nvim',
-        #     main = 'autoclose',
-        #     opts = {},
-        # },
-        # {
-        #     'kylechui/nvim-surround',
-        #     main = 'nvim-surround',
-        #     opts = {},
-        # },
-        # ```
-
-        lazy-nvim
-        nvim-surround
-        vim-signify
-        nvim-treesitter-textobjects
-        eyeliner-nvim
-        nvim-treesitter
-        lualine-nvim
-        pest-vim
-        nvim-cmp
-        neoscroll-nvim
-        cyberdream-nvim
-        plantuml-syntax
-        nvim-lspconfig
-        luasnip
-        smear-cursor-nvim
-        ssr-nvim
-        nvim-ts-autotag
-        autoclose-nvim
-        fidget-nvim
-        lsp_lines-nvim
-        persistence-nvim
-        nvim-ts-context-commentstring
-        dressing-nvim
-        comment-nvim
-        typst-preview-nvim
-        popup-nvim
-        plenary-nvim
-        nvim-web-devicons
-        telescope-nvim # NOTE: extentions don't seem to work
-        telescope-symbols-nvim
-        telescope-undo-nvim
-        cmp-nvim-lsp
     ];
 
     treesitterParsers = with pkgs.vimPlugins.nvim-treesitter-parsers; [
@@ -122,46 +59,53 @@ in {
 
         extraPackages = packages ++ lspServers;
 
-        extraLuaConfig = let
-                dirs = pkgs.neovim.passthru.packpathDirs;
-                installPath = "${pkgs.vimUtils.packDir dirs}/pack/myNeovimPackages/start";
-            in ''
-                -- this file was generatred by nix
-                -- require actual init file
-                require 'main'
+        extraLuaConfig = ''
+            -- this file was generatred by nix
 
-                -- Init lazy
-                require 'lazy'.setup('plugins', {
-                    spec = {
-                        { import = "plugins", },
-                    },
-                    performance = {
-                        reset_packpath = false,
-                        rtp = { reset = false, },
-                    },
-                    dev = {
-                        path = "${installPath}",
-                        patterns = { "" },
-                    },
-                    install = {
-                        missing = false,
-                        colorscheme = {},
-                    },
-                    checker = {
-                        enabled = false,
-                    },
-                    readme = {
-                        enabled = false,
-                    },
-                    profiling = {
-                        loader = true,
-                        require = true,
-                    },
-                    pkg = {
-                        sources = { 'lazy' },
-                    },
-                })
-            '';
+            -- require actual init file
+            require 'main'
+
+            -- Install lazy
+            local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+            if not (vim.uv or vim.loop).fs_stat(lazypath) then
+              local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+              local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+              if vim.v.shell_error ~= 0 then
+                vim.api.nvim_echo({
+                  { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+                  { out, "WarningMsg" },
+                  { "\nPress any key to exit..." },
+                }, true, {})
+                vim.fn.getchar()
+                os.exit(1)
+              end
+            end
+            vim.opt.rtp:prepend(lazypath)
+
+            -- Init lazy
+            require 'lazy'.setup({
+                spec = {
+                    { import = "plugins", },
+                },
+                performance = {
+                    reset_packpath = false,
+                    rtp = { reset = false, },
+                },
+                install = {
+                    colorscheme = {},
+                },
+                readme = {
+                    enabled = false,
+                },
+                profiling = {
+                    loader = true,
+                    require = true,
+                },
+                pkg = {
+                    sources = { 'lazy' },
+                },
+            })
+        '';
     };
 
     home.file.".config/nvim" = {
