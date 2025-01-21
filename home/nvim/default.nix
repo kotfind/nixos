@@ -1,9 +1,5 @@
 { pkgs, inputs, config, ... }:
 let
-    plugins = with pkgs.vimPlugins; [
-        nvim-treesitter.withAllGrammars
-    ];
-
     lspServers = with pkgs; [
         pyright
         libclang
@@ -19,9 +15,6 @@ let
 
     packages = with pkgs; [
         xclip
-
-        # for lazy.nvim
-        git
     ];
 in {
     programs.neovim = {
@@ -33,11 +26,10 @@ in {
         vimdiffAlias = true;
         viAlias = true;
 
-        withNodeJs = false;
+        withNodeJs = true;
         withPython3 = false;
         withRuby = false;
 
-        plugins = plugins;
         extraPackages = packages ++ lspServers;
 
         extraLuaConfig = ''
@@ -82,10 +74,13 @@ in {
     };
 
     home.activation.nvimLazySync = config.lib.dag.entryAfter ["writeBoundary"] ''
-        run \
-            ${pkgs.neovim}/bin/nvim \
+        PATH="$PATH:${pkgs.git}/bin:${pkgs.gcc}/bin" \
+            run ${pkgs.neovim}/bin/nvim \
                 --headless \
                 -c ':Lazy! sync' \
+                -c ':Lazy! load nvim-treesitter' \
+                -c ':TSInstallSync all' \
+                -c ':TSUpdateSync' \
                 -c qa
     '';
 
