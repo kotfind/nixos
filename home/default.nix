@@ -19,6 +19,7 @@
         ./tmux
         ./obs.nix
         ./gallery-dl.nix
+        ./services.nix
     ];
 
     home = {
