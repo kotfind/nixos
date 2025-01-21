@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, config, ... }:
 let
     plugins = with pkgs.vimPlugins; [
         nvim-treesitter.withAllGrammars
@@ -19,6 +19,9 @@ let
 
     packages = with pkgs; [
         xclip
+
+        # for lazy.nvim
+        git
     ];
 in {
     programs.neovim = {
@@ -71,9 +74,20 @@ in {
                 },
                 pkg = { sources = { 'lazy' }, },
                 rocks = { enabled = false, },
+                headless = {
+                    task = false,
+                },
             }
         '';
     };
+
+    home.activation.nvimLazySync = config.lib.dag.entryAfter ["writeBoundary"] ''
+        run \
+            ${pkgs.neovim}/bin/nvim \
+                --headless \
+                -c ':Lazy! sync' \
+                -c qa
+    '';
 
     home.sessionVariables = {
         MANPAGER = "nvim +Man!";
