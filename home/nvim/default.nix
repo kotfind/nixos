@@ -61,28 +61,17 @@ in {
             vim.opt.rtp:prepend(lazypath)
 
             -- Init lazy
-            require 'lazy'.setup({
-                spec = {
-                    { import = "plugins", },
-                },
-                performance = {
-                    reset_packpath = false,
-                    rtp = { reset = false, },
-                },
-                install = {
-                    colorscheme = {},
-                },
-                readme = {
-                    enabled = false,
-                },
+            require 'lazy'.setup {
+                spec = { { import = "plugins", }, },
+                install = { colorscheme = {}, },
+                readme = { enabled = false, },
                 profiling = {
                     loader = true,
                     require = true,
                 },
-                pkg = {
-                    sources = { 'lazy' },
-                },
-            })
+                pkg = { sources = { 'lazy' }, },
+                rocks = { enabled = false, },
+            }
         '';
     };
 
