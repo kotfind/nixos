@@ -73,7 +73,7 @@
 
     programs.gnupg.agent = {
         enable = true;
-        pinentryPackage = pkgs.pinentry-curses; 
+        pinentryPackage = pkgs.pinentry-rofi;
     };
 
     programs.git.enable = true;

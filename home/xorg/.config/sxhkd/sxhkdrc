@@ -172,3 +172,10 @@ super + shift { , + ctrl} + z
 
 super { , + shift} + f
     firefox {--new-window,--private-window}
+
+#
+# password
+#
+
+super + e
+    rofi-pass
