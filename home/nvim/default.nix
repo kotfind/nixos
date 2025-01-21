@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 let
     plugins = with pkgs.vimPlugins; [
         nvim-treesitter.withAllGrammars
@@ -75,12 +75,21 @@ in {
         '';
     };
 
-    home.file.".config/nvim" = {
-        source = ./.config/nvim;
-        recursive = true;
-    };
-
     home.sessionVariables = {
         MANPAGER = "nvim +Man!";
     };
+
+    home.file = let
+            spellPath = ".local/share/nvim/site/spell";
+        in {
+            ".config/nvim" = {
+                source = ./.config/nvim;
+                recursive = true;
+            };
+
+            "${spellPath}/ru.utf-8.spl".source = inputs.nvim-spl-ru;
+            "${spellPath}/ru.utf-8.sug".source = inputs.nvim-sug-ru;
+            "${spellPath}/en.utf-8.spl".source = inputs.nvim-spl-en;
+            "${spellPath}/en.utf-8.sug".source = inputs.nvim-sug-en;
+        };
 }

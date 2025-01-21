@@ -36,10 +36,62 @@
         "type": "github"
       }
     },
+    "nvim-spl-en": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-D7PU4+gCrrshtSQTg3WGzk0UaD9mzpb1EdjW5/O13nM=",
+        "type": "file",
+        "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/en.utf-8.spl"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/en.utf-8.spl"
+      }
+    },
+    "nvim-spl-ru": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-+qR5FsmYK/332YyxfyjqQ6zHaygCoTtM1p2Okza4YLY=",
+        "type": "file",
+        "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ru.utf-8.spl"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ru.utf-8.spl"
+      }
+    },
+    "nvim-sug-en": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-Qj81zFWCP8nM9kqgYm1B/hhRmk3NxhQoV8xpFbjS6Pc=",
+        "type": "file",
+        "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/en.utf-8.sug"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/en.utf-8.sug"
+      }
+    },
+    "nvim-sug-ru": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-yzT/KlhbkxouHfq48JtAMnnB+htAERv8fnGp2PKQFJU=",
+        "type": "file",
+        "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ru.utf-8.sug"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://ftp.nluug.nl/pub/vim/runtime/spell/ru.utf-8.sug"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "nvim-spl-en": "nvim-spl-en",
+        "nvim-spl-ru": "nvim-spl-ru",
+        "nvim-sug-en": "nvim-sug-en",
+        "nvim-sug-ru": "nvim-sug-ru"
       }
     }
   },

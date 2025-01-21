@@ -12,16 +12,22 @@
 
     inputs = {
         nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
         home-manager.url = "github:nix-community/home-manager";
         home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+        nvim-spl-ru = { url = "https://ftp.nluug.nl/pub/vim/runtime/spell/ru.utf-8.spl"; flake = false; };
+        nvim-sug-ru = { url = "https://ftp.nluug.nl/pub/vim/runtime/spell/ru.utf-8.sug"; flake = false; };
+        nvim-spl-en = { url = "https://ftp.nluug.nl/pub/vim/runtime/spell/en.utf-8.spl"; flake = false; };
+        nvim-sug-en = { url = "https://ftp.nluug.nl/pub/vim/runtime/spell/en.utf-8.sug"; flake = false; };
     };
 
-    outputs = { nixpkgs, home-manager, ... }: {
+    outputs = { nixpkgs, home-manager, ... }@inputs: {
         nixosConfigurations.system = let
             cfg = import ./cfg.nix;
             # utils = import ./utils { pkgs = nixpkgs; };
             specialArgs = {
-                inherit cfg;
+                inherit cfg inputs;
             };
         in nixpkgs.lib.nixosSystem {
             inherit specialArgs;
