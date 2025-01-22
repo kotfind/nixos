@@ -32,7 +32,7 @@ o.ignorecase = true
 o.undofile = true
 
 -- Wrap
-o.wrap = true
+o.wrap = false
 o.linebreak = true
 o.breakindent = true
 
