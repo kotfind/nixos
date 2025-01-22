@@ -8,6 +8,7 @@
         p7zip
         imagemagick
         gh
+        ncdu
     ];
 
     programs = {
