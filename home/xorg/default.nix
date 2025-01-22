@@ -83,7 +83,12 @@ in
         ];
     };
 
-    services.gpg-agent.pinentryPackage = pkgs.pinentry-rofi;
+    services.gpg-agent = {
+        enable = true;
+        enableFishIntegration = true;
+        enableBashIntegration = true;
+        pinentryPackage = pkgs.pinentry-rofi;
+    };
 
     services.screen-locker = {
         enable = true;
