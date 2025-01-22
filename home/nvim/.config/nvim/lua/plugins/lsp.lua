@@ -133,7 +133,7 @@ local function setup_lspconfig()
         end,
 
         ['java_language_server'] = function()
-            lspconfig.lua_ls.setup {
+            lspconfig.java_language_server.setup {
                 on_attach = on_attach,
                 capabilities = capabilities(),
                 cmd = { 'java-language-server' },
