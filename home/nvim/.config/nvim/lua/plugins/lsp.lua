@@ -91,24 +91,6 @@ end
 local function setup_lspconfig()
     local lspconfig = require 'lspconfig'
 
-    -- Lspconfig server name list:
-    -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
-    local lsp_server_names = {
-        'pyright',
-        'clangd',
-        'rust_analyzer',
-        'lua_ls',
-        'tinymist',
-        'bashls',
-        'cssls',
-        'eslint',
-        'html',
-        'jsonls',
-        'kotlin_language_server',
-        'nil_ls',
-        'java_language_server',
-    }
-
     local server_config = {
         ['__default__'] = function(server_name)
             lspconfig[server_name].setup {
@@ -158,19 +140,19 @@ local function setup_lspconfig()
             }
         end,
 
-        -- ['tinymist'] = function()
-        --     lspconfig.tinymist.setup {
-        --         on_attach = on_attach,
-        --         capabilities = capabilities(),
-        --         settings = {
-        --             exportPdf = 'onType',
-        --             outputPath = '$name',
-        --         }
-        --     }
-        -- end
+        ['tinymist'] = function()
+            lspconfig.tinymist.setup {
+                on_attach = on_attach,
+                capabilities = capabilities(),
+                settings = {
+                    exportPdf = 'onType',
+                    outputPath = '$name',
+                }
+            }
+        end
     }
 
-    for _, server_name in ipairs(lsp_server_names) do
+    for _, server_name in ipairs(LspServerNames) do
         local cfg = server_config[server_name]
         if cfg == nil then
             server_config['__default__'](server_name)

@@ -1,16 +1,21 @@
 { pkgs, inputs, config, ... }:
 let
+    # format:
+    # [ pkg lspconfig1 lspconfig2 ... ]
+    #
+    # Lspconfig server name list:
+    # https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
     lspServers = with pkgs; [
-        pyright
-        libclang
-        rust-analyzer
-        lua-language-server
-        tinymist
-        bash-language-server
-        vscode-langservers-extracted
-        kotlin-language-server
-        java-language-server
-        nil
+        [pyright "pyright"]
+        [libclang "clangd"]
+        [rust-analyzer "rust_analyzer"]
+        [lua-language-server "lua_ls"]
+        [tinymist "tinymist"]
+        [bash-language-server "bashls"]
+        [vscode-langservers-extracted "cssls" "eslint" "html" "jsonls"]
+        [kotlin-language-server "kotlin_language_server"]
+        [java-language-server "java_language_server"]
+        [nil "nil_ls"]
     ];
 
     packages = with pkgs; [
@@ -30,47 +35,73 @@ in {
         withPython3 = false;
         withRuby = false;
 
-        extraPackages = packages ++ lspServers;
+        extraPackages =
+            packages
+            ++ (
+                pkgs.lib.lists.forEach
+                    lspServers
+                    (spec: builtins.elemAt spec 0)
+            );
 
-        extraLuaConfig = ''
-            -- this file was generatred by nix
+        extraLuaConfig = let
+                lspServerNames = pkgs.lib.lists.foldl
+                    (acc: spec:
+                        acc ++ (pkgs.lib.lists.drop 1 spec)
+                    )
+                    []
+                    lspServers;
 
-            -- require actual init file
-            require 'main'
+                lspServerNamesStr = pkgs.lib.lists.foldl
+                    (acc: serverName:
+                        acc + "\n'${serverName}',"
+                    )
+                    ""
+                    lspServerNames;
+            in
+            ''
+                -- this file was generatred by nix
 
-            -- Install lazy
-            local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-            if not (vim.uv or vim.loop).fs_stat(lazypath) then
-              local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-              local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
-              if vim.v.shell_error ~= 0 then
-                vim.api.nvim_echo({
-                  { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-                  { out, "WarningMsg" },
-                  { "\nPress any key to exit..." },
-                }, true, {})
-                vim.fn.getchar()
-                os.exit(1)
-              end
-            end
-            vim.opt.rtp:prepend(lazypath)
+                -- export LspServerNames
+                LspServerNames = {
+                    ${lspServerNamesStr}
+                }
 
-            -- Init lazy
-            require 'lazy'.setup {
-                spec = { { import = "plugins", }, },
-                install = { colorscheme = {}, },
-                readme = { enabled = false, },
-                profiling = {
-                    loader = true,
-                    require = true,
-                },
-                pkg = { sources = { 'lazy' }, },
-                rocks = { enabled = false, },
-                headless = {
-                    task = false,
-                },
-            }
-        '';
+                -- require actual init file
+                require 'main'
+
+                -- Install lazy
+                local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+                if not (vim.uv or vim.loop).fs_stat(lazypath) then
+                  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+                  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+                  if vim.v.shell_error ~= 0 then
+                    vim.api.nvim_echo({
+                      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+                      { out, "WarningMsg" },
+                      { "\nPress any key to exit..." },
+                    }, true, {})
+                    vim.fn.getchar()
+                    os.exit(1)
+                  end
+                end
+                vim.opt.rtp:prepend(lazypath)
+
+                -- Init lazy
+                require 'lazy'.setup {
+                    spec = { { import = "plugins", }, },
+                    install = { colorscheme = {}, },
+                    readme = { enabled = false, },
+                    profiling = {
+                        loader = true,
+                        require = true,
+                    },
+                    pkg = { sources = { 'lazy' }, },
+                    rocks = { enabled = false, },
+                    headless = {
+                        task = false,
+                    },
+                }
+            '';
     };
 
     home.activation.nvimLazySync = config.lib.dag.entryAfter ["writeBoundary"] ''
