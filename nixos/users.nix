@@ -3,6 +3,7 @@
     # Note: don't forget `passwd`
     users.users.${cfg.username} = {
         isNormalUser = true;
+        linger = true;
         extraGroups = [
             "wheel"
             "networkmanager"
