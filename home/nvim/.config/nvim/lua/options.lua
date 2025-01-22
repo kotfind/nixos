@@ -42,8 +42,17 @@ vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
 })
 
 -- Spell
-o.spell = true
-o.spelllang = { 'en', 'ru' }
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = {
+        '*.typ',
+        '*.txt',
+        '*.md',
+    },
+    callback = function()
+        o.spell = true
+        o.spelllang = { 'en', 'ru' }
+    end
+})
 
 -- Disable spell for terminal window
 vim.api.nvim_create_autocmd({ "TermOpen" }, {
