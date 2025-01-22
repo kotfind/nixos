@@ -83,6 +83,8 @@ in
         ];
     };
 
+    services.gpg-agent.pinentryPackage = pkgs.pinentry-rofi;
+
     services.screen-locker = {
         enable = true;
         lockCmd = "${pkgs.xlockmore}/bin/xlock -echokeys";
