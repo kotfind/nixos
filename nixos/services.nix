@@ -3,16 +3,16 @@ if cfg.hostname == "kotfindPC" then {
     systemd.services = {
         navidrome = {
             description = "Navidrome Music Service";
-
+        
             enable = true;
-
+        
             wantedBy = [ "multi-user.target" ];
             after = [ "network.target" ];
-
+        
             path = with pkgs; [
                 podman
             ];
-
+        
             serviceConfig = let 
                     composeFile = "/hdd/data/music/navidrome/docker-compose.yml";
                     compose = "${pkgs.podman-compose}/bin/podman-compose";
@@ -21,6 +21,8 @@ if cfg.hostname == "kotfindPC" then {
                     Type = "oneshot";
                     RemainAfterExit = true;
 
+                    User = "kotfind";
+        
                     ExecStart = "${cmd} up -d";
                     ExecStop = "${cmd} down";
                 };
