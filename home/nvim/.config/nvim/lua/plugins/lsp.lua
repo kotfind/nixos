@@ -103,18 +103,23 @@ local function setup_lspconfig()
             lspconfig.rust_analyzer.setup {
                 on_attach = on_attach,
                 capabilities = capabilities(),
-                cmd = vim.lsp.rpc.connect('127.0.0.1', 27631),
-                args = { '--all-targets' },
-                init_options = {
-                    lspMux = {
-                        version = '1',
-                        method = 'connect',
-                        server = vim.fn.stdpath('data') .. '/mason/bin/rust-analyzer',
+                -- cmd = vim.lsp.rpc.connect('127.0.0.1', 27631),
+                settings = {
+                    ["rust-analyzer"] = {
+                        -- lspMux = {
+                        --     version = "1",
+                        --     method = "connect",
+                        --     server = "rust-analyzer",
+                        -- },
+                        checkOnSave = {
+                            command = 'clippy',
+                        },
+                        cachePriming = {
+                            enable = false,
+                        },
+                        allTargets = true,
                     },
-                    checkOnSave = {
-                        command = 'clippy',
-                    },
-                },
+                }
             }
         end,
 

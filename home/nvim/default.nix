@@ -132,4 +132,19 @@ in {
             "${spellPath}/en.utf-8.spl".source = inputs.nvim-spl-en;
             "${spellPath}/en.utf-8.sug".source = inputs.nvim-sug-en;
         };
+
+    # systemd.user.services.ra-multiplex = {
+    #     Unit = {
+    #         After = [ "default.target" ];
+    #     };
+    #
+    #     Service = {
+    #         Type = "simple";
+    #         ExecStart = "${pkgs.ra-multiplex}/bin/ra-multiplex server";
+    #     };
+    #
+    #     Install = {
+    #         WantedBy = [ "default.target" ];
+    #     };
+    # };
 }
