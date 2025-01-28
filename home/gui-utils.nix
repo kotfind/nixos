@@ -1,17 +1,18 @@
 { pkgs, ... }:
 {
     home.packages = with pkgs; [
-        vlc
-        vlc-bittorrent # TODO: won't work
-        transmission_4-qt
-        sxiv
-
-        pavucontrol
-
         # Run this to make fcitx5 to work in telegram
-        # sudo dbus-update-activation-environment --all
+        #   sudo dbus-update-activation-environment --all
+        # or run telegram from terminal:
+        #   telegram-desktop & disown & exit
         # source: https://github.com/telegramdesktop/tdesktop/issues/26891
         telegram-desktop
+
+        vlc
+        transmission_4-qt
+        sxiv
+        pavucontrol
+        libreoffice
     ];
 
     programs.zathura.enable = true;
