@@ -9,6 +9,8 @@
         imagemagick
         gh
         ncdu
+        todo-txt-cli
+        bat
     ];
 
     programs = {
