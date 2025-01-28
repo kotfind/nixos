@@ -14,7 +14,7 @@
         ./nvim
         ./pass.nix
         ./proxy.nix
-        ./rust
+        ./rust.nix
         ./sqlite
         ./tmux
         ./obs.nix

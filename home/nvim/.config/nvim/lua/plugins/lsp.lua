@@ -100,17 +100,30 @@ local function setup_lspconfig()
         end,
 
         ['rust_analyzer'] = function()
+            local vars_to_export = { 'PATH', 'LD_LIBRARY_PATH' }
+            local exec_name = '';
+            for _, var in ipairs(vars_to_export) do
+                exec_name = exec_name .. var .. '=' .. os.getenv(var) .. ' '
+            end
+            exec_name = exec_name .. 'rust-analyzer'
+
             lspconfig.rust_analyzer.setup {
                 on_attach = on_attach,
                 capabilities = capabilities(),
-                -- cmd = vim.lsp.rpc.connect('127.0.0.1', 27631),
+                cmd = vim.lsp.rpc.connect('127.0.0.1', 27631),
                 settings = {
                     ["rust-analyzer"] = {
-                        -- lspMux = {
-                        --     version = "1",
-                        --     method = "connect",
-                        --     server = "rust-analyzer",
-                        -- },
+                        lspMux = {
+                            version = '1',
+                            method = 'connect',
+
+                            -- I'm using this workarround as ra-multiplex's `pass_environment` don't work.
+                            -- It seems that the PATH are not used when looking for `cargo` and `rustc` executables.
+                            server = '/bin/sh',
+                            args = { '-c', exec_name },
+                        },
+
+                        -- All options: https://github.com/rust-lang/rust-analyzer/blob/master/docs/user/generated_config.adoc
                         checkOnSave = {
                             command = 'clippy',
                         },
