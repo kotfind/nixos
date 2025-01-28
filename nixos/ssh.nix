@@ -8,4 +8,15 @@
             KbdInteractiveAuthentication = false;
         };
     };
+
+    programs = {
+        mosh = {
+            enable = true;
+        };
+
+        ssh = {
+            setXAuthLocation = true;
+            forwardX11 = true;
+        };
+    };
 }
