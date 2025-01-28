@@ -22,7 +22,7 @@
             userName = cfg.username;
             userEmail = cfg.email;
 
-            # TODO: add keys
+            difftastic.enable = true;
         };
 
         # TODO: fixme
