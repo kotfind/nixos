@@ -101,11 +101,9 @@ local function setup_servers()
 
                 allTargets = true,
 
-                cargo = {
-                    extraEnv = {
-                        RUSTFLAGS = '-A dead_code',
-                    },
-                },
+                diagnostics = {
+                    disabled = { 'dead_code', 'unused_variables' }
+                }
             }
 
             -- lspMux
