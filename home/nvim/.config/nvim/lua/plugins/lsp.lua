@@ -100,12 +100,15 @@ local function setup_lspconfig()
         end,
 
         ['rust_analyzer'] = function()
-            local vars_to_export = { 'PATH', 'LD_LIBRARY_PATH' }
-            local exec_name = '';
-            for _, var in ipairs(vars_to_export) do
-                exec_name = exec_name .. var .. '=' .. os.getenv(var) .. ' '
+            local vars_to_export = { 'PATH', 'LD_LIBRARY_PATH', 'PKG_CONFIG_PATH' }
+            local cmd = '';
+            for _, env_name in ipairs(vars_to_export) do
+                local env_val = os.getenv(env_name)
+                if env_val ~= nil then
+                    cmd = cmd .. env_name .. '=' .. env_val .. ' '
+                end
             end
-            exec_name = exec_name .. 'rust-analyzer'
+            cmd = cmd .. 'rust-analyzer'
 
             lspconfig.rust_analyzer.setup {
                 on_attach = on_attach,
@@ -120,7 +123,7 @@ local function setup_lspconfig()
                             -- I'm using this workarround as ra-multiplex's `pass_environment` don't work.
                             -- It seems that the PATH are not used when looking for `cargo` and `rustc` executables.
                             server = '/bin/sh',
-                            args = { '-c', exec_name },
+                            args = { '-c', cmd },
                         },
 
                         -- All options: https://github.com/rust-lang/rust-analyzer/blob/master/docs/user/generated_config.adoc
