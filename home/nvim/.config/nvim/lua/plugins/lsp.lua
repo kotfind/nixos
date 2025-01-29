@@ -127,9 +127,6 @@ local function setup_lspconfig()
                         checkOnSave = {
                             command = 'clippy',
                         },
-                        cachePriming = {
-                            enable = false,
-                        },
                         allTargets = true,
                     },
                 }
