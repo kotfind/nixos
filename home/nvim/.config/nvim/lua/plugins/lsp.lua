@@ -1,30 +1,10 @@
-function LspExec(command, ...)
-    local function handler(results)
-        for _, result in ipairs(results) do
-            if result.error ~= nil then
-                error("failed to execute comand '" .. command .. "': " .. result.error.message)
-            end
-        end
-    end
-
-    vim.lsp.buf_request_all(
-        0,
-        'workspace/executeCommand',
-        {
-            command = command,
-            arguments = { ... },
-        },
-        handler
-    )
-end
-
 local function setup_typst_preview()
     require 'typst-preview'.setup {
         open_cmd = 'firefox --new-window %s',
 
         dependencies_bin = {
-            ['tinymist'] = vim.fn.stdpath('data') .. '/mason/bin/tinymist',
-            ['websocat'] = '/usr/bin/websocat',
+            ['tinymist'] = '/usr/bin/tinymist', -- FIXME
+            ['websocat'] = '/usr/bin/websocat', -- FIXME
         },
 
         get_main_file = function(bufpath)
@@ -88,7 +68,7 @@ local function setup_diagnostics()
     Map('n', '<leader>tl', lsp_lines.toggle)
 end
 
-local function setup_lspconfig()
+local function setup_servers()
     local lspconfig = require 'lspconfig'
 
     local server_config = {
@@ -100,6 +80,7 @@ local function setup_lspconfig()
         end,
 
         ['rust_analyzer'] = function()
+            -- Export env vars
             local vars_to_export = { 'PATH', 'LD_LIBRARY_PATH', 'PKG_CONFIG_PATH' }
             local cmd = '';
             for _, env_name in ipairs(vars_to_export) do
@@ -110,29 +91,41 @@ local function setup_lspconfig()
             end
             cmd = cmd .. 'rust-analyzer'
 
+            -- Common settings
+            local settings = {
+                -- All options:
+                -- https://rust-analyzer.github.io/manual.html#configurationblob/master/docs/user/generated_config.adoc
+                checkOnSave = {
+                    command = 'clippy',
+                },
+
+                allTargets = true,
+
+                cargo = {
+                    extraEnv = {
+                        RUSTFLAGS = '-A dead_code',
+                    },
+                },
+            }
+
+            -- lspMux
+            settings.lspMux = {
+                version = '1',
+                method = 'connect',
+
+                -- I'm using this workarround as ra-multiplex's `pass_environment` don't work.
+                -- It seems that the PATH are not used when looking for `cargo` and `rustc` executables.
+                server = '/bin/sh',
+                args = { '-c', cmd },
+            }
+
             lspconfig.rust_analyzer.setup {
                 on_attach = on_attach,
                 capabilities = capabilities(),
                 cmd = vim.lsp.rpc.connect('127.0.0.1', 27631),
                 settings = {
-                    ["rust-analyzer"] = {
-                        lspMux = {
-                            version = '1',
-                            method = 'connect',
-
-                            -- I'm using this workarround as ra-multiplex's `pass_environment` don't work.
-                            -- It seems that the PATH are not used when looking for `cargo` and `rustc` executables.
-                            server = '/bin/sh',
-                            args = { '-c', cmd },
-                        },
-
-                        -- All options: https://github.com/rust-lang/rust-analyzer/blob/master/docs/user/generated_config.adoc
-                        checkOnSave = {
-                            command = 'clippy',
-                        },
-                        allTargets = true,
-                    },
-                }
+                    ["rust-analyzer"] = settings,
+                },
             }
         end,
 
@@ -197,7 +190,7 @@ local function setup_lsp()
     })
 
     -- Setup servers
-    setup_lspconfig()
+    setup_servers()
 end
 
 return {
