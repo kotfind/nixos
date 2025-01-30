@@ -92,14 +92,15 @@ local function setup_servers()
             cmd = cmd .. 'rust-analyzer'
 
             -- Common settings
+            --
+            -- List of all options:
+            -- https://rust-analyzer.github.io/manual.html#configuration
             local settings = {
-                -- All options:
-                -- https://rust-analyzer.github.io/manual.html#configurationblob/master/docs/user/generated_config.adoc
-                checkOnSave = {
+                allTargets = true,
+
+                check = {
                     command = 'clippy',
                 },
-
-                allTargets = true,
 
                 diagnostics = {
                     disabled = { 'dead_code', 'unused_variables' }
