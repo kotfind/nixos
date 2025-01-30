@@ -86,7 +86,8 @@ local function setup_servers()
             for _, env_name in ipairs(vars_to_export) do
                 local env_val = os.getenv(env_name)
                 if env_val ~= nil then
-                    cmd = cmd .. env_name .. '=' .. env_val .. ' '
+                    env_val = env_val:gsub('\'', '\\\'')
+                    cmd = cmd .. env_name .. '=\'' .. env_val .. '\' '
                 end
             end
             cmd = cmd .. 'rust-analyzer'
@@ -103,7 +104,11 @@ local function setup_servers()
                 },
 
                 diagnostics = {
-                    disabled = { 'dead_code', 'unused_variables' }
+                    disabled = { 'dead_code', 'unused_variables' },
+                },
+
+                cargo = {
+                    targetDir = true,
                 }
             }
 
