@@ -4,7 +4,9 @@ let
     # [ pkg lspconfig1 lspconfig2 ... ]
     #
     # Lspconfig server name list:
-    # https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+    #   https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+    # or
+    #   :help lspconfig-all
     lspServers = with pkgs; [
         [pyright "pyright"]
         [libclang "clangd"]
@@ -16,6 +18,7 @@ let
         [kotlin-language-server "kotlin_language_server"]
         [java-language-server "java_language_server"]
         [nil "nil_ls"]
+        [dot-language-server "dotls"]
     ];
 
     packages = with pkgs; [
