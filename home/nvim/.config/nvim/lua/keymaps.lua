@@ -62,3 +62,8 @@ Map('n', '<leader>yy', '"+yy')
 
 -- Select pasted
 Map('n', 'gp', "V'[']")
+
+-- Toggle Spellcheck
+Map('n', '<leader>ts', function()
+    vim.opt.spell = not vim.opt.spell:get()
+end)
