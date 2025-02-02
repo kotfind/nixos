@@ -1,5 +1,5 @@
 local function setup_tree()
-    Map({ 'n', 'i' }, '<leader>tt', ':NvimTreeToggle<CR>')
+    Map('n', '<leader>tt', ':NvimTreeToggle<CR>')
     require 'nvim-tree'.setup {}
 end
 
