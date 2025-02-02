@@ -17,7 +17,6 @@
         ./rust.nix
         ./sqlite
         ./tmux
-        ./obs.nix
         ./gallery-dl.nix
         ./secrets
     ];

@@ -15,5 +15,8 @@
         libreoffice
     ];
 
-    programs.zathura.enable = true;
+    programs = {
+        zathura.enable = true;
+        obs-studio.enable = true;
+    };
 }

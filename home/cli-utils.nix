@@ -9,8 +9,9 @@
         imagemagick
         gh
         ncdu
-        todo-txt-cli
         bat
+        file
+        ffmpeg
     ];
 
     programs = {
