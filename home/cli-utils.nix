@@ -25,6 +25,10 @@
             userName = cfg.username;
             userEmail = cfg.email;
 
+            extraConfig = {
+                core.quotepath = false;
+            };
+
             difftastic.enable = true;
         };
 
