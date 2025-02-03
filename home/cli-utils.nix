@@ -12,6 +12,7 @@
         bat
         file
         ffmpeg
+        cloc
     ];
 
     programs = {
