@@ -1,16 +1,23 @@
 { pkgs, config, ... }:
 let
-    activeThemeFileName = "active-theme.toml";
-    activeThemeFile = "${config.home.homeDirectory}/.config/alacritty/${activeThemeFileName}";
+    activeThemeFile = "${config.home.homeDirectory}/.config/alacritty/active-theme.toml";
 
-    themesDir = ./themes;
-    defaultTheme = "dark.toml";
+    toml = (pkgs.formats.toml {}).generate;
 
-    toggleScript = pkgs.writeShellScriptBin "alacritty-toggle-theme" ''
+    themes = pkgs.lib.attrsets.mapAttrsToList
+        (themeName: colors: toml "${themeName}.toml" { inherit colors; })
+        (import ./themes.nix);
+
+    themesStr = pkgs.lib.strings.concatMapStringsSep
+        " "
+        (themeFile: "'${themeFile}'")
+        themes;
+
+    toggleScript = pkgs.writeShellScript "alacritty-toggle-theme" ''
         set -euo pipefail
         set -x
 
-        themes=(${themesDir}/*.toml)
+        themes=(${themesStr})
         themes+=("''${themes[0]}")
 
         for i in "''${!themes[@]}"; do
@@ -28,7 +35,7 @@ in
     programs.alacritty = {
         enable = true;
         settings = {
-            general.import = [ activeThemeFileName ];
+            general.import = [ activeThemeFile ];
 
             font.size = 11.0;
 
@@ -36,12 +43,12 @@ in
 
             keyboard.bindings = [
                 { mods = "Control|Shift"; key = "Return"; action = "SpawnNewInstance"; }
-                { mods = "Control|Shift"; key = "n";      command = "${toggleScript}/bin/alacritty-toggle-theme"; }
+                { mods = "Control|Shift"; key = "n";      command = "${toggleScript}"; }
             ];
         };
     };
 
     home.activation.linkAlacrittyTheme = config.lib.dag.entryAfter ["writeBoundary"] ''
-        ln -sf ${themesDir}/${defaultTheme} ${activeThemeFile}
+        ln -sf ${builtins.elemAt themes 0} ${activeThemeFile}
     '';
 }
