@@ -10,12 +10,12 @@
         ./fonts.nix
         ./gui-utils.nix
         ./keyboard
-        ./mime
+        ./mime.nix
         ./nvim
         ./pass.nix
         ./proxy.nix
         ./rust.nix
-        ./sqlite
+        ./sqlite.nix
         ./tmux
         ./gallery-dl.nix
         ./secrets

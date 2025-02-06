@@ -1,8 +1,13 @@
 { pkgs, ... }:
+let
+    dir = ".config/fcitx5";
+in
 {
-    home.file.".config/fcitx5/conf/xcb.conf".source = ./.config/fcitx5/conf/xcb.conf;
-    home.file.".config/fcitx5/config".source = ./.config/fcitx5/config;
-    home.file.".config/fcitx5/profile".source = ./.config/fcitx5/profile;
+    home.file = {
+        "${dir}/conf/xcb.conf".source = ./conf/xcb.conf;
+        "${dir}/config".source = ./config;
+        "${dir}/profile".source = ./profile;
+    };
 
     i18n.inputMethod = {
         enabled = "fcitx5";
