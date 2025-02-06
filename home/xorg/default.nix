@@ -1,4 +1,4 @@
-{ pkgs, cfg, ... }:
+{ pkgs, cfg, config, ... }:
 let
     autostartService =
         {
@@ -111,7 +111,7 @@ in
 
     systemd.user.tmpfiles.rules = let
             user = cfg.username;
-            home = "/home/${user}"; # FIXME: hardcoded home direcory
+            home = config.home.homeDirectory;
         in [
             # Type  Path               Mode  User     Group   Age  Argument
             "d      /tmp/downloads     0755  ${user}  users   -    -"

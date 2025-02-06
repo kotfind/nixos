@@ -1,7 +1,6 @@
 [general]
 import = [
-	"dark_theme.toml"
-	# "light_theme.toml"
+    "theme.toml"
 ]
 
 [font]
@@ -10,6 +9,7 @@ size = 11.0
 [keyboard]
 bindings = [
 	{ mods = "Control|Shift", key = "Return", action = "SpawnNewInstance" },
+    { mods = "Control|Shift", key = "n",      command = "/home/kotfind/.config/alacritty/toggle_theme.sh" }
 ]
 
 [window]
