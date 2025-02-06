@@ -1,47 +1,47 @@
 { pkgs, config, ... }:
 let
-    themes = [
-        ./.config/alacritty/dark_theme.toml
-        ./.config/alacritty/light_theme.toml
-    ];
+    activeThemeFileName = "active-theme.toml";
+    activeThemeFile = "${config.home.homeDirectory}/.config/alacritty/${activeThemeFileName}";
 
-    themesStr = pkgs.lib.strings.concatMapStringsSep
-        " "
-        (theme: "'${theme}'")
-        themes;
+    themesDir = ./themes;
+    defaultTheme = "dark.toml";
 
-    dir = ".config/alacritty";
-    absDir = "${config.home.homeDirectory}/${dir}";
-    themeFile = "${absDir}/theme.toml";
+    toggleScript = pkgs.writeShellScriptBin "alacritty-toggle-theme" ''
+        set -euo pipefail
+        set -x
+
+        themes=(${themesDir}/*.toml)
+        themes+=("''${themes[0]}")
+
+        for i in "''${!themes[@]}"; do
+            if [ "${activeThemeFile}" -ef "''${themes["$i"]}" ]; then
+                ln -sf ''${themes[$((i + 1))]} ${activeThemeFile}
+                exit
+            fi
+        done
+
+        echo "failed to toggle theme" 1>&2
+        exit 1
+    '';
 in
 {
-    programs.alacritty.enable = true;
+    programs.alacritty = {
+        enable = true;
+        settings = {
+            general.import = [ activeThemeFileName ];
 
-    home.file."${dir}/alacritty.toml".source = ./.config/alacritty/alacritty.toml;
-    home.file."${dir}/toggle_theme.sh" = {
-        executable = true;
-        text = /* bash */ ''
-            #!${pkgs.bash}/bin/bash
+            font.size = 11.0;
 
-            set -euo pipefail
-            set -x
+            window.padding = { x = 2; y = 2; };
 
-            THEMES=(${themesStr})
-            THEMES+=("''${THEMES[0]}")
-
-            for i in "''${!THEMES[@]}"; do
-                if [ "${themeFile}" -ef "''${THEMES["$i"]}" ]; then
-                    ln -sf ''${THEMES[$((i + 1))]} ${themeFile}
-                    exit
-                fi
-            done
-
-            echo "failed to toggle theme" 1>&2
-            exit 1
-        '';
+            keyboard.bindings = [
+                { mods = "Control|Shift"; key = "Return"; action = "SpawnNewInstance"; }
+                { mods = "Control|Shift"; key = "n";      command = "${toggleScript}/bin/alacritty-toggle-theme"; }
+            ];
+        };
     };
 
     home.activation.linkAlacrittyTheme = config.lib.dag.entryAfter ["writeBoundary"] ''
-        ln -sf ${builtins.elemAt themes 0} ${themeFile}
+        ln -sf ${themesDir}/${defaultTheme} ${activeThemeFile}
     '';
 }
