@@ -122,17 +122,24 @@ in {
         MANPAGER = "nvim +Man!";
     };
 
-    home.file = let
+    home.file =
+        {
+            ".config/nvim" = {
+                recursive = true;
+                source = pkgs.lib.sources.cleanSourceWith {
+                    src = ./.;
+                    # FIXME: Won't work for whatever reason
+                    filter = name: type:
+                        !(pkgs.lib.strings.hasSuffix name ".nix");
+                };
+            };
+        }
+        // (let
             spellPath = ".local/share/nvim/site/spell";
         in {
-            ".config/nvim" = {
-                source = ./.config/nvim;
-                recursive = true;
-            };
-
             "${spellPath}/ru.utf-8.spl".source = inputs.nvim-spl-ru;
             "${spellPath}/ru.utf-8.sug".source = inputs.nvim-sug-ru;
             "${spellPath}/en.utf-8.spl".source = inputs.nvim-spl-en;
             "${spellPath}/en.utf-8.sug".source = inputs.nvim-sug-en;
-        };
+        });
 }
