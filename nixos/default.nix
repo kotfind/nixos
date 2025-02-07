@@ -13,6 +13,6 @@
         ./ssh.nix
         ./users.nix
         ./virtualization.nix
-        ./xort.nix
+        ./xorg.nix
     ];
 }

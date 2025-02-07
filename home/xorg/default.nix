@@ -57,7 +57,7 @@ in
                 xtitle
                 trayer
                 fira-code
-                fira-code-nerdfont
+                nerd-fonts.fira-code
                 gawk
                 toybox
                 pulseaudio

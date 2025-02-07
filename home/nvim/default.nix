@@ -61,7 +61,7 @@ in {
                     ""
                     lspServerNames;
             in
-            ''
+            /* lua */ ''
                 -- this file was generatred by nix
 
                 -- export LspServerNames

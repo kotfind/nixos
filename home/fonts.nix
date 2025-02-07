@@ -26,6 +26,6 @@
         kochi-substitute
         dejavu_fonts
         fira-code
-        fira-code-nerdfont
+        nerd-fonts.fira-code
     ];
 }
