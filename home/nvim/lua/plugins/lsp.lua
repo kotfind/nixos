@@ -71,6 +71,8 @@ end
 local function setup_servers()
     local lspconfig = require 'lspconfig'
 
+    -- LSP Confi docs:
+    -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
     local server_config = {
         ['__default__'] = function(server_name)
             lspconfig[server_name].setup {
@@ -95,7 +97,7 @@ local function setup_servers()
             -- Common settings
             --
             -- List of all options:
-            -- https://rust-analyzer.github.io/manual.html#configuration
+            -- https://rust-analyzer.github.io/book/configuration.html
             local settings = {
                 allTargets = true,
 
@@ -109,6 +111,7 @@ local function setup_servers()
 
                 cargo = {
                     targetDir = true,
+                    features = 'all',
                 }
             }
 
