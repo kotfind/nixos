@@ -17,7 +17,7 @@ local function get_triggers()
         { file = 'run',     run = './run' },
         { ft = 'python',    run = 'python3 ' .. file },
         { file = 'main.rs', run = 'RUST_LOG=info cargo run' },
-        { file = 'lib.rs',  run = 'RUST_LOG=info cargo test' },
+        { file = 'lib.rs',  run = 'RUST_LOG=info cargo test --all-features' },
         {
             file = 'CMakeLists.txt',
             run = [[
