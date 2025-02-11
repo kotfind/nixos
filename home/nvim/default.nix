@@ -7,19 +7,19 @@ let
     #   https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
     # or
     #   :help lspconfig-all
-    lspServers = with pkgs; [
+    lspServers = pkgs.lib.lists.flatten (with pkgs; [
         [pyright "pyright"]
         [libclang "clangd"]
-        [rust-analyzer "rust_analyzer"]
+        [rust-analyzer rustfmt "rust_analyzer"]
         [lua-language-server "lua_ls"]
         [tinymist "tinymist"]
         [bash-language-server "bashls"]
         [vscode-langservers-extracted "cssls" "eslint" "html" "jsonls"]
         [kotlin-language-server "kotlin_language_server"]
-        [jdt-language-server "jdtls"]
+        [jdt-language-server google-java-format "jdtls"]
         [nil "nil_ls"]
         [dot-language-server "dotls"]
-    ];
+    ]);
 
     packages = with pkgs; [
         xclip
@@ -41,17 +41,14 @@ in {
         extraPackages =
             packages
             ++ (
-                pkgs.lib.lists.forEach
+                pkgs.lib.lists.filter
+                    (spec: pkgs.lib.attrsets.isDerivation spec)
                     lspServers
-                    (spec: builtins.elemAt spec 0)
             );
 
         extraLuaConfig = let
-                lspServerNames = pkgs.lib.lists.foldl
-                    (acc: spec:
-                        acc ++ (pkgs.lib.lists.drop 1 spec)
-                    )
-                    []
+                lspServerNames = pkgs.lib.lists.filter
+                    (spec: pkgs.lib.strings.isString spec)
                     lspServers;
 
                 lspServerNamesStr = pkgs.lib.lists.foldl
