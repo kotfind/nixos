@@ -19,6 +19,7 @@
         ./tmux
         ./gallery-dl.nix
         ./secrets
+        ./scripts
     ];
 
     home = {
