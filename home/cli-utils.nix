@@ -13,6 +13,7 @@
         file
         ffmpeg
         cloc
+        xclip
     ];
 
     programs = {
