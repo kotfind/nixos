@@ -150,11 +150,10 @@ local function setup_servers()
             }
         end,
 
-        ['java_language_server'] = function()
-            lspconfig.java_language_server.setup {
+        ['jdtls'] = function()
+            lspconfig.jdtls.setup {
                 on_attach = on_attach,
                 capabilities = capabilities(),
-                cmd = { 'java-language-server' },
             }
         end,
 

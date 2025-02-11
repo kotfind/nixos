@@ -1,4 +1,4 @@
-{ pkgs, inputs, config, ... }:
+{ pkgs, inputs, ... }:
 let
     # format:
     # [ pkg lspconfig1 lspconfig2 ... ]
@@ -16,7 +16,7 @@ let
         [bash-language-server "bashls"]
         [vscode-langservers-extracted "cssls" "eslint" "html" "jsonls"]
         [kotlin-language-server "kotlin_language_server"]
-        [java-language-server "java_language_server"]
+        [jdt-language-server "jdtls"]
         [nil "nil_ls"]
         [dot-language-server "dotls"]
     ];
@@ -64,7 +64,7 @@ in {
             /* lua */ ''
                 -- this file was generatred by nix
 
-                -- export LspServerNames
+                -- Export some variables
                 LspServerNames = {
                     ${lspServerNamesStr}
                 }

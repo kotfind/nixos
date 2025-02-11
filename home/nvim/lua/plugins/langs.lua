@@ -1,5 +1,6 @@
 return {
     'pest-parser/pest.vim',
+
     {
         'aklt/plantuml-syntax',
         config = function()
