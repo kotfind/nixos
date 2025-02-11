@@ -46,7 +46,20 @@ local function get_triggers()
         { ft = 'typst',      run = string.format('typst compile %s %s.pdf && zathura %s.pdf', file, tmpfile, tmpfile), },
 
         -- Maven (Java/ Kotlin)
-        { file = 'pom.xml',  run = 'mvn exec:java' }
+        {
+            file = 'pom.xml',
+            run = [[
+                case "$RUN_APP_FILE" in
+                    */test/*)
+                        mvn test
+                        ;;
+
+                    *)
+                        mvn exec:java
+                        ;;
+                esac
+            ]]
+        }
     }
 end
 
@@ -60,11 +73,21 @@ local function run_bash_in_dir(bash_code, dir, cmd_pref)
     end
 
     -- Write tmpfile
+
+    -- define RUN_APP_FILE variable
+    tmpfile:write('RUN_APP_FILE=\'' .. vim.fn.expand('%:p') .. '\'\n')
+
+    -- cd into dir
     if dir ~= nil and dir ~= '' then
         tmpfile:write('cd ' .. dir .. '\n')
     end
+
+    -- main part
     tmpfile:write(bash_code)
-    tmpfile:write('\n' .. 'rm ' .. tmpfilename .. '\n') -- make script delete itself
+
+    -- make script delete itself
+    tmpfile:write('\n' .. 'rm ' .. tmpfilename .. '\n')
+
     tmpfile:close()
 
     -- Execute tmpfile
