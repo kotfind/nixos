@@ -55,7 +55,7 @@ local function setup_textobjects()
     local goto_previous_start = {}
     local goto_previous_end = {}
 
-    for _i, object in ipairs(objects) do
+    for _, object in ipairs(objects) do
         local letter = object[1]
         local name = object[2]
 

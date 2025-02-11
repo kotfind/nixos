@@ -14,10 +14,17 @@ local function get_triggers()
     local cxxflags = cflags
 
     return {
+        -- General
         { file = 'run',     run = './run' },
+
+        -- Python
         { ft = 'python',    run = 'python3 ' .. file },
+
+        -- Rust
         { file = 'main.rs', run = 'RUST_LOG=info cargo run' },
         { file = 'lib.rs',  run = 'RUST_LOG=info cargo test --all-features' },
+
+        -- Cmake (C++)
         {
             file = 'CMakeLists.txt',
             run = [[
@@ -27,10 +34,19 @@ local function get_triggers()
                 cmake --build . --target run
             ]],
         },
+
+        -- Make
         { file = 'Makefile', run = 'make -j4 && make run', },
+
+        -- C/ C++
         { ft = 'c',          run = string.format('gcc %s %s -o %s && %s', file, cflags, tmpfile, tmpfile), },
         { ft = 'cpp',        run = string.format('g++ %s %s -std=c++20 -o %s && %s', file, cxxflags, tmpfile, tmpfile), },
+
+        -- Typst
         { ft = 'typst',      run = string.format('typst compile %s %s.pdf && zathura %s.pdf', file, tmpfile, tmpfile), },
+
+        -- Maven (Java/ Kotlin)
+        { file = 'pom.xml',  run = 'mvn exec:java' }
     }
 end
 
