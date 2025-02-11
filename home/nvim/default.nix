@@ -107,16 +107,17 @@ in {
             '';
     };
 
-    home.activation.nvimLazySync = config.lib.dag.entryAfter ["writeBoundary"] ''
-        PATH="$PATH:${pkgs.git}/bin:${pkgs.gcc}/bin" \
-            run ${pkgs.neovim}/bin/nvim \
-                --headless \
-                -c ':Lazy! sync' \
-                -c ':Lazy! load nvim-treesitter' \
-                -c ':TSInstallSync all' \
-                -c ':TSUpdateSync' \
-                -c qa
-    '';
+    ## Temporary disabled
+    # home.activation.nvimLazySync = config.lib.dag.entryAfter ["writeBoundary"] ''
+    #     PATH="$PATH:${pkgs.git}/bin:${pkgs.gcc}/bin" \
+    #         run ${pkgs.neovim}/bin/nvim \
+    #             --headless \
+    #             -c ':Lazy! sync' \
+    #             -c ':Lazy! load nvim-treesitter' \
+    #             -c ':TSInstallSync all' \
+    #             -c ':TSUpdateSync' \
+    #             -c qa
+    # '';
 
     home.sessionVariables = {
         MANPAGER = "nvim +Man!";
