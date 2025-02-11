@@ -8,6 +8,10 @@ local function setup_treesitter()
             enable = true,
         },
 
+        indent = {
+            enable = true,
+        },
+
         playground = {
             enable = true,
         },
