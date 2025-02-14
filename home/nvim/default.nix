@@ -1,24 +1,80 @@
 { pkgs, inputs, ... }:
 let
     # format:
-    # [ pkg lspconfig1 lspconfig2 ... ]
+    # [ pkg1 pkg2 ... lspconfig1 lspconfig2 ... ]
     #
     # Lspconfig server name list:
     #   https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
     # or
     #   :help lspconfig-all
     lspServers = pkgs.lib.lists.flatten (with pkgs; [
-        [pyright "pyright"]
-        [libclang "clangd"]
-        [rust-analyzer rustfmt "rust_analyzer"]
-        [lua-language-server "lua_ls"]
-        [tinymist "tinymist"]
-        [bash-language-server "bashls"]
-        [vscode-langservers-extracted "cssls" "eslint" "html" "jsonls"]
-        [kotlin-language-server "kotlin_language_server"]
-        [jdt-language-server google-java-format "jdtls"]
-        [nil "nil_ls"]
-        [dot-language-server "dotls"]
+        [
+            "pyright"
+            pyright
+            yapf
+        ]
+
+        [
+            "ccls"
+            ccls
+        ]
+
+        [
+            "rust_analyzer"
+            rust-analyzer
+            rustfmt
+            clippy
+        ]
+
+        [
+            "lua_ls"
+            lua-language-server
+            luaformatter
+        ]
+
+        [
+            "tinymist"
+            tinymist
+            prettypst
+        ]
+
+        [
+            "bashls"
+            bash-language-server
+            shfmt
+        ]
+
+        [
+            "cssls"
+            "eslint"
+            "html"
+            "jsonls"
+            vscode-langservers-extracted
+            perl540Packages.HTMLFormatter
+        ]
+
+        [
+            "kotlin_language_server"
+            kotlin-language-server
+            ktlint
+        ]
+
+        [
+            "jdtls"
+            jdt-language-server
+            google-java-format
+        ]
+
+        [
+            "nil_ls"
+            nil
+            nixfmt-classic
+        ]
+
+        [
+            "dotls"
+            dot-language-server
+        ]
     ]);
 
     packages = with pkgs; [
@@ -126,7 +182,7 @@ in {
                 recursive = true;
                 source = pkgs.lib.sources.cleanSourceWith {
                     src = ./.;
-                    # FIXME: Won't work for whatever reason
+                    # FIXME: Filter won't work for whatever reason
                     filter = name: type:
                         !(pkgs.lib.strings.hasSuffix name ".nix");
                 };
