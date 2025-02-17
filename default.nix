@@ -35,7 +35,7 @@ let
                 };
             };
 
-            host = config.cfgLib.hosts.pc;
+            host = import ./current-host.nix config.cfgLib.hosts;
         };
     };
 
