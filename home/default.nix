@@ -1,4 +1,4 @@
-{ cfg, config, ... }:
+{ config, ... }:
 {
     imports = [
         # ./xorg
@@ -26,15 +26,9 @@
         stateVersion = "24.11";
 
         # username = cfg.username;
-        homeDirectory = builtins.trace
-            (
-                config.cfgLib.host
-            )
-            (
-                if config.home.username == "kotfind"
-                then "/home/${cfg.username}"
-                else "/root"
-            );
+        homeDirectory = if config.home.username == "kotfind"
+            then "/home/kotfind"
+            else "/root";
     };
 
 

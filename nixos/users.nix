@@ -1,7 +1,8 @@
-{ cfg, ... }:
+{  ... }:
 {
     # Note: don't forget `passwd`
-    users.users.${cfg.username} = {
+    # FIXME kotfind -> user
+    users.users.kotfind = {
         isNormalUser = true;
         linger = true;
         extraGroups = [
