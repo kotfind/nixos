@@ -1,5 +1,8 @@
-{ pkgs, cfg, config, ... }:
+{ pkgs, config, ... }:
 let
+    enableForKotfind = with config.cfgLib;
+        enableFor users.kotfind;
+
     autostartService =
         {
             cmd,
@@ -34,7 +37,7 @@ let
         };
 in
 {
-    xsession = {
+    xsession = enableForKotfind {
         enable = true;
         windowManager.bspwm = {
             enable = true;
@@ -42,12 +45,12 @@ in
         };
     };
 
-    services.sxhkd = {
+    services.sxhkd = enableForKotfind {
         enable = true;
         extraConfig = builtins.readFile ./.config/sxhkd/sxhkdrc;
     };
 
-    systemd.user.services = {
+    systemd.user.services = enableForKotfind {
         lemonbar = autostartService {
             cmd = ./.config/lemonbar/lemonbar.sh;
             executor = "${pkgs.bash}/bin/bash -c";
@@ -72,50 +75,52 @@ in
         };
     };
 
-    services.batsignal = {
-        enable = cfg.fullname == "kotfind@kotfindLT";
-        extraArgs = [
-            "-f" "99"
-            "-w" "30"
-            "-c" "10"
-            "-d" "5"
-            "-p"
-        ];
-    };
+    services.batsignal = with config.cfgLib; 
+        enableFor hosts.laptop.users.kotfind {
+            enable = true;
+            extraArgs = [
+                "-f" "99"
+                "-w" "30"
+                "-c" "10"
+                "-d" "5"
+                "-p"
+            ];
+        };
 
-    services.gpg-agent = {
+    services.gpg-agent = enableForKotfind {
         enable = true;
         enableFishIntegration = true;
         enableBashIntegration = true;
         pinentryPackage = pkgs.pinentry-rofi;
     };
 
-    services.screen-locker = {
+    services.screen-locker = enableForKotfind {
         enable = true;
         lockCmd = "${pkgs.xlockmore}/bin/xlock -echokeys";
     };
 
-    home.packages = with pkgs; [
+    home.packages = enableForKotfind (with pkgs; [
         # for sxhkd
         scrot
         rofi
         pulseaudio
         light # TODO: for laptop only
         playerctl
-    ];
+    ]);
 
-    home.sessionVariables = {
+    home.sessionVariables = enableForKotfind {
         # for some java gui apps to work:
         _JAVA_AWT_WM_NONREPARENTING = 1;
     };
 
-    systemd.user.tmpfiles.rules = let
-            user = cfg.username;
+    systemd.user.tmpfiles.rules = enableForKotfind
+        (let
+            user = config.cfgLib.user.name;
             home = config.home.homeDirectory;
         in [
             # Type  Path               Mode  User     Group   Age  Argument
             "d      /tmp/downloads     0755  ${user}  users   -    -"
             "d      /tmp/screenshots   0755  ${user}  users   -    -"
             "L+     ${home}/Downloads  -     -        -       -    /tmp/downloads"
-        ];
+        ]);
 }

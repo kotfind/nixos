@@ -6,6 +6,7 @@
         rustflags = ["-C", "link-arg=--ld-path=${pkgs.mold}/bin/mold"]
     '';
 
+    # TODO ?: move ra-multiplex config to nvim config?
     home.file.".config/ra-multiplex/config.toml".text = ''
         instance_timeout = 300
     '';

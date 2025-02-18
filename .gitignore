@@ -1,2 +1,2 @@
-./cfg.nix
-./nixos/hardware-configuration.nix
+nixos/hardware-configuration.nix
+result

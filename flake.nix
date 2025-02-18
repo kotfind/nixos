@@ -25,38 +25,7 @@
         sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    outputs = { nixpkgs, home-manager, sops-nix, ... }@inputs: {
-        nixosConfigurations.system = let
-                cfg = import ./cfg.nix;
-                # utils = import ./utils { pkgs = nixpkgs; };
-                specialArgs = {
-                    inherit cfg inputs;
-                };
-            in nixpkgs.lib.nixosSystem {
-                inherit specialArgs;
-                system = "x86_64-linux";
-
-                modules = [
-                    ./nixos
-
-                    sops-nix.nixosModules.sops
-
-                    home-manager.nixosModules.home-manager
-                    {
-                        home-manager = {
-                            sharedModules = [
-                                sops-nix.homeManagerModules.sops
-                            ];
-
-                            useGlobalPkgs = true;
-                            useUserPackages = true;
-
-                            extraSpecialArgs = specialArgs;
-
-                            users.${cfg.username} = import ./home;
-                        };
-                    }
-                ];
-            };
+    outputs = inputs: {
+        nixosConfigurations.default = import ./default.nix inputs;
     };
 }

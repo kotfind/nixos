@@ -1,10 +1,11 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 let
     desktop' = pkgName: desktopFileName: "${pkgs.${pkgName}}/share/applications/${desktopFileName}";
     desktop = pkgName: desktop' pkgName "${pkgName}.desktop";
 in
 {
-    xdg.mimeApps = {
+    # FIXME: don't seem to work
+    xdg.mimeApps = (with config.cfgLib; enableFor users.kotfind) {
         enable = true;
         defaultApplications =
             {

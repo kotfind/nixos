@@ -1,7 +1,6 @@
-{ cfg, ... }:
+{ config, ... }:
 {
-    # Note: don't forget `passwd`
-    users.users.${cfg.username} = {
+    users.users."${config.cfgLib.users.kotfind.name}" = {
         isNormalUser = true;
         linger = true;
         extraGroups = [
@@ -15,4 +14,8 @@
             "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCqXAoR6gqLUkYGpkVBkGgSDjyv68niEhXfxV05inIBiwMoYkIR6XsClUiFEx7uo97khEUOcol4qu4LxJVUURjQBdJN5cqKPTheCyCZoKSPe565YUqV9E55k528MkAfIi2Qz+XAmwr4ZEBFGECZQdI2WcrE1VgSVzxW9/YjDIcTgzkN7P4f3GiZnWb+sD8tJL+HAoMJ6HoaM/O0ghkWN1iKjwEp9Nh9QRuMwwpCvGqJy/GUdmjRy+YbVWe64pGEAge1dB/Wl/fbKdncUZ7m568/s9f9we3hQ/XEYGmxCMhRrV8CXYVlqc+5QKViRfgEiNPYE0/tqQhRP4NaOKHqxRveG+3oISCayxbDjAUzH0iH0uMohZTgGbPcGcwlDJHszD9YwISOlZfHrErsSXf63fK9MuQvj76LK4q6o6wCrlRC3550eWYGD03nME9TQKemnp2kVFgml/kUPwI6hPq0pHFYIXyvdsp/FrwbRgq79BesQ7ZOvWno+if7CxNbn6VfmOs= kotfind@kotfindPC"
         ];
     };
+
+    nix.settings.trusted-users = [
+        "@wheel"
+    ];
 }

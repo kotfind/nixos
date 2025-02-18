@@ -1,4 +1,4 @@
-{ cfg, ... }:
+{ config, ... }:
 {
     imports = [
         ./xorg
@@ -25,10 +25,15 @@
     home = {
         stateVersion = "24.11";
 
-        username = cfg.username;
-        homeDirectory = "/home/${cfg.username}";
-    };
+        homeDirectory =
+            let
+                user = config.cfgLib.user;
+            in
+            user.data.homeDir or "/home/${user.name}";
 
+
+        file."hello".text = "Hello, ${config.home.username}";
+    };
 
     programs.home-manager.enable = true;
 }

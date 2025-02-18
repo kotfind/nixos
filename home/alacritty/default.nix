@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, lib, ... }:
 let
     activeThemeFile = "${config.home.homeDirectory}/.config/alacritty/active-theme.toml";
 
@@ -48,7 +48,16 @@ in
         };
     };
 
-    home.activation.linkAlacrittyTheme = config.lib.dag.entryAfter ["writeBoundary"] ''
-        ln -sf ${builtins.elemAt themes 0} ${activeThemeFile}
-    '';
+    home.activation.linkAlacrittyTheme = let
+            themeFileArg = lib.escapeShellArg (builtins.elemAt themes 0);
+            activeThemeFileArg = lib.escapeShellArg activeThemeFile;
+        in
+        config.lib.dag.entryAfter ["writeBoundary"]
+            /* bash */ ''
+                # create directory if it does not exist
+                mkdir -p $(dirname ${activeThemeFileArg})
+
+                # link theme file
+                ln -sf ${themeFileArg} ${activeThemeFileArg}
+            '';
 }

@@ -3,9 +3,10 @@
     imports = [
         { system.stateVersion = "24.11"; }
 
+        ./hardware-configuration.nix
+
         ./audio.nix
         ./bluetooth.nix
-        ./hardware-configuration.nix
         ./networking.nix
         ./nix.nix
         ./other.nix

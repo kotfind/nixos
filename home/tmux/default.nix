@@ -1,6 +1,11 @@
-{ ... }:
+{ config, ... }:
 {
-    home.file.".tmux.conf".source = ./.tmux.conf;
+    # TODO: rewrite with nix
+    home.file.".tmux.conf" = (with config.cfgLib; enableFor users.kotfind) {
+        source = ./.tmux.conf;
+    };
 
-    programs.tmux.enable = true;
+    programs.tmux = (with config.cfgLib; enableFor users.kotfind) {
+        enable = true;
+    };
 }
