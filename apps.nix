@@ -23,29 +23,57 @@ let
 
     mkApp = script: {
         type = "app";
-        program = "${script}";
+        program = lib.getExe script;
     };
 
-    assertRoot = pkgs.writeShellScript "assert-root" ''
-        if [ ! -e 'flake.nix' ]; then
-            echo 'please run this script from flake root directory' 1>&2
-            exit 1
-        fi
-    '';
-
-    switch = pkgs.writeShellScript "switch" ''
+    # Goes to path "$1", relative to flake root
+    dirFromRoot = pkgs.writeScriptBin "dir-from-root" /*bash */ ''
         set -euo pipefail
 
-        ${assertRoot}
+        while true; do
+            if [ -e 'flake.nix' ]; then
+                flake_root="$PWD"
+                break
+            fi
+
+            if [ "$PWD" -ef "/" ]; then
+                echo 'flake.nix was not found in current or parent directories' 1>&2
+                exit 1
+            fi
+
+            cd ..
+        done
+
+        path="$flake_root/$1"
+
+        if [ ! -d "$path" ]; then
+            echo "$path is not a directory" 1>&2
+            exit 1
+        fi
+
+        echo "$path"
+    '';
+
+    dirRoot = pkgs.writeScriptBin "dir-root" /* bash */ ''
+        ${lib.getExe dirFromRoot} .
+    '';
+
+    switch = pkgs.writeShellScriptBin "switch" ''
+        set -euo pipefail
+
+        pushd "$(${lib.getExe dirRoot})"
+
+        sudo -v
 
         sudo ${nixos-rebuild} switch --flake .#default --verbose
 
         ${lib.strings.concatMapStrings
-            (userName_: let
+            (userName_:
+                let
                     userName = lib.escapeShellArg userName_;
                 in
                 /* bash */ ''
-                    echo "-------------------- activate ${userName} --------------------"
+                    echo -e "\n-------------------- activate ${userName} --------------------\n"
 
                     gen="$(awk '/ExecStart=/ { print $2; }' /etc/systemd/system/home-manager-${userName}.service)"
 
@@ -56,8 +84,29 @@ let
                 '')
             (builtins.attrNames users)
         }
+
+        popd
+    '';
+
+    update = pkgs.writeShellScriptBin "update" ''
+        set -euo pipefail
+
+        pushd "$(${lib.getExe dirRoot})"
+
+        sudo -v
+
+        sudo nix flake update
+
+        ${lib.getExe (import ./home/nvim/update.nix {
+            inherit pkgs lib users dirFromRoot;
+        })}
+
+        popd
+
+        ${lib.getExe switch}
     '';
 in
 {
     switch = mkApp switch;
+    update = mkApp update;
 }

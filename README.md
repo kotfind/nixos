@@ -17,10 +17,22 @@
 
 3. Build and switch to configuration:
     ```bash
-    ./switch
+    nix run .#switch
     ```
 
-4. Don't forget to set user passwords if you are just installing the system:
+4. Set user passwords:
     ```bash
     passwd *USERNAME*
     ```
+
+# Note on switch and update
+
+Bot `nixos-rebuild switch` and `nixos-rebuild update` should NOT be executed manualy, but
+through the wrappers:
+```bash
+nix run .#switch
+```
+and
+```bash
+nix run .#update
+```
