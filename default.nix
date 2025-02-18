@@ -18,6 +18,7 @@ let
                 kotfind = {
                     email = "kotfind@yandex.ru";
                 };
+
                 root = {
                     homeDir = "/root";
                 };
@@ -31,6 +32,15 @@ let
                     ];
                     data = {
                         hostname = "kotfindPC";
+                    };
+                };
+                laptop = {
+                    users = with config.cfgLib.users; [
+                        kotfind
+                        root
+                    ];
+                    data = {
+                        hostname = "kotfindLT";
                     };
                 };
             };

@@ -1,4 +1,4 @@
-{ pkgs, config, cfg, ... }:
+{ pkgs, config, lib, ... }:
 {
     sops = {
         age = {
@@ -8,26 +8,26 @@
 
         defaultSopsFile = ./default.yaml;
 
-        secrets =
+        # TODO: move secret definitions closer to their uses
+        secrets = lib.mkMerge [
             {
                 kotfindPC-ip-address = {};
-            } //
-            (if cfg.fullname == "kotfind@kotfindPC" then {
+            }   
+            ((with config.cfgLib; enableFor hosts.pc.users.kotfind) {
                 "kotfind@kotfindPC/ssh/id_rsa".path = "/home/kotfind/.ssh/id_rsa";
                 "kotfind@kotfindPC/ssh/id_rsa.pub".path = "/home/kotfind/.ssh/id_rsa.pub";
-            } else {}) //
-            (if cfg.username == "kotfind" then {
+            })
+            ((with config.cfgLib; enableFor users.kotfind) {
                 "kotfind/gh/oauth_token" = {};
-            } else {});
+            })
+        ];
 
-        templates =
-            {
-            } //
-            (if cfg.username == "kotfind" then {
-                "gh_hosts" = {
-                    content = let
+        templates = {
+            gh_hosts = {
+                content = let
                         oauth_token = "${config.sops.placeholder."kotfind/gh/oauth_token"}";
-                    in ''
+                    in
+                    /* yaml */ ''
                         github.com:
                             users:
                                 kotfind:
@@ -36,17 +36,20 @@
                             user: kotfind
                             oauth_token: ${oauth_token}
                     '';
-                    path = "/home/kotfind/.config/gh/hosts.yml";
-                };
-            } else {});
+
+                path = (with config.cfgLib; enableFor users.kotfind)
+                    "${config.home.homeDirectory}/.config/gh/hosts.yml";
+            };
+        };
     };
 
-    home.packages = with pkgs; [
-        sops
-        age
-    ];
+    home.packages = with pkgs; (with config.cfgLib; enableFor users.kotfind) [
+            sops
+            age
+        ];
 
-    programs.bash.bashrcExtra = ''
-        export kotfindPC="''$(cat ${config.sops.secrets.kotfindPC-ip-address.path})"
-    '';
+    programs.bash.bashrcExtra = (with config.cfgLib; enableFor users.kotfind)
+        /* bash */ ''
+            export kotfindPC="''$(cat ${config.sops.secrets.kotfindPC-ip-address.path})"
+        '';
 }

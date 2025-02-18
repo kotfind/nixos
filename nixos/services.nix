@@ -1,6 +1,6 @@
-{ pkgs, cfg, ... }:
-if cfg.hostname == "kotfindPC" then {
-    systemd.services = {
+{ pkgs, config, ... }:
+{
+    systemd.services = (with config.cfgLib; enableFor hosts.pc) {
         navidrome = {
             description = "Navidrome Music Service";
         
@@ -28,7 +28,7 @@ if cfg.hostname == "kotfindPC" then {
                 };
         };
 
-        rust-tagserver = {
+        rust-tagserver = (with config.cfgLib; enableFor hosts.pc) {
             description = "Rust Tagserver";
 
             enable = true;
@@ -50,4 +50,4 @@ if cfg.hostname == "kotfindPC" then {
             };
         };
     };
-} else {}
+}

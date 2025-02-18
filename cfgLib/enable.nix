@@ -22,7 +22,7 @@ let
 
     # Cfg is either isUserOnHost or isHost
     cfg = let
-            userName = config.user.name;
+            userName = config.cfgLib.user.name or null;
             host = config.cfgLib.host;
         in
         if userName == null

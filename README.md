@@ -16,6 +16,11 @@
     ```
 
 3. Build and switch to configuration:
-    ```
+    ```bash
     ./switch
+    ```
+
+4. Don't forget to set user passwords if you are just installing the system:
+    ```bash
+    passwd *USERNAME*
     ```

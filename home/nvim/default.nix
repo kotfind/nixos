@@ -1,4 +1,5 @@
 { pkgs, inputs, ... }:
+# TODO?: don't install lsp servers for root?
 let
     # format:
     # [ pkg1 pkg2 ... lspconfig1 lspconfig2 ... ]

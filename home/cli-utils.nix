@@ -1,19 +1,24 @@
-{ cfg, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 {
-    home.packages = with pkgs; [
-        wget
-        curl
-        killall
-        cached-nix-shell
-        p7zip
-        imagemagick
-        gh
-        ncdu
-        bat
-        file
-        ffmpeg
-        cloc
-        xclip
+    home.packages = with pkgs; lib.mkMerge [
+        [
+            wget
+            curl
+            killall
+            p7zip
+            bat
+            ncdu
+            file
+            xclip
+            cloc
+            imagemagick
+            ffmpeg
+            age
+        ]
+
+        ((with config.cfgLib; enableFor users.kotfind)  [
+            gh
+        ])
     ];
 
     programs = {
@@ -22,10 +27,10 @@
         ripgrep.enable = true;
         jq.enable = true;
 
-        git = {
+        git = with config.cfgLib; enableFor users.kotfind {
             enable = true;
-            userName = cfg.username;
-            userEmail = cfg.email;
+            userName = users.kotfind.name;
+            userEmail = users.kotfind.data.email;
 
             extraConfig = {
                 core.quotepath = false;
@@ -46,7 +51,7 @@
             # TODO: configure
         };
 
-        direnv = {
+        direnv = with config.cfgLib; enableFor users.kotfind {
             enable = true;
             nix-direnv.enable = true;
         };

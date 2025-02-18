@@ -1,4 +1,4 @@
-{ cfg, ... }:
+{ config, ... }:
 {
     services = {
         xserver = {
@@ -19,7 +19,7 @@
 
         displayManager.autoLogin = {
             enable = true;
-            user = cfg.username;
+            user = config.cfgLib.users.kotfind.name;
         };
     };
 }

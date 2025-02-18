@@ -1,8 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
     # List fonts:
     # fc-list : family style 
-    fonts.fontconfig = {
+    fonts.fontconfig = (with config.cfgLib; enableFor users.kotfind) {
         enable = true;
         defaultFonts = {
             monospace = [
@@ -21,11 +21,11 @@
         };
     };
 
-    home.packages = with pkgs; [
+    home.packages = (with config.cfgLib; enableFor users.kotfind) (with pkgs; [
         ipafont
         kochi-substitute
         dejavu_fonts
         fira-code
         nerd-fonts.fira-code
-    ];
+    ]);
 }

@@ -1,16 +1,46 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
-set -x
 
-cd "$(dirname "$0")"
+# Actually rebuild system
+rebuild() {
+    sudo nixos-rebuild switch --flake .#default --verbose
+}
 
-sudo nixos-rebuild switch --flake .#system --verbose
+# activate a single user "$1"
+activate_user() {
+    local username="$1"
 
-username="$(nix eval --impure --raw --expr "(import ./cfg.nix).username")"
-gen="$(awk '/ExecStart=/ { print $2; }' /etc/systemd/system/home-manager-"$username".service)"
+    echo "-------------------- activate $username --------------------"
 
-rm -f "/home/$username/.config/fcitx5/profile"
-rm -f "/home/$username/.config/fcitx5/config"
+    local gen
+    gen="$(awk '/ExecStart=/ { print $2; }' /etc/systemd/system/home-manager-"$username".service)"
 
-sudo -u "$username" "$gen/activate"
+    rm -f "/home/$username/.config/fcitx5/profile"
+    rm -f "/home/$username/.config/fcitx5/config"
+
+    sudo -u "$username" "$gen/activate"
+}
+
+# Call activations scripts for all users
+activate_all() {
+    local script='
+        { config, lib, ...}:
+            lib.escapeShellArgs
+                (builtins.attrNames config.cfgLib.users)'
+
+    local usernames
+    usernames=($(nix eval .#nixosConfigurations.default --apply "$script" --raw))
+
+    for username in "${usernames[@]}"; do
+        activate_user "$username"
+    done
+}
+
+run() {
+    cd "$(dirname "$0")"
+    rebuild
+    activate_all
+}
+
+run

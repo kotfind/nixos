@@ -1,14 +1,14 @@
-{ cfg, pkgs, ... }:
-if cfg.fullname == "kotfind@kotfindPC" then {
-    programs = {
-        gallery-dl = {
+{ config, ... }:
+{
+    programs =  {
+        gallery-dl = (with config.cfgLib; enableFor hosts.pc.users.kotfind) {
             enable = true;
 
             # TODO: auth
         };
 
-        fish.shellAliases = {
+        fish.shellAliases = (with config.cfgLib; enableFor hosts.pc.users.kotfind) {
             gdl = "gallery-dl";
         };
     };
-} else {}
+}
