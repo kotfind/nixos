@@ -4,11 +4,11 @@ let
 
     toml = (pkgs.formats.toml {}).generate;
 
-    themes = pkgs.lib.attrsets.mapAttrsToList
+    themes = lib.attrsets.mapAttrsToList
         (themeName: colors: toml "${themeName}.toml" { inherit colors; })
         (import ./themes.nix);
 
-    themesStr = pkgs.lib.strings.concatMapStringsSep
+    themesStr = lib.strings.concatMapStringsSep
         " "
         (themeFile: "'${themeFile}'")
         themes;

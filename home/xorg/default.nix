@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, lib, ... }:
 let
     enableForKotfind = with config.cfgLib;
         enableFor users.kotfind;
@@ -19,7 +19,7 @@ let
                 ExecStart = "${executor} ${cmd}";
 
                 Environment = let
-                        path = pkgs.lib.concatMapStringsSep
+                        path = lib.concatMapStringsSep
                             ":"
                             (pkg: "${pkg}/bin")
                             packages;

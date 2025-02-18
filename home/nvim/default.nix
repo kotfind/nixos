@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, lib, ... }:
 # TODO?: don't install lsp servers for root?
 let
     # format:
@@ -8,7 +8,7 @@ let
     #   https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
     # or
     #   :help lspconfig-all
-    lspServers = pkgs.lib.lists.flatten (with pkgs; [
+    lspServers = lib.lists.flatten (with pkgs; [
         [
             "pyright"
             pyright
@@ -98,17 +98,17 @@ in {
         extraPackages =
             packages
             ++ (
-                pkgs.lib.lists.filter
-                    (spec: pkgs.lib.attrsets.isDerivation spec)
+                lib.lists.filter
+                    (spec: lib.attrsets.isDerivation spec)
                     lspServers
             );
 
         extraLuaConfig = let
-                lspServerNames = pkgs.lib.lists.filter
-                    (spec: pkgs.lib.strings.isString spec)
+                lspServerNames = lib.lists.filter
+                    (spec: lib.strings.isString spec)
                     lspServers;
 
-                lspServerNamesStr = pkgs.lib.lists.foldl
+                lspServerNamesStr = lib.lists.foldl
                     (acc: serverName:
                         acc + "\n'${serverName}',"
                     )
@@ -181,11 +181,11 @@ in {
         {
             ".config/nvim" = {
                 recursive = true;
-                source = pkgs.lib.sources.cleanSourceWith {
+                source = lib.sources.cleanSourceWith {
                     src = ./.;
                     # FIXME: Filter won't work for whatever reason
                     filter = name: type:
-                        !(pkgs.lib.strings.hasSuffix name ".nix");
+                        !(lib.strings.hasSuffix name ".nix");
                 };
             };
         }

@@ -74,13 +74,13 @@ let
         };
     };
 in
-    nixpkgs.lib.nixosSystem {
-        inherit specialArgs system;
-        
-        modules = [
-            ./nixos
-            cfgLibMod
-            homeMod
-            sops-nix.nixosModules.sops
-        ];
-    }
+nixpkgs.lib.nixosSystem {
+    inherit specialArgs system;
+    
+    modules = [
+        ./nixos
+        cfgLibMod
+        homeMod
+        sops-nix.nixosModules.sops
+    ];
+}
