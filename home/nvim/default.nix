@@ -161,18 +161,6 @@ in {
             '';
     };
 
-    ## Temporary disabled
-    # home.activation.nvimLazySync = config.lib.dag.entryAfter ["writeBoundary"] ''
-    #     PATH="$PATH:${pkgs.git}/bin:${pkgs.gcc}/bin" \
-    #         run ${pkgs.neovim}/bin/nvim \
-    #             --headless \
-    #             -c ':Lazy! sync' \
-    #             -c ':Lazy! load nvim-treesitter' \
-    #             -c ':TSInstallSync all' \
-    #             -c ':TSUpdateSync' \
-    #             -c qa
-    # '';
-
     home.sessionVariables = {
         MANPAGER = "nvim +Man!";
     };
@@ -180,13 +168,8 @@ in {
     home.file =
         {
             ".config/nvim" = {
+                source = ./config;
                 recursive = true;
-                source = lib.sources.cleanSourceWith {
-                    src = ./.;
-                    # FIXME: Filter won't work for whatever reason
-                    filter = name: type:
-                        !(lib.strings.hasSuffix name ".nix");
-                };
             };
         }
         // (let

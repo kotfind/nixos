@@ -9,31 +9,26 @@ rebuild() {
 
 # activate a single user "$1"
 activate_user() {
-    local username="$1"
+    local user="$1"
 
-    echo "-------------------- activate $username --------------------"
+    echo "-------------------- activate $user --------------------"
 
     local gen
-    gen="$(awk '/ExecStart=/ { print $2; }' /etc/systemd/system/home-manager-"$username".service)"
+    gen="$(awk '/ExecStart=/ { print $2; }' /etc/systemd/system/home-manager-"$user".service)"
 
-    rm -f "/home/$username/.config/fcitx5/profile"
-    rm -f "/home/$username/.config/fcitx5/config"
+    rm -f "/home/$user/.config/fcitx5/profile"
+    rm -f "/home/$user/.config/fcitx5/config"
 
-    sudo -u "$username" "$gen/activate"
+    sudo -u "$user" "$gen/activate"
 }
 
 # Call activations scripts for all users
 activate_all() {
-    local script='
-        { config, lib, ...}:
-            lib.escapeShellArgs
-                (builtins.attrNames config.cfgLib.users)'
+    local users
+    users=($(./lsusers))
 
-    local usernames
-    usernames=($(nix eval .#nixosConfigurations.default --apply "$script" --raw))
-
-    for username in "${usernames[@]}"; do
-        activate_user "$username"
+    for user in "${users[@]}"; do
+        activate_user "$user"
     done
 }
 

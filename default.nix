@@ -1,52 +1,9 @@
 # This value is passed to outputs.nixosConfiguration.system
 
-{ nixpkgs, home-manager, sops-nix, ... }@inputs:
+{ nixpkgs, home-manager, sops-nix, system, ... }@inputs:
 let
-    system = "x86_64-linux";
-
     specialArgs = {
         inherit inputs;
-    };
-
-    # A cfgLib module with it's configuration.
-    # It's passed to both nixos and home-manager.
-    cfgLibMod = { config, ... }: {
-        imports = [ ./cfgLib ];
-
-        cfgLib = {
-            usersDef = {
-                kotfind = {
-                    email = "kotfind@yandex.ru";
-                };
-
-                root = {
-                    homeDir = "/root";
-                };
-            };
-
-            hostsDef = {
-                pc = {
-                    users = with config.cfgLib.users; [
-                        kotfind
-                        root
-                    ];
-                    data = {
-                        hostname = "kotfindPC";
-                    };
-                };
-                laptop = {
-                    users = with config.cfgLib.users; [
-                        kotfind
-                        root
-                    ];
-                    data = {
-                        hostname = "kotfindLT";
-                    };
-                };
-            };
-
-            host = import ./current-host.nix config.cfgLib.hosts;
-        };
     };
 
     homeMod = { config, lib, ... }: {
@@ -57,7 +14,7 @@ let
         home-manager = {
             sharedModules = [
                 sops-nix.homeManagerModules.sops
-                cfgLibMod
+                ./profiles.nix
             ];
 
             useGlobalPkgs = true;
@@ -79,7 +36,7 @@ nixpkgs.lib.nixosSystem {
     
     modules = [
         ./nixos
-        cfgLibMod
+        ./profiles.nix
         homeMod
         sops-nix.nixosModules.sops
     ];

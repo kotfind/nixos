@@ -25,7 +25,12 @@
         sops-nix.inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    outputs = inputs: {
-        nixosConfigurations.default = import ./default.nix inputs;
-    };
+    outputs = inputs:
+        let
+            system = "x86_64-linux";
+            args = inputs // { inherit system; };
+        in
+        {
+            nixosConfigurations.default = import ./default.nix args;
+        };
 }

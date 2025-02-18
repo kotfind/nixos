@@ -31,8 +31,6 @@
             in
             user.data.homeDir or "/home/${user.name}";
 
-
-        file."hello".text = "Hello, ${config.home.username}";
     };
 
     programs.home-manager.enable = true;
