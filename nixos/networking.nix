@@ -1,8 +1,6 @@
-{ ... }: {
+{ config, ... }: {
     networking = {
-        # FIXME
-        # hostName = cfg.hostname;
-        hostName = "kotfindPC";
+        hostName = config.cfgLib.host.data.hostname;
 
         networkmanager.enable = true;
 

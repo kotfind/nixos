@@ -1,8 +1,5 @@
 { pkgs, config, lib, ... }:
 let
-    enableForKotfind = with config.cfgLib;
-        enableFor users.kotfind;
-
     autostartService =
         {
             cmd,
@@ -37,7 +34,7 @@ let
         };
 in
 {
-    xsession = enableForKotfind {
+    xsession = (with config.cfgLib; enableFor users.kotfind) {
         enable = true;
         windowManager.bspwm = {
             enable = true;
@@ -45,12 +42,12 @@ in
         };
     };
 
-    services.sxhkd = enableForKotfind {
+    services.sxhkd = (with config.cfgLib; enableFor users.kotfind) {
         enable = true;
         extraConfig = builtins.readFile ./.config/sxhkd/sxhkdrc;
     };
 
-    systemd.user.services = enableForKotfind {
+    systemd.user.services = (with config.cfgLib; enableFor users.kotfind) {
         lemonbar = autostartService {
             cmd = ./.config/lemonbar/lemonbar.sh;
             executor = "${pkgs.bash}/bin/bash -c";
@@ -87,33 +84,41 @@ in
             ];
         };
 
-    services.gpg-agent = enableForKotfind {
+    services.gpg-agent = (with config.cfgLib; enableFor users.kotfind) {
         enable = true;
         enableFishIntegration = true;
         enableBashIntegration = true;
         pinentryPackage = pkgs.pinentry-rofi;
     };
 
-    services.screen-locker = enableForKotfind {
+    services.screen-locker = (with config.cfgLib; enableFor users.kotfind) {
         enable = true;
         lockCmd = "${pkgs.xlockmore}/bin/xlock -echokeys";
     };
 
-    home.packages = enableForKotfind (with pkgs; [
-        # for sxhkd
-        scrot
-        rofi
-        pulseaudio
-        light # TODO: for laptop only
-        playerctl
-    ]);
+    # for sxhkd
+    home.packages = lib.mkMerge [
+        (with config.cfgLib; enableFor users.kotfind
+            (with pkgs; [
+                scrot
+                rofi
+                pulseaudio
+                playerctl
+            ])
+        )
+        (with config.cfgLib; enableFor hosts.laptop.users.kotfind
+            (with pkgs; [
+                light
+            ])
+        )
+    ];
 
-    home.sessionVariables = enableForKotfind {
+    home.sessionVariables = (with config.cfgLib; enableFor users.kotfind) {
         # for some java gui apps to work:
         _JAVA_AWT_WM_NONREPARENTING = 1;
     };
 
-    systemd.user.tmpfiles.rules = enableForKotfind
+    systemd.user.tmpfiles.rules = (with config.cfgLib; enableFor users.kotfind)
         (let
             user = config.cfgLib.user.name;
             home = config.home.homeDirectory;
