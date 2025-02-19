@@ -1,13 +1,14 @@
 { config, ... }:
 {
     imports = [
-        ./xorg
         ./alacritty
         ./chromium.nix
         ./cli-utils.nix
         ./firefox.nix
         ./fish
         ./fonts.nix
+        ./gallery-dl.nix
+        ./git.nix
         ./gui-utils.nix
         ./keyboard
         ./mime.nix
@@ -15,11 +16,12 @@
         ./pass.nix
         ./proxy.nix
         ./rust.nix
-        ./sqlite.nix
-        ./tmux
-        ./gallery-dl.nix
-        ./secrets
         ./scripts
+        ./secrets
+        ./sqlite.nix
+        ./ssh.nix
+        ./tmux
+        ./xorg
     ];
 
     home = {
