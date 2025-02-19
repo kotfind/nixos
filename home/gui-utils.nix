@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, lib, ... }:
 {
     home.packages = with pkgs; lib.mkMerge [
         [
@@ -16,6 +16,8 @@
             transmission_4-qt
             pavucontrol
             libreoffice
+
+            zoom-us
         ])
     ];
 

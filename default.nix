@@ -6,6 +6,10 @@ let
         inherit inputs;
     };
 
+    unfreePkgs = pkgs: with pkgs; [
+        zoom-us
+    ];
+
     homeMod = { config, lib, ... }: {
         imports = [
             home-manager.nixosModules.home-manager
@@ -39,5 +43,15 @@ nixpkgs.lib.nixosSystem {
         ./profiles.nix
         homeMod
         sops-nix.nixosModules.sops
+
+        ({ pkgs, lib, ... }: {
+            nixpkgs.config.allowUnfreePredicate = pkg:
+                builtins.elem
+                    (lib.getName pkg)
+                    (builtins.map
+                        (pkg: lib.getName pkg)
+                        (unfreePkgs pkgs)
+                    );
+        })
     ];
 }
