@@ -13,6 +13,17 @@
             path = (with config.cfgLib; enableFor hosts.pc.users.kotfind)
                 "${config.home.homeDirectory}/.ssh/id_rsa.pub";
         };
+
+
+        "kotfind@kotfindLT/ssh/id_rsa" = {
+            path = (with config.cfgLib; enableFor hosts.laptop.users.kotfind)
+                "${config.home.homeDirectory}/.ssh/id_rsa";
+        };
+
+        "kotfind@kotfindLT/ssh/id_rsa.pub" = {
+            path = (with config.cfgLib; enableFor hosts.laptop.users.kotfind)
+                "${config.home.homeDirectory}/.ssh/id_rsa.pub";
+        };
     };
 
     programs.ssh = (with config.cfgLib; enableFor users.kotfind) {
