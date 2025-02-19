@@ -29,8 +29,11 @@ in
         (with config.cfgLib; enableFor users.kotfind)
             (config.lib.dag.entryAfter ["writeBoundary"] /* bash */ ''
                 if [ ! -d ${storeDir} ]; then
-                    PATH="${pkgs.openssh}/bin:$PATH"
-                    ${git} clone ${storeGitRepoArg} ${storeDirArg}
+                    # Note: checking for git fail is usefull for initial
+                    # installation, when keys are not installed yet
+                    PATH="${pkgs.openssh}/bin:$PATH" \
+                        ${git} clone ${storeGitRepoArg} ${storeDirArg} \
+                            || "WARN: failed to fetch password-store from git"
                 fi
             '');
 }

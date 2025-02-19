@@ -37,7 +37,11 @@ in
         settings = {
             general.import = [ activeThemeFile ];
 
-            font.size = 11.0;
+            # TODO: enableFor -> matchCfg
+            font.size = lib.mkMerge [
+                ((with config.cfgLib; enableFor hosts.pc) 11.0)
+                ((with config.cfgLib; enableFor hosts.laptop) 9.0)
+            ];
 
             window.padding = { x = 2; y = 2; };
 

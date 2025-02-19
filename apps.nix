@@ -27,7 +27,7 @@ let
     };
 
     # Goes to path "$1", relative to flake root
-    dirFromRoot = pkgs.writeScriptBin "dir-from-root" /*bash */ ''
+    dirFromRoot = pkgs.writeShellScriptBin "dir-from-root" ''
         set -euo pipefail
 
         while true; do
@@ -54,7 +54,7 @@ let
         echo "$path"
     '';
 
-    dirRoot = pkgs.writeScriptBin "dir-root" /* bash */ ''
+    dirRoot = pkgs.writeShellScriptBin "dir-root" ''
         ${lib.getExe dirFromRoot} .
     '';
 

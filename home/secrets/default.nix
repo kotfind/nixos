@@ -3,6 +3,7 @@
     sops = {
         age = {
             sshKeyPaths = [];
+            # FIXME: custom user
             keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
         };
 
