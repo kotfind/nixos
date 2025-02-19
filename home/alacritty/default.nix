@@ -32,7 +32,7 @@ let
     '';
 in
 {
-    programs.alacritty = {
+    programs.alacritty = (with config.cfgLib; enableFor users.kotfind) {
         enable = true;
         settings = {
             general.import = [ activeThemeFile ];
@@ -48,16 +48,17 @@ in
         };
     };
 
-    home.activation.linkAlacrittyTheme = let
+    home.activation.linkAlacrittyTheme =
+        let
             themeFileArg = lib.escapeShellArg (builtins.elemAt themes 0);
             activeThemeFileArg = lib.escapeShellArg activeThemeFile;
         in
-        config.lib.dag.entryAfter ["writeBoundary"]
-            /* bash */ ''
+        (with config.cfgLib; enableFor users.kotfind)
+            (config.lib.dag.entryAfter ["writeBoundary"] /* bash */ ''
                 # create directory if it does not exist
                 mkdir -p $(dirname ${activeThemeFileArg})
 
                 # link theme file
                 ln -sf ${themeFileArg} ${activeThemeFileArg}
-            '';
+            '');
 }
