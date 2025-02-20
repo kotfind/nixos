@@ -36,7 +36,7 @@ let
     # `cfg` should be either host or userOnHost.
     # if `cfg` is userOnHost then `restr` should be of one of these types: user, host or userOnHost.
     # if `cfg` is host then `restr` should be host.
-    matchCfg = restr:
+    matchForSingle = restr:
         if isHost cfg then (
             if isHost restr then eq cfg restr
             else throw "restr has unsupported type: forgot to set config.user?"
@@ -50,17 +50,19 @@ let
         else throw "cfg has unsupported type";
 
     # Returns true if cfg matches any of the restraints.
-    matchCfgList = restrList:
+    matchForList = restrList:
         lib.lists.any 
-            matchCfg
+            matchForSingle
             restrList;
+
+    matchFor = restr:
+        if builtins.isList restr
+            then matchForList restr
+            else matchForSingle restr;
 
     enableFor = restr: var:
         lib.mkIf
-            (if builtins.isList restr
-                then matchCfgList restr
-                else matchCfg restr
-            )
+            (matchFor restr)
             var;
 in
 {
@@ -72,9 +74,17 @@ in
                     builtins.isFunction
             );
         };
+
+        matchFor = lib.mkOption {
+            type = moduleOpt (with lib.types;
+                addCheck
+                    anything
+                    builtins.isFunction
+            );
+        };
     };
 
     config.cfgLib = {
-        inherit enableFor;
+        inherit enableFor matchFor;
     };
 }
