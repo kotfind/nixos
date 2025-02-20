@@ -1,88 +1,33 @@
 { pkgs, config, lib, ... }:
 let
-    autostartService =
-        {
-            cmd,
-            executor ? "",
-            packages ? [],
-            isOneshot ? false,
-            remainAfterExit ? isOneshot,
-        } : {
-            Install = {
-                WantedBy = [ "graphical-session.target" ];
-            };
-
-            Service = {
-                ExecStart = "${executor} ${cmd}";
-
-                Environment = let
-                        path = lib.concatMapStringsSep
-                            ":"
-                            (pkg: "${pkg}/bin")
-                            packages;
-                    in [ "PATH=${path}" ];
-
-                RemainAfterExit = remainAfterExit;
-
-                Type = if isOneshot then "oneshot" else "simple";
-            };
-
-            Unit = {
-                After = [ "graphical-session-pre.target" ];
-                PartOf = [ "graphical-session.target" ];
-            };
-        };
+    autostartService = import ./autostart-service.nix { inherit lib; };
 in
 {
+    imports = [
+        ./bspwm.nix
+        ./sxhkd.nix
+        ./lemonbar.nix
+    ];
+
     xsession = (with config.cfgLib; enableFor users.kotfind) {
         enable = true;
-        windowManager.bspwm = {
-            enable = true;
-            extraConfig = builtins.readFile ./.config/bspwm/bspwmrc;
-        };
     };
 
-    services.sxhkd = (with config.cfgLib; enableFor users.kotfind) {
-        enable = true;
-        extraConfig = builtins.readFile ./.config/sxhkd/sxhkdrc;
-    };
-
-    systemd.user.services = (with config.cfgLib; enableFor users.kotfind) {
-        lemonbar = autostartService {
-            cmd = ./.config/lemonbar/lemonbar.sh;
-            executor = "${pkgs.bash}/bin/bash -c";
-            packages = with pkgs; [
-                bash
-                lemonbar-xft
-                xtitle
-                trayer
-                fira-code
-                nerd-fonts.fira-code
-                gawk
-                toybox
-                pulseaudio
-                bspwm
-                xorg.xrandr
-            ];
-        };
-
-        polkit = autostartService {
+    systemd.user.services.polkit = (with config.cfgLib; enableFor users.kotfind)
+        (autostartService {
             cmd = "${pkgs.lxqt.lxqt-policykit}/bin/lxqt-policykit-agent";
-            packages = [ pkgs.lxqt.lxqt-policykit ];
-        };
-    };
+        });
 
-    services.batsignal = with config.cfgLib; 
-        enableFor hosts.laptop.users.kotfind {
-            enable = true;
-            extraArgs = [
-                "-f" "99"
-                "-w" "30"
-                "-c" "10"
-                "-d" "5"
-                "-p"
-            ];
-        };
+    services.batsignal = (with config.cfgLib; enableFor hosts.laptop.users.kotfind) {
+        enable = true;
+        extraArgs = [
+            "-f" "99"
+            "-w" "30"
+            "-c" "10"
+            "-d" "5"
+            "-p"
+        ];
+    };
 
     services.gpg-agent = (with config.cfgLib; enableFor users.kotfind) {
         enable = true;
@@ -95,23 +40,6 @@ in
         enable = true;
         lockCmd = "${pkgs.xlockmore}/bin/xlock -echokeys";
     };
-
-    # for sxhkd
-    home.packages = lib.mkMerge [
-        (with config.cfgLib; enableFor users.kotfind
-            (with pkgs; [
-                scrot
-                rofi
-                pulseaudio
-                playerctl
-            ])
-        )
-        (with config.cfgLib; enableFor hosts.laptop.users.kotfind
-            (with pkgs; [
-                light
-            ])
-        )
-    ];
 
     home.sessionVariables = (with config.cfgLib; enableFor users.kotfind) {
         # for some java gui apps to work:
