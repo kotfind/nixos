@@ -18,6 +18,16 @@ in
             cmd = "${pkgs.lxqt.lxqt-policykit}/bin/lxqt-policykit-agent";
         });
 
+    # install networkmanagerapplet for all hosts, but autostart in on the laptop only
+    systemd.user.services.network-manager-applet = (with config.cfgLib; enableFor hosts.laptop.users.kotfind)
+        (autostartService {
+            cmd = lib.getExe pkgs.networkmanagerapplet;
+        });
+
+    home.packages = with pkgs; (with config.cfgLib; enableFor users.kotfind) [
+        networkmanagerapplet
+    ];
+
     services.batsignal = (with config.cfgLib; enableFor hosts.laptop.users.kotfind) {
         enable = true;
         extraArgs = [
