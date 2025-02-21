@@ -15,7 +15,7 @@ let
         # Run terminal
         "super + Return" = alacritty;
 
-        # Launch programm
+        # Launch program
         "super + @space" = /* bash */ ''
             ${rofi} -show drun
         '';
