@@ -23,17 +23,14 @@
         fd.enable = true;
         ripgrep.enable = true;
         jq.enable = true;
-
-        htop = {
-            enable = true;
-
-            # TODO: configure
-        };
-
-        direnv = (with config.cfgLib; enableFor users.kotfind) {
-            enable = true;
-
-            nix-direnv.enable = true;
-        };
+        htop.enable = true;
     };
+
+    programs.direnv = (with config.cfgLib; enableFor users.kotfind) {
+        enable = true;
+
+        nix-direnv.enable = true;
+    };
+
+    programs.fish.shellAliases."j" = "just";
 }
