@@ -14,6 +14,7 @@
             imagemagick
             ffmpeg
             age
+            just
         ]
     ];
 
