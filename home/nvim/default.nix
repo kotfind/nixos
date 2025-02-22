@@ -162,7 +162,7 @@ in {
     };
 
     home.sessionVariables = {
-        MANPAGER = "nvim +Man!";
+        MANPAGER = "nvim +Man! -c ':set signcolumn=no'";
     };
 
     home.file =
