@@ -10,6 +10,7 @@ let
     sleep = "${pkgs.toybox}/bin/sleep";
     free = "${pkgs.toybox}/bin/free";
     sed = "${pkgs.toybox}/bin/sed";
+    cat = "${pkgs.toybox}/bin/cat";
     bspc = "${pkgs.bspwm}/bin/bspc";
     pactl = "${pkgs.pulseaudio}/bin/pactl";
     xtitle = lib.getExe pkgs.xtitle;
@@ -61,6 +62,19 @@ let
             ${echo} -ne "\uf1c0 $mem% ($swap%)"
         }
 
+        battery() {
+        ${if (with config.cfgLib; matchFor hosts.laptop)
+        then /* bash */ ''
+            capacity="$(${cat} /sys/class/power_supply/BAT0/capacity)"
+            printf "B: %2d%%" "$capacity"
+        ''
+
+        else /* bash */ ''
+            ${echo} -en "NOBAT"
+        ''
+        }
+        }
+
         volume() {
             if ${pactl} get-sink-mute @DEFAULT_SINK@ | ${grep} 'yes' &>/dev/null; then
                 ${echo} -en ' MUTE '
@@ -105,7 +119,7 @@ let
             local center="" #"$(window_title)"
 
             local right
-            right="[ $(volume) ] [ $(clock) ] [ $(cpu_usage) ] [ $(mem_usage) ]"
+            right="[ $(battery) ] [ $(volume) ] [ $(clock) ] [ $(cpu_usage) ] [ $(mem_usage) ]"
 
             ${echo} "%{l}$left %{c}$center %{r}$right"
         }
@@ -115,6 +129,7 @@ let
         fonts=(
             'FiraCode'
             'FiraCode Nerd Font'
+            'FiraCode Nerd Font Mono'
         )
 
         sleep_for=0.1

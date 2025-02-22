@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
     # Boot
     boot.loader.systemd-boot.enable = true;
@@ -25,4 +25,7 @@
         enable = true;
         pinentryPackage = pkgs.pinentry-tty;
     };
+
+    # Programs
+    programs.light.enable = with config.cfgLib; matchFor hosts.laptop;
 }
