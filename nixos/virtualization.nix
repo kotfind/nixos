@@ -19,6 +19,10 @@
         podman-compose
     ];
 
+    environment.sessionVariables = {
+        PODMAN_COMPOSE_WARNING_LOGS = "false";
+    };
+
     # Fix podman
     nixpkgs.overlays = [ (final: prev: {
         podman = prev.podman.override {
