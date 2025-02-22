@@ -10,6 +10,7 @@ let
     sleep = "${pkgs.toybox}/bin/sleep";
     free = "${pkgs.toybox}/bin/free";
     sed = "${pkgs.toybox}/bin/sed";
+    cat = "${pkgs.toybox}/bin/cat";
     bspc = "${pkgs.bspwm}/bin/bspc";
     pactl = "${pkgs.pulseaudio}/bin/pactl";
     xtitle = lib.getExe pkgs.xtitle;
@@ -61,6 +62,62 @@ let
             ${echo} -ne "\uf1c0 $mem% ($swap%)"
         }
 
+        battery() {
+        ${if (with config.cfgLib; matchFor hosts.laptop)
+        then /* bash */ ''
+            discharging_icons=(
+                '\Uf008e'
+                '\Uf007a'
+                '\Uf007b'
+                '\Uf007c'
+                '\Uf007d'
+                '\Uf007e'
+                '\Uf007f'
+                '\Uf0080'
+                '\Uf0081'
+                '\Uf0082'
+                '\Uf0079'
+            )
+            charging_icons=(
+                '\Uf089f'
+                '\Uf089c'
+                '\Uf0086'
+                '\Uf0087'
+                '\Uf0088'
+                '\Uf089d'
+                '\Uf0089'
+                '\Uf089e'
+                '\Uf008a'
+                '\Uf008b'
+                '\Uf0085'
+            )
+
+            capacity="$(${cat} /sys/class/power_supply/BAT0/capacity)"
+            icon_num="$((capacity * 11 / 101))"
+
+            status="$(${cat} /sys/class/power_supply/BAT0/status)"
+            case "$status" in
+                'Charging')
+                    ${echo} -en "''${charging_icons[$icon_num]}"
+                    ;;
+
+                'Discharging')
+                    ${echo} -en "''${discharging_icons[$icon_num]}"
+                    ;;
+
+                *)
+                    ${echo} -en "unknown battery status" 1>&2
+                    exit 1
+                    ;;
+            esac
+        ''
+        else /* bash */ ''
+            no_bat_icon='\Uf125e'
+            ${echo} -en "$no_bat_icon"
+        ''
+        }
+        }
+
         volume() {
             if ${pactl} get-sink-mute @DEFAULT_SINK@ | ${grep} 'yes' &>/dev/null; then
                 ${echo} -en ' MUTE '
@@ -105,7 +162,7 @@ let
             local center="" #"$(window_title)"
 
             local right
-            right="[ $(volume) ] [ $(clock) ] [ $(cpu_usage) ] [ $(mem_usage) ]"
+            right="[ $(battery) ] [ $(volume) ] [ $(clock) ] [ $(cpu_usage) ] [ $(mem_usage) ]"
 
             ${echo} "%{l}$left %{c}$center %{r}$right"
         }
@@ -115,6 +172,7 @@ let
         fonts=(
             'FiraCode'
             'FiraCode Nerd Font'
+            'FiraCode Nerd Font Mono'
         )
 
         sleep_for=0.1
