@@ -1,11 +1,9 @@
 local function setup_codeium()
     require 'codeium'.setup {
         bin_path = CodeiumPath,
+        tools = { language_server = CodeiumPath, },
         virtual_text = {
             map_keys = false,
-        },
-        tools = {
-            language_server = CodeiumPath,
         },
     }
 end

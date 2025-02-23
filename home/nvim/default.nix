@@ -1,4 +1,4 @@
-{ pkgs, inputs, lib, ... }:
+{ pkgs, inputs, lib, system, ... }:
 # TODO?: don't install lsp servers for root?
 let
     # format:
@@ -78,13 +78,14 @@ let
         ]
     ]);
 
-    packages = with pkgs; [
-        xclip
-        codeium
+    codeium-lsp = inputs.codeium.packages.${system}.codeium-lsp;
+
+
+    packages = [
+        pkgs.xclip
+        codeium-lsp
     ];
 in {
-    home.packages = [ pkgs.codeium ];
-
     programs.neovim = {
         enable = true;
 
@@ -126,7 +127,7 @@ in {
                     ${lspServerNamesStr}
                 }
 
-                CodeiumPath = '${lib.getExe pkgs.codeium}'
+                CodeiumPath = '${lib.getExe codeium-lsp}'
 
                 -- require actual init file
                 require 'main'

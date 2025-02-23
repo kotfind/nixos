@@ -3,7 +3,7 @@
 { nixpkgs, home-manager, sops-nix, system, ... }@inputs:
 let
     specialArgs = {
-        inherit inputs;
+        inherit inputs system;
     };
 
     unfreePkgs = pkgs: with pkgs; [
