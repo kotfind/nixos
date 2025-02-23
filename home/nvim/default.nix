@@ -80,8 +80,11 @@ let
 
     packages = with pkgs; [
         xclip
+        codeium
     ];
 in {
+    home.packages = [ pkgs.codeium ];
+
     programs.neovim = {
         enable = true;
 
@@ -122,6 +125,8 @@ in {
                 LspServerNames = {
                     ${lspServerNamesStr}
                 }
+
+                CodeiumPath = '${lib.getExe pkgs.codeium}'
 
                 -- require actual init file
                 require 'main'

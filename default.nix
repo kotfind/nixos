@@ -8,6 +8,7 @@ let
 
     unfreePkgs = pkgs: with pkgs; [
         zoom-us
+        codeium
     ];
 
     homeMod = { config, lib, ... }: {

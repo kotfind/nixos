@@ -1,3 +1,15 @@
+local function setup_codeium()
+    require 'codeium'.setup {
+        bin_path = CodeiumPath,
+        virtual_text = {
+            map_keys = false,
+        },
+        tools = {
+            language_server = CodeiumPath,
+        },
+    }
+end
+
 local function setup_normal()
     local cmp = require 'cmp'
     local luasnip = require 'luasnip'
@@ -75,6 +87,7 @@ local function setup_normal()
                     path = '[Path]',
                     calc = '[Calc]',
                     luasnip = '[Snip]',
+                    codeium = '[Chat]',
                     -- spell = '[Spell]',
                 })[entry.source.name]
                 return vim_item
@@ -94,6 +107,7 @@ local function setup_normal()
                 }
             },
             { name = 'path' },
+            { name = 'codeium' },
             -- {
             --     name = 'spell',
             --     option = {
@@ -192,5 +206,15 @@ return {
             'L3MON4D3/cmp-luasnip-choice',
             'L3MON4D3/LuaSnip',
         },
+    },
+
+    -- Codeium
+    {
+        'Exafunction/codeium.nvim',
+        dependencies = {
+            'nvim-lua/plenary.nvim',
+            'hrsh7th/nvim-cmp',
+        },
+        config = setup_codeium,
     },
 }
