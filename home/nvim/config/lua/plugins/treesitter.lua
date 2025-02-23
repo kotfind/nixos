@@ -9,7 +9,7 @@ local function setup_treesitter()
         },
 
         indent = {
-            enable = true,
+            enable = false,
         },
 
         playground = {
