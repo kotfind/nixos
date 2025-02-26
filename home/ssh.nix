@@ -30,6 +30,10 @@
         enable = true;
     };
 
+    home.packages = (with config.cfgLib; enableFor users.kotfind) (with pkgs; [
+        sshfs
+    ]);
+
     programs.bash.bashrcExtra = (with config.cfgLib; enableFor users.kotfind)
         /* bash */ ''
             export kotfindPC="''$(cat ${
