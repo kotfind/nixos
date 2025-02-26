@@ -67,9 +67,9 @@ let
         ]
 
         [
-            "nil_ls"
-            nil
-            nixfmt-classic
+            "nixd"
+            nixd
+            alejandra
         ]
 
         [
