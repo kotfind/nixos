@@ -9,8 +9,13 @@
                 "networkmanager"
                 "pipewire"
                 "docker"
+
+                # For android development
+                "adbusers"
+                "kvm"
             ]
             ((with config.cfgLib; enableFor hosts.laptop) [
+                # For light commands
                 "video"
             ])
         ];
