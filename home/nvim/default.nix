@@ -63,7 +63,7 @@ let
     [
       "kotlin_language_server"
       kotlin-language-server
-      ktlint
+      ktfmt
     ]
 
     [
@@ -138,9 +138,11 @@ in {
             ${lspServerNamesStr}
         }
 
-        CodeiumPath = '${lib.getExe codeium-lsp}'
+        CodeiumPath = '${lib.getExe' codeium-lsp "codeium-lsp"}'
 
         AlejandraPath = '${lib.getExe pkgs.alejandra}'
+
+        KtFmtPath = '${lib.getExe pkgs.ktfmt}'
 
         -- require actual init file
         require 'main'
