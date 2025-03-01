@@ -5,10 +5,9 @@ local function setup_conform()
             kotlin = { 'ktfmt' },
         },
 
-        format_on_save = {
+        format_after_save = {
             timeout_ms = 10000,
             lsp_format = 'fallback',
-            async = true,
         },
 
         formatters = {
