@@ -1,37 +1,38 @@
-{ pkgs, ... }:
-{
-    virtualisation = {
-        containers.enable = true;
-        oci-containers.backend = "podman";
+{pkgs, ...}: {
+  virtualisation = {
+    containers.enable = true;
+    oci-containers.backend = "podman";
 
-        podman = {
-            enable = true;
-            defaultNetwork.settings.dns_enabled = true;
-        };
-
-        docker = {
-            enable = true;
-            enableOnBoot = true;
-        };
+    podman = {
+      enable = true;
+      defaultNetwork.settings.dns_enabled = true;
     };
 
-    environment.systemPackages = with pkgs; [
-        podman-compose
-    ];
-
-    environment.sessionVariables = {
-        PODMAN_COMPOSE_WARNING_LOGS = "false";
+    docker = {
+      enable = true;
+      enableOnBoot = true;
     };
+  };
 
-    # Fix podman
-    nixpkgs.overlays = [ (final: prev: {
-        podman = prev.podman.override {
-            extraPackages = [
-                # https://github.com/NixOS/nixpkgs/issues/138423#issuecomment-1609849179
-                "/run/wrappers/"
+  environment.systemPackages = with pkgs; [
+    podman-compose
+  ];
 
-                pkgs.shadow
-            ];
-        };
-    }) ];
+  environment.sessionVariables = {
+    PODMAN_COMPOSE_WARNING_LOGS = "false";
+  };
+
+  # Fix podman
+  nixpkgs.overlays = [
+    (final: prev: {
+      podman = prev.podman.override {
+        extraPackages = [
+          # https://github.com/NixOS/nixpkgs/issues/138423#issuecomment-1609849179
+          "/run/wrappers/"
+
+          pkgs.shadow
+        ];
+      };
+    })
+  ];
 }

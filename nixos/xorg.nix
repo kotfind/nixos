@@ -1,25 +1,26 @@
-{ config, ... }:
-{
-    services = {
-        xserver = {
-            enable = true;
-            displayManager = {
-                lightdm = {
-                    enable = true;
-                    greeter.enable = false;
-                };
-                defaultSession = "xsession";
-                session = [{
-                    manage = "desktop";
-                    name = "xsession";
-                    start = "exec $HOME/.session";
-                }];
-            };
+{config, ...}: {
+  services = {
+    xserver = {
+      enable = true;
+      displayManager = {
+        lightdm = {
+          enable = true;
+          greeter.enable = false;
         };
-
-        displayManager.autoLogin = {
-            enable = true;
-            user = config.cfgLib.users.kotfind.name;
-        };
+        defaultSession = "xsession";
+        session = [
+          {
+            manage = "desktop";
+            name = "xsession";
+            start = "exec $HOME/.session";
+          }
+        ];
+      };
     };
+
+    displayManager.autoLogin = {
+      enable = true;
+      user = config.cfgLib.users.kotfind.name;
+    };
+  };
 }

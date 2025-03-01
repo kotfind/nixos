@@ -1,44 +1,56 @@
-{ config, lib, pkgs, ... }:
 {
-    # XXX: secrets are installed for all users, though files
-    # are linked correctly
-    sops.secrets = {
-        kotfindPC-ip-address = {};
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
+  # XXX: secrets are installed for all users, though files
+  # are linked correctly
+  sops.secrets = {
+    kotfindPC-ip-address = {};
 
-        "kotfind@kotfindPC/ssh/id_rsa" = {
-            path = (with config.cfgLib; enableFor hosts.pc.users.kotfind)
-                "${config.home.homeDirectory}/.ssh/id_rsa";
-        };
-
-        "kotfind@kotfindPC/ssh/id_rsa.pub" = {
-            path = (with config.cfgLib; enableFor hosts.pc.users.kotfind)
-                "${config.home.homeDirectory}/.ssh/id_rsa.pub";
-        };
-
-        "kotfind@kotfindLT/ssh/id_rsa" = {
-            path = (with config.cfgLib; enableFor hosts.laptop.users.kotfind)
-                "${config.home.homeDirectory}/.ssh/id_rsa";
-        };
-
-        "kotfind@kotfindLT/ssh/id_rsa.pub" = {
-            path = (with config.cfgLib; enableFor hosts.laptop.users.kotfind)
-                "${config.home.homeDirectory}/.ssh/id_rsa.pub";
-        };
+    "kotfind@kotfindPC/ssh/id_rsa" = {
+      path =
+        (with config.cfgLib; enableFor hosts.pc.users.kotfind)
+        "${config.home.homeDirectory}/.ssh/id_rsa";
     };
 
-    programs.ssh = (with config.cfgLib; enableFor users.kotfind) {
-        enable = true;
+    "kotfind@kotfindPC/ssh/id_rsa.pub" = {
+      path =
+        (with config.cfgLib; enableFor hosts.pc.users.kotfind)
+        "${config.home.homeDirectory}/.ssh/id_rsa.pub";
     };
 
-    home.packages = (with config.cfgLib; enableFor users.kotfind) (with pkgs; [
-        sshfs
-    ]);
+    "kotfind@kotfindLT/ssh/id_rsa" = {
+      path =
+        (with config.cfgLib; enableFor hosts.laptop.users.kotfind)
+        "${config.home.homeDirectory}/.ssh/id_rsa";
+    };
 
-    programs.bash.bashrcExtra = (with config.cfgLib; enableFor users.kotfind)
-        /* bash */ ''
-            export kotfindPC="''$(cat ${
-                lib.escapeShellArg
-                    config.sops.secrets.kotfindPC-ip-address.path
-            })"
-        '';
+    "kotfind@kotfindLT/ssh/id_rsa.pub" = {
+      path =
+        (with config.cfgLib; enableFor hosts.laptop.users.kotfind)
+        "${config.home.homeDirectory}/.ssh/id_rsa.pub";
+    };
+  };
+
+  programs.ssh = (with config.cfgLib; enableFor users.kotfind) {
+    enable = true;
+  };
+
+  home.packages = (with config.cfgLib; enableFor users.kotfind) (with pkgs; [
+    sshfs
+  ]);
+
+  programs.bash.bashrcExtra =
+    (with config.cfgLib; enableFor users.kotfind)
+    /*
+    bash
+    */
+    ''
+      export kotfindPC="''$(cat ${
+        lib.escapeShellArg
+        config.sops.secrets.kotfindPC-ip-address.path
+      })"
+    '';
 }

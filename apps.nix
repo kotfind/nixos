@@ -1,112 +1,116 @@
 # This value is passed to outputs.apps.${system}
+{
+  nixpkgs,
+  system,
+  ...
+}: let
+  # -------------------- Basic Setup --------------------
+  pkgs = import nixpkgs {inherit system;};
+  lib = pkgs.lib;
 
-{ nixpkgs, system, ... }:
-let
-    # -------------------- Basic Setup --------------------
-    pkgs = import nixpkgs { inherit system; };
-    lib = pkgs.lib;
+  modules = lib.evalModules {
+    specialArgs = {inherit pkgs lib;};
+    modules = [
+      ./profiles.nix
+    ];
+  };
 
-    modules = lib.evalModules {
-        specialArgs = { inherit pkgs lib; };
-        modules = [
-            ./profiles.nix
-        ];
-    };
+  users = modules.config.cfgLib.users;
 
-    users = modules.config.cfgLib.users;
+  # -------------------- Dependencies --------------------
 
-    # -------------------- Dependencies --------------------
+  nixos-rebuild = "${pkgs.nixos-rebuild}/bin/nixos-rebuild";
 
-    nixos-rebuild = "${pkgs.nixos-rebuild}/bin/nixos-rebuild";
+  # -------------------- Other --------------------
 
-    # -------------------- Other --------------------
+  mkApp = script: {
+    type = "app";
+    program = lib.getExe script;
+  };
 
-    mkApp = script: {
-        type = "app";
-        program = lib.getExe script;
-    };
+  # Goes to path "$1", relative to flake root
+  dirFromRoot = pkgs.writeShellScriptBin "dir-from-root" ''
+    set -euo pipefail
 
-    # Goes to path "$1", relative to flake root
-    dirFromRoot = pkgs.writeShellScriptBin "dir-from-root" ''
-        set -euo pipefail
+    while true; do
+        if [ -e 'flake.nix' ]; then
+            flake_root="$PWD"
+            break
+        fi
 
-        while true; do
-            if [ -e 'flake.nix' ]; then
-                flake_root="$PWD"
-                break
-            fi
-
-            if [ "$PWD" -ef "/" ]; then
-                echo 'flake.nix was not found in current or parent directories' 1>&2
-                exit 1
-            fi
-
-            cd ..
-        done
-
-        path="$flake_root/$1"
-
-        if [ ! -d "$path" ]; then
-            echo "$path is not a directory" 1>&2
+        if [ "$PWD" -ef "/" ]; then
+            echo 'flake.nix was not found in current or parent directories' 1>&2
             exit 1
         fi
 
-        echo "$path"
-    '';
+        cd ..
+    done
 
-    dirRoot = pkgs.writeShellScriptBin "dir-root" ''
-        ${lib.getExe dirFromRoot} .
-    '';
+    path="$flake_root/$1"
 
-    switch = pkgs.writeShellScriptBin "switch" ''
-        set -euo pipefail
+    if [ ! -d "$path" ]; then
+        echo "$path is not a directory" 1>&2
+        exit 1
+    fi
 
-        pushd "$(${lib.getExe dirRoot})"
+    echo "$path"
+  '';
 
-        sudo -v
+  dirRoot = pkgs.writeShellScriptBin "dir-root" ''
+    ${lib.getExe dirFromRoot} .
+  '';
 
-        sudo ${nixos-rebuild} switch --flake .#default --verbose
+  switch = pkgs.writeShellScriptBin "switch" ''
+    set -euo pipefail
 
-        ${lib.strings.concatMapStrings
-            (userName_:
-                let
-                    userName = lib.escapeShellArg userName_;
-                in
-                /* bash */ ''
-                    echo -e "\n-------------------- activate ${userName} --------------------\n"
+    pushd "$(${lib.getExe dirRoot})"
 
-                    gen="$(awk '/ExecStart=/ { print $2; }' /etc/systemd/system/home-manager-${userName}.service)"
+    sudo -v
 
-                    rm -f "/home/${userName}/.config/fcitx5/profile"
-                    rm -f "/home/${userName}/.config/fcitx5/config"
+    sudo ${nixos-rebuild} switch --flake .#default --verbose
 
-                    sudo -u "${userName}" "$gen/activate"
-                '')
-            (builtins.attrNames users)
-        }
+    ${
+      lib.strings.concatMapStrings
+      (userName_: let
+        userName = lib.escapeShellArg userName_;
+      in
+        /*
+        bash
+        */
+        ''
+          echo -e "\n-------------------- activate ${userName} --------------------\n"
 
-        popd
-    '';
+          gen="$(awk '/ExecStart=/ { print $2; }' /etc/systemd/system/home-manager-${userName}.service)"
 
-    update = pkgs.writeShellScriptBin "update" ''
-        set -euo pipefail
+          rm -f "/home/${userName}/.config/fcitx5/profile"
+          rm -f "/home/${userName}/.config/fcitx5/config"
 
-        pushd "$(${lib.getExe dirRoot})"
+          sudo -u "${userName}" "$gen/activate"
+        '')
+      (builtins.attrNames users)
+    }
 
-        sudo -v
+    popd
+  '';
 
-        sudo nix flake update
+  update = pkgs.writeShellScriptBin "update" ''
+    set -euo pipefail
 
-        ${lib.getExe (import ./home/nvim/update.nix {
-            inherit pkgs lib users dirFromRoot;
-        })}
+    pushd "$(${lib.getExe dirRoot})"
 
-        popd
+    sudo -v
 
-        ${lib.getExe switch}
-    '';
-in
-{
-    switch = mkApp switch;
-    update = mkApp update;
+    sudo nix flake update
+
+    ${lib.getExe (import ./home/nvim/update.nix {
+      inherit pkgs lib users dirFromRoot;
+    })}
+
+    popd
+
+    ${lib.getExe switch}
+  '';
+in {
+  switch = mkApp switch;
+  update = mkApp update;
 }

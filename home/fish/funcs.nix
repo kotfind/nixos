@@ -1,7 +1,11 @@
 {
-    tempcd = /* fish */ ''
-        set dir (mktemp -d)
-        echo $dir
-        cd $dir
+  tempcd =
+    /*
+    fish
+    */
+    ''
+      set dir (mktemp -d)
+      echo $dir
+      cd $dir
     '';
 }

@@ -1,8 +1,7 @@
-{ pkgs, ... }:
-{
-    nix.nixPath = [
-        "nixpkgs=${pkgs.path}"
-    ];
+{pkgs, ...}: {
+  nix.nixPath = [
+    "nixpkgs=${pkgs.path}"
+  ];
 
-    nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
 }

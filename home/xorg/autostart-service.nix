@@ -1,32 +1,34 @@
 # not a module, just a function to be dirrectly included
-{ lib }:
-{
-    cmd,
-    packages ? [],
-    isOneshot ? false,
-    remainAfterExit ? isOneshot,
-} : {
-    Install = {
-        WantedBy = [ "graphical-session.target" ];
-    };
+{lib}: {
+  cmd,
+  packages ? [],
+  isOneshot ? false,
+  remainAfterExit ? isOneshot,
+}: {
+  Install = {
+    WantedBy = ["graphical-session.target"];
+  };
 
-    Service = {
-        ExecStart = cmd;
+  Service = {
+    ExecStart = cmd;
 
-        Environment = [
-            "PATH=${
-                lib.escapeShellArg
-                    (lib.strings.makeBinPath packages)
-            }"
-        ];
+    Environment = [
+      "PATH=${
+        lib.escapeShellArg
+        (lib.strings.makeBinPath packages)
+      }"
+    ];
 
-        RemainAfterExit = remainAfterExit;
+    RemainAfterExit = remainAfterExit;
 
-        Type = if isOneshot then "oneshot" else "simple";
-    };
+    Type =
+      if isOneshot
+      then "oneshot"
+      else "simple";
+  };
 
-    Unit = {
-        After = [ "graphical-session-pre.target" ];
-        PartOf = [ "graphical-session.target" ];
-    };
+  Unit = {
+    After = ["graphical-session-pre.target"];
+    PartOf = ["graphical-session.target"];
+  };
 }

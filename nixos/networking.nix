@@ -1,9 +1,9 @@
-{ config, ... }: {
-    networking = {
-        hostName = config.cfgLib.host.data.hostname;
+{config, ...}: {
+  networking = {
+    hostName = config.cfgLib.host.data.hostname;
 
-        networkmanager.enable = true;
+    networkmanager.enable = true;
 
-        firewall.enable = false;
-    };
+    firewall.enable = false;
+  };
 }
