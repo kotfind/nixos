@@ -129,6 +129,8 @@ in {
 
                 CodeiumPath = '${lib.getExe codeium-lsp}'
 
+                AlejandraPath = '${lib.getExe pkgs.alejandra}'
+
                 -- require actual init file
                 require 'main'
 
