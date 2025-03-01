@@ -1,16 +1,18 @@
 { pkgs, lib, config, ... }:
+with (with pkgs; {
+    bspc = lib.getExe' bspwm "bspc";
+    alacritty = lib.getExe alacritty;
+    rofi = lib.getExe rofi;
+    scrot = lib.getExe scrot;
+    pactl = lib.getExe' pulseaudio "pactl";
+    light = lib.getExe light;
+    playerctl = lib.getExe playerctl;
+    systemctl = lib.getExe' systemd "systemctl";
+    loginctl = lib.getExe' systemd "loginctl";
+    rofi-pass = lib.getExe rofi-pass;
+    pkill = lib.getExe' toybox "pkill";
+});
 let
-    bspc = "${pkgs.bspwm}/bin/bspc";
-    alacritty = "${lib.getExe pkgs.alacritty}";
-    rofi = "${lib.getExe pkgs.rofi}";
-    scrot = "${lib.getExe pkgs.scrot}";
-    pactl = "${pkgs.pulseaudio}/bin/pactl";
-    light = "${lib.getExe pkgs.light}";
-    playerctl = "${lib.getExe pkgs.playerctl}";
-    systemctl = "${pkgs.systemd}/bin/systemctl";
-    loginctl = "${pkgs.systemd}/bin/loginctl";
-    rofi-pass = "${lib.getExe pkgs.rofi-pass}";
-
     keybindings = {
         # Run terminal
         "super + Return" = alacritty;
@@ -20,9 +22,15 @@ let
             ${rofi} -show drun
         '';
 
-        # quit/ restart bspwm
-        "super + alt + {q,r}" = /* bash */ ''
-            ${bspc} {quit,wm -r}
+        # quit bspwm
+        "super + alt + q" = /* bash */ ''
+            ${bspc} quit
+        '';
+
+        # restart bspwm (and sxhkd)
+        "super + alt + r" = /* bash */ ''
+            ${bspc} wm -r
+            ${pkill} -USR1 -x sxhkd
         '';
 
         # close/ kill a window
@@ -45,13 +53,27 @@ let
             ${bspc} node -g sticky
         '';
 
+        # balance
+        "super + b" = /* bash */ ''
+            ${bspc} node @/ -E 
+        '';
+
+        "super + B" = /* bash */ ''
+            ${bspc} node @/ -B 
+        '';
+
+        # rotate parent
+        "super + r" = /* bash */ ''
+            ${bspc} node @parent -R 90
+        '';
+
         # focus/ swap
         "super + {_,shift + }{h,j,k,l}" = /* bash */ ''
             ${bspc} node -{f,s} {west,south,north,east}
         '';
 
-        "super + {p,b,comma,period}" = /* bash */ ''
-            ${bspc} node -f @{parent,brother,first,second}
+        "super + {p,comma,period}" = /* bash */ ''
+            ${bspc} node -f @{parent,first,second}
         '';
 
         "super + {_,shift + } c" = /* bash */ ''
@@ -85,9 +107,12 @@ let
             ${bspc} node -o 0.{1-9}
         '';
 
-
         "super + ctrl + space" = /* bash */ ''
             ${bspc} node -p cancel
+        '';
+
+        "super + ctrl + Return" = /* bash */ ''
+            ${bspc} node -n 'last.!automatic.local'
         '';
 
         # move/ resize
@@ -97,7 +122,6 @@ let
             ${bspc} node -v {-20 0,0 20,0 -20,20 0}
         '';
 
-        
         "super + alt + {h, j, k, l}" =
             let
                 script = pkgs.writeShellScript "bspc-resize-node" /* bash */ ''
