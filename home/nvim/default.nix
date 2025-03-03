@@ -144,6 +144,8 @@ in {
 
         KtFmtPath = '${lib.getExe pkgs.ktfmt}'
 
+        AstylePath = '${lib.getExe pkgs.astyle}'
+
         -- require actual init file
         require 'main'
 
