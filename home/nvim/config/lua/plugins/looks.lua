@@ -89,22 +89,12 @@ return {
     },
 
     {
-        'jinh0/eyeliner.nvim',
-        main = 'eyeliner',
-        opts = {
-            highlight_on_key = true,
-        },
-    },
-
-    {
         'sphamba/smear-cursor.nvim',
-        main = 'smear_cursor',
         opts = {},
     },
 
     {
         'karb94/neoscroll.nvim',
-        main = 'neoscroll',
         opts = {},
     },
 }

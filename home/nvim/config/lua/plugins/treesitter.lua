@@ -99,16 +99,19 @@ local function setup_textobjects()
     Map({ 'n', 'x', 'o' }, ';', ts_repeat_move.repeat_last_move_next)
     Map({ 'n', 'x', 'o' }, ',', ts_repeat_move.repeat_last_move_previous)
 
-    Map({ 'n', 'x', 'o' }, 'f', ts_repeat_move.builtin_f_expr, { expr = true })
-    Map({ 'n', 'x', 'o' }, 'F', ts_repeat_move.builtin_F_expr, { expr = true })
-    Map({ 'n', 'x', 'o' }, 't', ts_repeat_move.builtin_t_expr, { expr = true })
-    Map({ 'n', 'x', 'o' }, 'T', ts_repeat_move.builtin_T_expr, { expr = true })
+    for _, key in ipairs({ 'f', 't', 'F', 'T' }) do
+        Map(
+            { 'n', 'x', 'o' },
+            key,
+            ts_repeat_move['builtin_' .. key .. '_expr'],
+            { expr = true }
+        )
+    end
 end
 
 return {
     {
         'nvim-treesitter/nvim-treesitter',
-        -- build = ':TSUpdate',
         config = setup_treesitter,
     },
 
@@ -118,5 +121,13 @@ return {
             'nvim-treesitter/nvim-treesitter',
         },
         config = setup_textobjects,
-    }
+    },
+
+    -- FIXME: disabled, as won't work with ts_repeat_move.builtin_?_key
+    -- {
+    --     'jinh0/eyeliner.nvim',
+    --     opts = {
+    --         highlight_on_key = true,
+    --     },
+    -- },
 }
