@@ -4,24 +4,22 @@
   lib,
   ...
 }: {
-  home.packages = with pkgs;
-    lib.mkMerge [
-      [
-        wget
-        curl
-        killall
-        p7zip
-        bat
-        ncdu
-        file
-        xclip
-        cloc
-        imagemagick
-        ffmpeg
-        age
-        just
-      ]
-    ];
+  home.packages = with pkgs; [
+    wget
+    curl
+    bat
+    xclip
+    ncdu
+    killall
+    file
+    imagemagick
+    ffmpeg
+    age
+    just
+    p7zip
+    unzip
+    tar
+  ];
 
   programs = {
     man.enable = true;
@@ -37,5 +35,5 @@
     nix-direnv.enable = true;
   };
 
-  programs.fish.shellAliases."j" = "just";
+  programs.fish.shellAliases."j" = lib.getExe pkgs.just;
 }
