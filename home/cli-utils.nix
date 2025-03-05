@@ -18,7 +18,7 @@
     just
     p7zip
     unzip
-    tar
+    gnutar
   ];
 
   programs = {
