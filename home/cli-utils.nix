@@ -9,6 +9,7 @@
     curl
     bat
     xclip
+    xorg.xkill
     ncdu
     killall
     file
