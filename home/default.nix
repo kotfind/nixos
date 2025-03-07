@@ -6,7 +6,7 @@
     ./firefox.nix
     ./fish
     ./fonts.nix
-    ./dl.nix
+    ./downloaders.nix
     ./git.nix
     ./gui-utils.nix
     ./keyboard

@@ -18,4 +18,8 @@
       ydl = lib.getExe pkgs.yt-dlp;
     };
   };
+
+  home.packages = (with config.cfgLib; enableFor hosts.pc.users.kotfind) (with pkgs; [
+    gdown
+  ]);
 }
