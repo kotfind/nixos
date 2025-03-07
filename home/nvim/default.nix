@@ -7,82 +7,180 @@
 }:
 # TODO?: don't install lsp servers for root?
 let
-  # format:
-  # [ pkg1 pkg2 ... lspconfig1 lspconfig2 ... ]
-  #
+  # Format:
+  # <language_name> = {
+  #   server = {
+  #     name = <lspconfig-name>;
+  #     path = lib.getExe pkgs.<package-name>;
+  #   };
+  #   formatter = {
+  #     name = <conform-name>;
+  #     path = lib.getExe pkgs.<package-name>;
+  #   };
+  # }
   # Lspconfig server name list:
   #   https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
   # or
   #   :help lspconfig-all
-  lspServers = lib.lists.flatten (with pkgs; [
-    [
-      "pyright"
-      pyright
-      yapf
-    ]
+  langCfg = {
+    python = {
+      server = {
+        name = "pyright";
+        path = lib.getExe pkgs.pyright;
+      };
+      formatter = {
+        name = "yapf";
+        path = lib.getExe pkgs.yapf;
+      };
+    };
 
-    [
-      "ccls"
-      ccls
-    ]
+    c = {
+      server = {
+        name = "ccls";
+        path = lib.getExe pkgs.ccls;
+      };
+    };
 
-    [
-      "rust_analyzer"
-      rust-analyzer
-      rustfmt
-      clippy
-    ]
+    rust = {
+      server = {
+        name = "rust_analyzer";
+        path = lib.getExe pkgs.rust-analyzer;
+      };
+      formatter = {
+        name = "rustfmt";
+        path = lib.getExe pkgs.rustfmt;
+      };
+      linter = {
+        name = "clippy";
+        path = lib.getExe pkgs.clippy;
+      };
+    };
 
-    [
-      "lua_ls"
-      lua-language-server
-      luaformatter
-    ]
+    lua = {
+      server = {
+        name = "lua_ls";
+        path = lib.getExe pkgs.lua-language-server;
+      };
+      formatter = {
+        name = "stylua";
+        path = lib.getExe pkgs.stylua;
+      };
+    };
 
-    [
-      "tinymist"
-      tinymist
-      prettypst
-    ]
+    typst = {
+      server = {
+        name = "tinymist";
+        path = lib.getExe pkgs.tinymist;
+      };
+      formatter = {
+        name = "typstyle";
+        path = lib.getExe pkgs.typstyle;
+      };
+    };
 
-    [
-      "bashls"
-      bash-language-server
-      shfmt
-    ]
+    bash = {
+      server = {
+        name = "bashls";
+        path = lib.getExe pkgs.bash-language-server;
+      };
+      formatter = {
+        name = "shfmt";
+        path = lib.getExe pkgs.shfmt;
+      };
+    };
 
-    [
-      "cssls"
-      "eslint"
-      "html"
-      "jsonls"
-      vscode-langservers-extracted
-      perl540Packages.HTMLFormatter
-    ]
+    html = {
+      server = {
+        name = "html";
+        path = lib.getExe' pkgs.vscode-langservers-extracted "vscode-html-language-server";
+      };
+      formatter = {
+        name = "htmlbeautifier";
+        path = lib.getExe pkgs.rubyPackages.htmlbeautifier;
+      };
+    };
 
-    [
-      "kotlin_language_server"
-      kotlin-language-server
-      ktfmt
-    ]
+    css = {
+      server = {
+        name = "cssls";
+        path = lib.getExe' pkgs.vscode-langservers-extracted "vscode-css-language-server";
+      };
+      formatter = {
+        name = "stylelint";
+        path = lib.getExe pkgs.stylelint;
+      };
+    };
 
-    [
-      "jdtls"
-      jdt-language-server
-      google-java-format
-    ]
+    json = {
+      server = {
+        name = "jsonls";
+        path = lib.getExe' pkgs.vscode-langservers-extracted "vscode-json-language-server";
+      };
+      formatter = {
+        name = "fixjson";
+        path = lib.getExe pkgs.fixjson;
+      };
+    };
 
-    [
-      "nixd"
-      nixd
-      alejandra
-    ]
+    javascript = {
+      server = {
+        name = "eslint";
+        path = lib.getExe' pkgs.vscode-langservers-extracted "vscode-eslint-language-server";
+      };
+      # TODO: formatter
+    };
 
-    [
-      "dotls"
-      dot-language-server
-    ]
-  ]);
+    kotlin = {
+      server = {
+        name = "kotlin_language_server";
+        path = lib.getExe pkgs.kotlin-language-server;
+      };
+      formatter = {
+        name = "ktfmt";
+        path = lib.getExe pkgs.ktfmt;
+      };
+    };
+
+    java = {
+      server = {
+        name = "jdtls";
+        path = lib.getExe pkgs.jdt-language-server;
+      };
+      formatter = {
+        name = "google-java-format";
+        path = lib.getExe pkgs.google-java-format;
+      };
+    };
+
+    nix = {
+      server = {
+        name = "nixd";
+        path = lib.getExe pkgs.nixd;
+      };
+      formatter = {
+        name = "alejandra";
+        path = lib.getExe pkgs.alejandra;
+      };
+    };
+
+    dot = {
+      server = {
+        name = "dotls";
+        path = lib.getExe pkgs.dot-language-server;
+      };
+    };
+  };
+
+  toLua = v:
+    if v == null
+    then "nil"
+    else if builtins.isString v
+    then "'" + lib.strings.escape ["'" "\\"] v + "'"
+    else if builtins.isList v
+    then "{" + lib.strings.concatMapStringsSep "," toLua v + "}"
+    else if builtins.isAttrs v
+    then "{" + lib.strings.concatMapAttrsStringSep "," (name: value: name + "=" + toLua value) v + "}"
+    else throw "cannot convert to lua";
 
   codeium-lsp = inputs.codeium.packages.${system}.codeium-lsp;
 
@@ -104,29 +202,9 @@ in {
     withPython3 = false;
     withRuby = false;
 
-    extraPackages =
-      packages
-      ++ (
-        lib.lists.filter
-        (spec: lib.attrsets.isDerivation spec)
-        lspServers
-      );
+    extraPackages = packages;
 
-    extraLuaConfig = let
-      lspServerNames =
-        lib.lists.filter
-        (spec: lib.strings.isString spec)
-        lspServers;
-
-      lspServerNamesStr =
-        lib.lists.foldl
-        (
-          acc: serverName:
-            acc + "\n'${serverName}',"
-        )
-        ""
-        lspServerNames;
-    in
+    extraLuaConfig =
       /*
       lua
       */
@@ -134,17 +212,8 @@ in {
         -- this file was generatred by nix
 
         -- Export some variables
-        LspServerNames = {
-            ${lspServerNamesStr}
-        }
-
+        LangCfg = ${toLua langCfg}
         CodeiumPath = '${lib.getExe' codeium-lsp "codeium-lsp"}'
-
-        AlejandraPath = '${lib.getExe pkgs.alejandra}'
-
-        KtFmtPath = '${lib.getExe pkgs.ktfmt}'
-
-        AstylePath = '${lib.getExe pkgs.astyle}'
 
         -- require actual init file
         require 'main'

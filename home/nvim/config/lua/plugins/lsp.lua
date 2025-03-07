@@ -74,14 +74,15 @@ local function setup_servers()
     -- LSP Confi docs:
     -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
     local server_config = {
-        ['__default__'] = function(server_name)
-            lspconfig[server_name].setup {
+        ['__default__'] = function(server)
+            lspconfig[server.name].setup {
                 on_attach = on_attach,
                 capabilities = capabilities(),
+                cmd = { server.path },
             }
         end,
 
-        ['rust_analyzer'] = function()
+        ['rust_analyzer'] = function(server)
             -- Export env vars
             local vars_to_export = { 'PATH', 'LD_LIBRARY_PATH', 'PKG_CONFIG_PATH' }
             local cmd = '';
@@ -92,7 +93,7 @@ local function setup_servers()
                     cmd = cmd .. env_name .. '=\'' .. env_val .. '\' '
                 end
             end
-            cmd = cmd .. 'rust-analyzer'
+            cmd = cmd .. server.name
 
             -- Common settings
             --
@@ -136,10 +137,11 @@ local function setup_servers()
             }
         end,
 
-        ['lua_ls'] = function()
+        ['lua_ls'] = function(server)
             lspconfig.lua_ls.setup {
                 on_attach = on_attach,
                 capabilities = capabilities(),
+                cmd = { server.path },
                 settings = {
                     Lua = {
                         diagnostics = {
@@ -150,17 +152,11 @@ local function setup_servers()
             }
         end,
 
-        ['jdtls'] = function()
-            lspconfig.jdtls.setup {
-                on_attach = on_attach,
-                capabilities = capabilities(),
-            }
-        end,
-
-        ['tinymist'] = function()
+        ['tinymist'] = function(server)
             lspconfig.tinymist.setup {
                 on_attach = on_attach,
                 capabilities = capabilities(),
+                cmd = { server.path },
                 settings = {
                     exportPdf = 'onType',
                     outputPath = '$name',
@@ -169,12 +165,16 @@ local function setup_servers()
         end
     }
 
-    for _, server_name in ipairs(LspServerNames) do
-        local cfg = server_config[server_name]
-        if cfg == nil then
-            server_config['__default__'](server_name)
-        else
-            cfg()
+    for _, lang_data in pairs(LangCfg) do
+        local server = lang_data.server
+
+        if server ~= nil then
+            local cfg = server_config[server]
+            if cfg == nil then
+                server_config['__default__'](server)
+            else
+                cfg(server)
+            end
         end
     end
 end
