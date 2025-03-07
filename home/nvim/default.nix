@@ -271,5 +271,13 @@ in {
       "${spellPath}/ru.utf-8.sug".source = inputs.nvim-sug-ru;
       "${spellPath}/en.utf-8.spl".source = inputs.nvim-spl-en;
       "${spellPath}/en.utf-8.sug".source = inputs.nvim-sug-en;
-    });
+    })
+    // {
+      ".stylua.toml".source = (pkgs.formats.toml {}).generate ".stylua.toml" {
+        column_width = 80;
+        indent_type = "Spaces";
+        quote_style = "AutoPreferSingle";
+        call_parentheses = "None";
+      };
+    };
 }
