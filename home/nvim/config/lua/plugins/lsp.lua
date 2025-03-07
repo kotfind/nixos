@@ -1,5 +1,5 @@
 local function setup_typst_preview()
-    require 'typst-preview'.setup {
+    require('typst-preview').setup {
         open_cmd = 'firefox --new-window %s',
 
         dependencies_bin = {
@@ -8,7 +8,7 @@ local function setup_typst_preview()
         },
 
         get_main_file = function(bufpath)
-            if vim.fn.filereadable('main.typ') then
+            if vim.fn.filereadable 'main.typ' then
                 return 'main.typ'
             else
                 return bufpath
@@ -28,7 +28,7 @@ local function on_attach(client, bufnr)
         Map(modes, key, func, {
             noremap = true,
             silent = true,
-            buffer = bufnr
+            buffer = bufnr,
         })
     end
 
@@ -45,7 +45,7 @@ local function on_attach(client, bufnr)
 end
 
 local function capabilities()
-    return require 'cmp_nvim_lsp'.default_capabilities()
+    return require('cmp_nvim_lsp').default_capabilities()
 end
 
 local function setup_diagnostics()
@@ -57,10 +57,11 @@ local function setup_diagnostics()
         virtual_lines = false,
     }
 
-    vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-        underline = false,
-        severity_sort = true,
-    })
+    vim.lsp.handlers['textDocument/publishDiagnostics'] =
+        vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+            underline = false,
+            severity_sort = true,
+        })
 
     local lsp_lines = require 'lsp_lines'
     lsp_lines.setup {}
@@ -70,6 +71,7 @@ end
 
 local function setup_servers()
     local lspconfig = require 'lspconfig'
+    local util = require 'lspconfig.util'
 
     -- LSP Confi docs:
     -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
@@ -84,13 +86,14 @@ local function setup_servers()
 
         ['rust_analyzer'] = function(server)
             -- Export env vars
-            local vars_to_export = { 'PATH', 'LD_LIBRARY_PATH', 'PKG_CONFIG_PATH' }
-            local cmd = '';
+            local vars_to_export =
+                { 'PATH', 'LD_LIBRARY_PATH', 'PKG_CONFIG_PATH' }
+            local cmd = ''
             for _, env_name in ipairs(vars_to_export) do
                 local env_val = os.getenv(env_name)
                 if env_val ~= nil then
-                    env_val = env_val:gsub('\'', '\\\'')
-                    cmd = cmd .. env_name .. '=\'' .. env_val .. '\' '
+                    env_val = env_val:gsub("'", "\\'")
+                    cmd = cmd .. env_name .. "='" .. env_val .. "' "
                 end
             end
             cmd = cmd .. server.name
@@ -113,7 +116,7 @@ local function setup_servers()
                 cargo = {
                     targetDir = true,
                     features = 'all',
-                }
+                },
             }
 
             -- lspMux
@@ -132,7 +135,7 @@ local function setup_servers()
                 capabilities = capabilities(),
                 cmd = vim.lsp.rpc.connect('127.0.0.1', 27631),
                 settings = {
-                    ["rust-analyzer"] = settings,
+                    ['rust-analyzer'] = settings,
                 },
             }
         end,
@@ -142,10 +145,27 @@ local function setup_servers()
                 on_attach = on_attach,
                 capabilities = capabilities(),
                 cmd = { server.path },
+
+                root_dir = util.root_pattern { '.git' },
+
                 settings = {
                     Lua = {
                         diagnostics = {
-                            globals = { 'vim', 's', 't', 'i', 'f', 'd', 'r', 'sn', 'fmt', 'fmta', 'rep', 'k', 'c' },
+                            globals = {
+                                'vim',
+                                's',
+                                't',
+                                'i',
+                                'f',
+                                'd',
+                                'r',
+                                'sn',
+                                'fmt',
+                                'fmta',
+                                'rep',
+                                'k',
+                                'c',
+                            },
                         },
                     },
                 },
@@ -160,16 +180,16 @@ local function setup_servers()
                 settings = {
                     exportPdf = 'onType',
                     outputPath = '$name',
-                }
+                },
             }
-        end
+        end,
     }
 
     for _, lang_data in pairs(LangCfg) do
         local server = lang_data.server
 
         if server ~= nil then
-            local cfg = server_config[server]
+            local cfg = server_config[server.name]
             if cfg == nil then
                 server_config['__default__'](server)
             else
@@ -196,7 +216,7 @@ return {
         config = setup_lsp,
         dependencies = {
             'hrsh7th/cmp-nvim-lsp',
-        }
+        },
     },
 
     {
@@ -207,7 +227,7 @@ return {
 
     {
         url = 'https://git.sr.ht/~whynothugo/lsp_lines.nvim',
-        config = setup_diagnostics
+        config = setup_diagnostics,
     },
 
     {
