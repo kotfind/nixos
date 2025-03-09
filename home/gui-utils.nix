@@ -21,6 +21,7 @@
         transmission_4-qt
         pavucontrol
         libreoffice
+        pinta
 
         zoom-us
       ])
