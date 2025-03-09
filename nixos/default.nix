@@ -4,6 +4,7 @@
 
     ./hardware-configuration.nix
 
+    ./android.nix
     ./audio.nix
     ./bluetooth.nix
     ./networking.nix
