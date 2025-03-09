@@ -21,18 +21,29 @@
       idProduct = "ff88";
     }
   ];
+
+  androidGroups = [
+    "adbusers"
+    "kvm"
+  ];
 in {
   users.users = builtins.listToAttrs (builtins.map
     (user: {
       name = user.name;
       value = {
-        extraGroups = [
-          "adbusers"
-          "kvm"
-        ];
+        extraGroups = androidGroups;
       };
     })
     users);
+
+  users.groups = builtins.listToAttrs (
+    builtins.map
+    (group: {
+      name = group;
+      value = {};
+    })
+    androidGroups
+  );
 
   services.udev.packages = with pkgs; [
     android-udev-rules
