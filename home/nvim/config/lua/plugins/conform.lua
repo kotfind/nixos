@@ -4,17 +4,35 @@ local function setup_conform()
 
     local formatter_config = {
         ['__default__'] = function(formatter)
-            if formatter.path ~= nil then
-                formatters[formatter.name] = {
-                    command = formatter.path,
-                }
-            end
+            formatters[formatter.name] = {
+                command = formatter.path,
+            }
         end,
 
         ['typstyle'] = function(formatter)
             formatters[formatter.name] = {
                 command = formatter.path,
                 append_args = { '--tab-width', '4' },
+            }
+        end,
+
+        ['ktfmt'] = function(formatter)
+            formatters[formatter.name] = {
+                command = formatter.path,
+                append_args = { '--kotlinlang-style' },
+            }
+        end,
+
+        ['astyle'] = function(formatter)
+            formatters[formatter.name] = {
+                command = formatter.path,
+                args = {},
+                stdin = true,
+                cwd = util.root_file {
+                    '.editorconfig',
+                    'flake.nix',
+                    '.git',
+                },
             }
         end,
     }
@@ -41,41 +59,6 @@ local function setup_conform()
             lsp_format = 'fallback',
         },
     }
-
-    -- local util = require 'conform.util'
-    -- require 'conform'.setup {
-    --     formatters_by_ft = {
-    --         nix = { 'alejandra' },
-    --         kotlin = { 'ktfmt' },
-    --         cpp = { 'astyle' },
-    --         c = { 'astyle' },
-    --     },
-    --
-    --     format_after_save = {
-    --         timeout_ms = 10000,
-    --         lsp_format = 'fallback',
-    --     },
-    --
-    --     formatters = {
-    --         alejandra = { command = AlejandraPath, },
-    --         ktfmt = {
-    --             command = KtFmtPath,
-    --             append_args = { '--kotlinlang-style' }
-    --         },
-    --
-    --         -- custom formatter
-    --         astyle = {
-    --             command = AstylePath,
-    --             args = {},
-    --             stdin = true,
-    --             cwd = util.root_file {
-    --                 '.editorconfig',
-    --                 'flake.nix',
-    --                 '.git',
-    --             },
-    --         },
-    --     },
-    -- }
 end
 
 return {
