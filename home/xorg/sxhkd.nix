@@ -18,6 +18,9 @@
   loginctl = getExe' pkgs.systemd "loginctl";
   rofi-pass = getExe pkgs.rofi-pass;
   pkill = getExe' pkgs.toybox "pkill";
+  xprop = getExe pkgs.xorg.xprop;
+  sed = getExe pkgs.gnused;
+  firefox = getExe pkgs.firefox;
 
   scrotWithArgs = args:
     escapeShellArgs
@@ -45,7 +48,7 @@
       "super + alt + r" = getExe (
         writeShellScriptBin "restart-bspwm" ''
           ${bspc} wm -r
-          ${pkill} -USR1 -x sxhkd
+          ${pkill} -l USR1 -x sxhkd
         ''
       );
 
@@ -169,7 +172,45 @@
       # -------------------- Miscellaneous --------------------
 
       # firefox
-      "super { , + shift} + f" = "firefox {--new-window,--private-window}";
+      "super + {_, shift} + f" = let
+        script = writeShellScriptBin "focus-or-open-firefox" ''
+          set -euo pipefail
+          set -x
+
+          case "$1" in
+            'normal')
+              wm_name_suffix='Mozilla Firefox'
+              firefox_flag='--new-window'
+              ;;
+
+            'private')
+              wm_name_suffix='Mozilla Firefox Private Browsing'
+              firefox_flag='--private-window'
+              ;;
+
+            *)
+              echo "unknown window type '$1'" 1>&2
+              exit 1
+              ;;
+          esac
+
+          ids=($(${bspc} query -N -n '.local.window'))
+          for id in "''${ids[@]}"; do
+            name="$(
+              ${xprop} -id "$id" -notype WM_NAME | \
+              ${sed} 's/^WM_NAME = "\(.*\)"$/\1/' | \
+              ${sed} 's/\"/"/'
+            )"
+
+            if echo "$name" | grep -q "$wm_name_suffix$"; then
+              ${bspc} node -f "$id"
+              exit 0
+            fi
+          done
+
+          ${firefox} "$firefox_flag"
+        '';
+      in "${getExe script} {normal,private}";
 
       # password
       "super + e" = rofi-pass;
