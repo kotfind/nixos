@@ -149,7 +149,7 @@ with (with pkgs; {
       bash
       */
       ''
-        ${bspc} {desktop -f,node -d} '^{1-9}'
+        ${bspc} {desktop -f,node -d} '{1-9}.local'
       '';
 
     # preselect
