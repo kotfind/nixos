@@ -20,6 +20,7 @@
     p7zip
     unzip
     gnutar
+    cloc
   ];
 
   programs = {
