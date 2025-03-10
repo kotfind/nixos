@@ -131,10 +131,10 @@ let
     };
 
     kotlin = {
-      server = {
-        name = "kotlin_language_server";
-        path = lib.getExe' pkgs.kotlin-language-server "kotlin-language-server";
-      };
+      # server = {
+      #   name = "kotlin_language_server";
+      #   path = lib.getExe' pkgs.kotlin-language-server "kotlin-language-server";
+      # };
       # formatter = {
       #   name = "ktfmt";
       #   path = lib.getExe pkgs.ktfmt;
