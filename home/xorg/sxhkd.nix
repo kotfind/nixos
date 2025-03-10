@@ -68,12 +68,12 @@ with (with pkgs; {
       '';
 
     # change window state
-    "super + {t,s}" =
+    "super + {t,T,s}" =
       /*
       bash
       */
       ''
-        ${bspc} node -t {tiled,floating}
+        ${bspc} node -t {tiled,pseudo_tiled,floating}
       '';
 
     # sticky
