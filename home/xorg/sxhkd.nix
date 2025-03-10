@@ -3,206 +3,98 @@
   lib,
   config,
   ...
-}:
-with (with pkgs; {
-  bspc = lib.getExe' bspwm "bspc";
-  alacritty = lib.getExe alacritty;
-  rofi = lib.getExe rofi;
-  scrot = lib.getExe scrot;
-  pactl = lib.getExe' pulseaudio "pactl";
-  light = lib.getExe light;
-  playerctl = lib.getExe playerctl;
-  systemctl = lib.getExe' systemd "systemctl";
-  loginctl = lib.getExe' systemd "loginctl";
-  rofi-pass = lib.getExe rofi-pass;
-  pkill = lib.getExe' toybox "pkill";
-}); let
-  keybindings = {
-    # Run terminal
-    "super + Return" = alacritty;
+}: let
+  inherit (lib) getExe getExe' escapeShellArgs;
+  inherit (pkgs) writeShellScriptBin;
+  inherit (config.cfgLib) enableFor matchFor hosts users;
 
-    # Launch program
-    "super + @space" =
-      /*
-      bash
-      */
-      ''
-        ${rofi} -show drun
-      '';
+  bspc = getExe' pkgs.bspwm "bspc";
+  alacritty = getExe pkgs.alacritty;
+  rofi = getExe pkgs.rofi;
+  pactl = getExe' pkgs.pulseaudio "pactl";
+  light = getExe pkgs.light;
+  playerctl = getExe pkgs.playerctl;
+  systemctl = getExe' pkgs.systemd "systemctl";
+  loginctl = getExe' pkgs.systemd "loginctl";
+  rofi-pass = getExe pkgs.rofi-pass;
+  pkill = getExe' pkgs.toybox "pkill";
 
-    # quit bspwm
-    "super + alt + q" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} quit
-      '';
+  scrotWithArgs = args:
+    escapeShellArgs
+    ([(getExe pkgs.scrot)]
+      ++ args
+      ++ ["/tmp/screenshots/%s.png"]);
 
-    # restart bspwm (and sxhkd)
-    "super + alt + r" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} wm -r
-        ${pkill} -USR1 -x sxhkd
-      '';
+  keybindings =
+    {
+      # -------------------- Launch --------------------
 
-    # close/ kill a window
-    "super + {_,shift + }w" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} node -{c,k}
-      '';
+      # launch terminal
+      "super + Return" = alacritty;
 
-    # switch layout
-    "super + m" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} desktop -l next
-      '';
+      # launch app
+      "super + @space" = "${rofi} -show drun";
+    }
+    // {
+      # -------------------- Quit / reload --------------------
 
-    # change window state
-    "super + {t,T,s}" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} node -t {tiled,pseudo_tiled,floating}
-      '';
+      # quit bspwm
+      "super + alt + q" = "${bspc} quit";
 
-    # sticky
-    "super + shift + s" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} node -g sticky
-      '';
-
-    # balance
-    "super + b" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} node @/ -E
-      '';
-
-    "super + B" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} node @/ -B
-      '';
-
-    # rotate parent
-    "super + r" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} node @parent -R 90
-      '';
-
-    # focus/ swap
-    "super + {_,shift + }{h,j,k,l}" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} node -{f,s} {west,south,north,east}
-      '';
-
-    "super + {p,i,I}" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} node -f @{parent,first,second}
-      '';
-
-    "super + {_,shift + } c" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} node -f {next,prev}.local.!hidden.window
-      '';
-
-    "super + bracket{left,right}" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} desktop -f {prev,next}.local
-      '';
-
-    "super + {_,shift + }{1-9}" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} {desktop -f,node -d} '{1-9}.local'
-      '';
-
-    # preselect
-    "super + ctrl + {h,j,k,l}" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} node -p {west,south,north,east}
-      '';
-
-    "super + ctrl + {1-9}" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} node -o 0.{1-9}
-      '';
-
-    "super + ctrl + space" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} node -p cancel
-      '';
-
-    "super + ctrl + Return" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} node -n 'last.!automatic.local'
-      '';
-
-    # move/ resize
-
-    # move floating
-    "super + {Left,Down,Up,Right}" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} node -v {-20 0,0 20,0 -20,20 0}
-      '';
-
-    "super + alt + {h, j, k, l}" = let
-      script =
-        pkgs.writeShellScript "bspc-resize-node"
-        /*
-        bash
-        */
+      # restart bspwm (and sxhkd)
+      "super + alt + r" = getExe (
+        writeShellScriptBin "restart-bspwm" ''
+          ${bspc} wm -r
+          ${pkill} -USR1 -x sxhkd
         ''
+      );
+
+      # close/ kill a window
+      "super + w" = "${bspc} node -c";
+      "super + shift + w" = "${bspc} node -k";
+    }
+    // {
+      # -------------------- Layout --------------------
+
+      # switch layout
+      "super + m" = "${bspc} desktop -l next";
+
+      # change window state
+      "super + s" = "${bspc} node -t floating";
+      "super + t" = "${bspc} node -t tiled";
+      "super + T" = "${bspc} node -t pseudo_tiled";
+
+      # sticky
+      "super + shift + s" = "${bspc} node -g sticky";
+
+      # balance nodes
+      "super + b" = "${bspc} node @/ -E";
+      "super + B" = "${bspc} node @/ -B";
+
+      # rotate parent
+      "super + r" = "${bspc} node @parent -R 90";
+    }
+    // {
+      # -------------------- Move / Focus / Resize Windows --------------------
+
+      # focus window in direction
+      "super + {h,j,k,l}" = "${bspc} node -f {west,south,north,east}";
+
+      # move window in direction
+      "super + shift + {h,j,k,l}" = "${bspc} node -s {west,south,north,east}";
+
+      # focus parent/ first child / second child
+      "super + {p,i,I}" = "${bspc} node -f @{parent,first,second}";
+
+      # cycle through windows
+      "super + {_,shift + } c" = "${bspc} node -f {next,prev}.local.!hidden.window";
+
+      # move floating window
+      "super + {Left,Down,Up,Right}" = "${bspc} node -v {-20 0,0 20,0 -20,20 0}";
+
+      # smart resize node
+      "super + alt + {h, j, k, l}" = let
+        script = writeShellScriptBin "bspc-resize-node" ''
           dir="$1"
           step=20
           case $dir in
@@ -212,96 +104,79 @@ with (with pkgs; {
               'right')  { bspc node -z right  +$step 0 || bspc node -z left   +$step 0; } ;;
           esac
         '';
-    in "${script} {'left','top','bottom','right'}";
+      in "${getExe script} {'left','top','bottom','right'}";
+    }
+    // {
+      # -------------------- Preselection --------------------
 
-    # screenshot
-    "{ ,shift,ctrl} + Print" =
-      /*
-      bash
-      */
-      ''
-        ${scrot} { ,-f -s, -f -u} '/tmp/screenshots/%s.png'
-      '';
+      # preselect direction
+      "super + ctrl + {h,j,k,l}" = "${bspc} node -p {west,south,north,east}";
 
-    # volume
-    "XF86AudioMute" =
-      /*
-      bash
-      */
-      ''
-        ${pactl} set-sink-mute @DEFAULT_SINK@ toggle
-      '';
+      # preselect ratio
+      "super + ctrl + {1-9}" = "${bspc} node -o 0.{1-9}";
 
-    "{XF86AudioRaiseVolume,XF86AudioLowerVolume}" =
-      /*
-      bash
-      */
-      ''
-        ${pactl} set-sink-volume @DEFAULT_SINK@ {+,-}5%
-      '';
+      # cancel preselection
+      "super + ctrl + space" = "${bspc} node -p cancel";
 
-    # brightness
-    "XF86MonBrightness{Up,Down}" =
-      (with config.cfgLib; enableFor hosts.laptop)
-      /*
-      bash
-      */
-      ''
-        ${light} {-A,-U} 5
-      '';
+      # send (move) node to preselected area
+      "super + ctrl + Return" = "${bspc} node -n 'last.!automatic.local'";
+    }
+    // {
+      # -------------------- Focus / Move Desktops --------------------
 
-    # media
-    # TODO: FIXME: Unkown keysym name: ...
-    "XF86{Play,Stop,Pause,Next,Prev}" =
-      /*
-      bash
-      */
-      ''
-        ${playerctl} {play-pause,play-pause,play-pause,next,previous}
-      '';
+      # focus next desktop (on the same monitor)
+      "super + bracket{left,right}" = "${bspc} desktop -f {prev,next}.local";
 
-    # lock/ suspend/ hibernate
-    "super + z" =
-      /*
-      bash
-      */
-      ''
-        ${loginctl} lock-session
-      '';
+      # focus desktop by number (on same monitor)
+      "super + {1-9}" = "${bspc} desktop -f '{1-9}.local'";
 
-    "super + shift { , + ctrl} + z" =
-      /*
-      bash
-      */
-      ''
-        ${systemctl} {suspend,hibernate} -i
-      '';
+      # send window to a desktop by number (on same monitor)
+      "super + shift + {1-9}" = "${bspc} node -d '{1-9}.local'";
 
-    # firefox
-    # TODO: switch to ff window is already opened
-    "super { , + shift} + f" =
-      /*
-      bash
-      */
-      ''
-        firefox {--new-window,--private-window}
-      '';
+      # focus previous / next monitor
+      "super + {comma,period}" = "${bspc} monitor -f {prev,next}";
 
-    # password
-    "super + e" = rofi-pass;
+      # send window to another monitor
+      "super + shift + {comma,period}" = "${bspc} node -m {prev,next}";
+    }
+    // {
+      # -------------------- Special Keys --------------------
 
-    # focus / send window to monitor
-    "super + {_,shift} + {comma,period}" =
-      /*
-      bash
-      */
-      ''
-        ${bspc} {monitor -f,node -m} {prev,next}
-      '';
-  };
+      # screenshot whole screen / selected area / current window
+      "Print" = scrotWithArgs [];
+      "shift + Print" = scrotWithArgs ["-f" "-s"];
+      "ctrl + Print" = scrotWithArgs ["-f" "-u"];
+
+      # volume mute / up / down
+      "XF86AudioMute" = "${pactl} set-sink-mute @DEFAULT_SINK@ toggle";
+      "{XF86AudioRaiseVolume,XF86AudioLowerVolume}" = "${pactl} set-sink-volume @DEFAULT_SINK@ {+,-}5%";
+
+      # brightness up / down
+      "XF86MonBrightness{Up,Down}" =
+        enableFor
+        hosts.laptop
+        "${light} {-A,-U} 5";
+
+      # media keys
+      "XF86{Play,Stop,Pause,Next,Prev}" = "${playerctl} {play-pause,play-pause,play-pause,next,previous}";
+
+      # lock / suspend / hibernate
+      "super + z" = "${loginctl} lock-session";
+      "super + shift + z" = "${systemctl} suspend -i";
+      "super + shift + ctrl + z" = "${systemctl} hibernate -i";
+    }
+    // {
+      # -------------------- Miscellaneous --------------------
+
+      # firefox
+      "super { , + shift} + f" = "firefox {--new-window,--private-window}";
+
+      # password
+      "super + e" = rofi-pass;
+    };
 in {
-  services.sxhkd = (with config.cfgLib; enableFor users.kotfind) {
-    enable = true;
+  services.sxhkd = {
+    enable = matchFor users.kotfind;
     inherit keybindings;
   };
 }
