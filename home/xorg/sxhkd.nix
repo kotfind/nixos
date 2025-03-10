@@ -120,7 +120,7 @@ with (with pkgs; {
         ${bspc} node -{f,s} {west,south,north,east}
       '';
 
-    "super + {p,comma,period}" =
+    "super + {p,i,I}" =
       /*
       bash
       */
@@ -143,19 +143,6 @@ with (with pkgs; {
       ''
         ${bspc} desktop -f {prev,next}.local
       '';
-
-    "super + {o,i}" = let
-      script =
-        pkgs.writeShellScript "bspc-switch-older-newer-node"
-        /*
-        bash
-        */
-        ''
-          ${bspc} wm -h off
-          ${bspc} node "$1" -f
-          ${bspc} wm -h on
-        '';
-    in "${script} {older,newer}";
 
     "super + {_,shift + }{1-9}" =
       /*
@@ -302,6 +289,15 @@ with (with pkgs; {
 
     # password
     "super + e" = rofi-pass;
+
+    # focus / send window to monitor
+    "super + {_,shift} + {comma,period}" =
+      /*
+      bash
+      */
+      ''
+        ${bspc} {monitor -f,node -m} {prev,next}
+      '';
   };
 in {
   services.sxhkd = (with config.cfgLib; enableFor users.kotfind) {
