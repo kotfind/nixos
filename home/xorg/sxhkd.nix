@@ -21,6 +21,9 @@
   xprop = getExe pkgs.xorg.xprop;
   sed = getExe pkgs.gnused;
   firefox = getExe pkgs.firefox;
+  true_ = getExe' pkgs.toybox "true";
+  echo = getExe' pkgs.toybox "echo";
+  grep = getExe pkgs.gnugrep;
 
   scrotWithArgs = args:
     escapeShellArgs
@@ -171,7 +174,7 @@
     // {
       # -------------------- Miscellaneous --------------------
 
-      # firefox
+      # run/ focus firefox firefox
       "super + {_, shift} + f" = let
         script = writeShellScriptBin "focus-or-open-firefox" ''
           set -euo pipefail
@@ -194,7 +197,7 @@
               ;;
           esac
 
-          ids=($(${bspc} query -N -n '.local.window'))
+          ids=($(${bspc} query -N -n '.local.window' | ${true_}))
           for id in "''${ids[@]}"; do
             name="$(
               ${xprop} -id "$id" -notype WM_NAME | \
@@ -202,7 +205,7 @@
               ${sed} 's/\"/"/'
             )"
 
-            if echo "$name" | grep -q "$wm_name_suffix$"; then
+            if ${echo} "$name" | ${grep} -q "$wm_name_suffix$"; then
               ${bspc} node -f "$id"
               exit 0
             fi
