@@ -7,41 +7,15 @@
 }:
 # TODO?: don't install lsp servers for root?
 let
-  inherit (lib) getExe getExe';
-  inherit (lib.strings) escape concatMapStringsSep concatMapAttrsStringSep;
-  inherit (pkgs) writeShellScriptBin;
-
-  customJavaFormatter = let
-    grep = getExe pkgs.gnugrep;
-  in
-    writeShellScriptBin "custom-java-formatter" ''
-      set -euo pipefail
-      set -x
-
-      spotless_task_name='spotlessApply'
-
-      if ! command -v gradle >/dev/null 2>&1; then
-        echo "gradle not available" >&2
-        exit 0
-      fi
-
-      if ! gradle tasks --all | ${grep} -q "^$spotless_task_name"; then
-        echo "spotlessApply task not available" >&2
-        exit 0
-      fi
-
-      gradle $spotless_task_name
-    '';
-
   # Format:
   # <language_name> = {
   #   server = {
   #     name = <lspconfig-name>;
-  #     path = getExe pkgs.<package-name>;
+  #     path = lib.getExe pkgs.<package-name>;
   #   };
   #   formatter = {
   #     name = <conform-name>;
-  #     path = getExe pkgs.<package-name>;
+  #     path = lib.getExe pkgs.<package-name>;
   #   };
   # }
   # Lspconfig server name list:
@@ -52,106 +26,106 @@ let
     python = {
       server = {
         name = "pyright";
-        path = getExe pkgs.pyright;
+        path = lib.getExe pkgs.pyright;
       };
       formatter = {
         name = "yapf";
-        path = getExe pkgs.yapf;
+        path = lib.getExe pkgs.yapf;
       };
     };
 
     c = {
       server = {
         name = "ccls";
-        path = getExe pkgs.ccls;
+        path = lib.getExe pkgs.ccls;
       };
     };
 
     rust = {
       server = {
         name = "rust_analyzer";
-        path = getExe pkgs.rust-analyzer;
+        path = lib.getExe pkgs.rust-analyzer;
       };
       formatter = {
         name = "rustfmt";
-        path = getExe pkgs.rustfmt;
+        path = lib.getExe pkgs.rustfmt;
       };
       linter = {
         name = "clippy";
-        path = getExe pkgs.clippy;
+        path = lib.getExe pkgs.clippy;
       };
     };
 
     lua = {
       server = {
         name = "lua_ls";
-        path = getExe pkgs.lua-language-server;
+        path = lib.getExe pkgs.lua-language-server;
       };
       formatter = {
         name = "stylua";
-        path = getExe pkgs.stylua;
+        path = lib.getExe pkgs.stylua;
       };
     };
 
     typst = {
       server = {
         name = "tinymist";
-        path = getExe pkgs.tinymist;
+        path = lib.getExe pkgs.tinymist;
       };
       formatter = {
         name = "typstyle";
-        path = getExe pkgs.typstyle;
+        path = lib.getExe pkgs.typstyle;
       };
     };
 
     bash = {
       server = {
         name = "bashls";
-        path = getExe pkgs.bash-language-server;
+        path = lib.getExe pkgs.bash-language-server;
       };
       formatter = {
         name = "shfmt";
-        path = getExe pkgs.shfmt;
+        path = lib.getExe pkgs.shfmt;
       };
     };
 
     html = {
       server = {
         name = "html";
-        path = getExe' pkgs.vscode-langservers-extracted "vscode-html-language-server";
+        path = lib.getExe' pkgs.vscode-langservers-extracted "vscode-html-language-server";
       };
       formatter = {
         name = "htmlbeautifier";
-        path = getExe pkgs.rubyPackages.htmlbeautifier;
+        path = lib.getExe pkgs.rubyPackages.htmlbeautifier;
       };
     };
 
     css = {
       server = {
         name = "cssls";
-        path = getExe' pkgs.vscode-langservers-extracted "vscode-css-language-server";
+        path = lib.getExe' pkgs.vscode-langservers-extracted "vscode-css-language-server";
       };
       formatter = {
         name = "stylelint";
-        path = getExe pkgs.stylelint;
+        path = lib.getExe pkgs.stylelint;
       };
     };
 
     json = {
       server = {
         name = "jsonls";
-        path = getExe' pkgs.vscode-langservers-extracted "vscode-json-language-server";
+        path = lib.getExe' pkgs.vscode-langservers-extracted "vscode-json-language-server";
       };
       formatter = {
         name = "fixjson";
-        path = getExe pkgs.fixjson;
+        path = lib.getExe pkgs.fixjson;
       };
     };
 
     javascript = {
       server = {
         name = "eslint";
-        path = getExe' pkgs.vscode-langservers-extracted "vscode-eslint-language-server";
+        path = lib.getExe' pkgs.vscode-langservers-extracted "vscode-eslint-language-server";
       };
       # TODO: formatter
     };
@@ -159,40 +133,36 @@ let
     kotlin = {
       # server = {
       #   name = "kotlin_language_server";
-      #   path = getExe' pkgs.kotlin-language-server "kotlin-language-server";
+      #   path = lib.getExe' pkgs.kotlin-language-server "kotlin-language-server";
       # };
       # formatter = {
       #   name = "ktfmt";
-      #   path = getExe pkgs.ktfmt;
+      #   path = lib.getExe pkgs.ktfmt;
       # };
     };
 
     java = {
       server = {
         name = "jdtls";
-        path = getExe pkgs.jdt-language-server;
-      };
-      formatter = {
-        name = "custom-java-formatter";
-        path = getExe customJavaFormatter;
+        path = lib.getExe pkgs.jdt-language-server;
       };
     };
 
     nix = {
       server = {
         name = "nixd";
-        path = getExe pkgs.nixd;
+        path = lib.getExe pkgs.nixd;
       };
       formatter = {
         name = "alejandra";
-        path = getExe pkgs.alejandra;
+        path = lib.getExe pkgs.alejandra;
       };
     };
 
     dot = {
       server = {
         name = "dotls";
-        path = getExe pkgs.dot-language-server;
+        path = lib.getExe pkgs.dot-language-server;
       };
     };
   };
@@ -201,11 +171,11 @@ let
     if v == null
     then "nil"
     else if builtins.isString v
-    then "'" + escape ["'" "\\"] v + "'"
+    then "'" + lib.strings.escape ["'" "\\"] v + "'"
     else if builtins.isList v
-    then "{" + concatMapStringsSep "," toLua v + "}"
+    then "{" + lib.strings.concatMapStringsSep "," toLua v + "}"
     else if builtins.isAttrs v
-    then "{" + concatMapAttrsStringSep "," (name: value: name + "=" + toLua value) v + "}"
+    then "{" + lib.strings.concatMapAttrsStringSep "," (name: value: name + "=" + toLua value) v + "}"
     else throw "cannot convert to lua";
 
   codeium-lsp = inputs.codeium.packages.${system}.codeium-lsp;
@@ -239,7 +209,7 @@ in {
 
         -- Export some variables
         LangCfg = ${toLua langCfg}
-        CodeiumPath = '${getExe' codeium-lsp "codeium-lsp"}'
+        CodeiumPath = '${lib.getExe' codeium-lsp "codeium-lsp"}'
 
         -- require actual init file
         require 'main'
