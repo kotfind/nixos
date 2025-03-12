@@ -1,9 +1,16 @@
-{config, ...}: {
+{config, ...}: let
+  inherit (config.cfgLib) host;
+in {
   networking = {
-    hostName = config.cfgLib.host.data.hostname;
+    hostName = host.data.hostname;
 
     networkmanager.enable = true;
 
     firewall.enable = false;
+  };
+
+  programs.clash-verge = {
+    enable = true;
+    autoStart = true;
   };
 }
