@@ -146,10 +146,6 @@ let
         name = "jdtls";
         path = lib.getExe pkgs.jdt-language-server;
       };
-      formatter = {
-        name = "google-java-format";
-        path = lib.getExe pkgs.google-java-format;
-      };
     };
 
     nix = {
