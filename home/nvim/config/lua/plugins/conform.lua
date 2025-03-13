@@ -9,6 +9,12 @@ local function setup_conform()
             }
         end,
 
+        ['__none__'] = function(formatter)
+            formatters[formatter.name] = {
+                command = { lsp_format = 'never' },
+            }
+        end,
+
         ['typstyle'] = function(formatter)
             formatters[formatter.name] = {
                 command = formatter.path,

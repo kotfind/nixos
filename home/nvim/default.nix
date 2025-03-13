@@ -127,7 +127,9 @@ let
         name = "eslint";
         path = lib.getExe' pkgs.vscode-langservers-extracted "vscode-eslint-language-server";
       };
-      # TODO: formatter
+      formatt = {
+        name = "__none__";
+      };
     };
 
     kotlin = {
