@@ -84,6 +84,27 @@ local function setup_servers()
             }
         end,
 
+        ['jdtls'] = function(server)
+            local server_config = lspconfig[server.name]
+            local cmd = server_config.config_def.default_config.cmd
+            cmd[1] = server.path
+
+            server_config.setup {
+                on_attach = on_attach,
+                capabilities = capabilities(),
+                cmd = cmd,
+                settings = {
+                    java = {
+                        import = {
+                            gradle = {
+                                enabled = true,
+                            },
+                        },
+                    },
+                },
+            }
+        end,
+
         ['rust_analyzer'] = function(server)
             -- Export env vars
             local vars_to_export =

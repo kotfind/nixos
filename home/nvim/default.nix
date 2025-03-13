@@ -144,10 +144,10 @@ let
     };
 
     java = {
-      # server = {
-      #   name = "jdtls";
-      #   path = lib.getExe pkgs.jdt-language-server;
-      # };
+      server = {
+        name = "jdtls";
+        path = lib.getExe pkgs.jdt-language-server;
+      };
     };
 
     nix = {
