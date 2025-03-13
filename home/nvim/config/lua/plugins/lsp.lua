@@ -84,50 +84,6 @@ local function setup_servers()
             }
         end,
 
-        ['jdtls'] = function(server)
-            local server_config = lspconfig[server.name]
-            local orig_cmd = server_config.config_def.default_config.cmd
-
-            local vars_to_export = { 'PATH', 'JAVA_HOME', 'GRADLE_USER_HOME' }
-            local cmd = ''
-            for _, env_name in ipairs(vars_to_export) do
-                local env_val = os.getenv(env_name)
-                if env_val ~= nil then
-                    env_val = env_val:gsub("'", "\\'")
-                    cmd = cmd .. env_name .. "='" .. env_val .. "' "
-                end
-            end
-            cmd = cmd .. server.path
-
-            for i, arg in ipairs(orig_cmd) do
-                if i ~= 1 then
-                    cmd = cmd .. ' ' .. arg
-                end
-            end
-
-            server_config.setup {
-                on_attach = on_attach,
-                capabilities = capabilities(),
-                cmd = { '/bin/sh', '-c', cmd },
-                settings = {
-                    java = {
-                        import = {
-                            gradle = {
-                                java = {
-                                    enabled = true,
-                                    home = os.getenv 'JAVA_HOME',
-                                },
-                                arguments = {
-                                    '-Dorg.gradle.java.home='
-                                        .. os.getenv 'JAVA_HOME',
-                                },
-                            },
-                        },
-                    },
-                },
-            }
-        end,
-
         ['rust_analyzer'] = function(server)
             -- Export env vars
             local vars_to_export =
