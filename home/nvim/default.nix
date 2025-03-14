@@ -148,6 +148,9 @@ let
         name = "jdtls";
         path = lib.getExe pkgs.jdt-language-server;
       };
+      formatter = {
+        name = "__none__";
+      };
     };
 
     nix = {

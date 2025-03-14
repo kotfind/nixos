@@ -100,6 +100,9 @@ local function setup_servers()
                                 enabled = true,
                             },
                         },
+                        format = {
+                            enabled = false,
+                        },
                     },
                 },
             }

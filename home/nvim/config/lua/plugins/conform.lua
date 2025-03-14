@@ -1,4 +1,5 @@
 local function setup_conform()
+    local util = require('conform').util
     local formatters_by_ft = {}
     local formatters = {}
 
@@ -10,9 +11,7 @@ local function setup_conform()
         end,
 
         ['__none__'] = function(formatter)
-            formatters[formatter.name] = {
-                command = { lsp_format = 'never' },
-            }
+            error 'this function should never be called'
         end,
 
         ['typstyle'] = function(formatter)
@@ -46,13 +45,17 @@ local function setup_conform()
     for lang, lang_data in pairs(LangCfg) do
         local formatter = lang_data.formatter
         if formatter ~= nil then
-            formatters_by_ft[lang] = { formatter.name }
-
-            local cfg = formatter_config[formatter.name]
-            if cfg ~= nil then
-                cfg(formatter)
+            if formatter.name == '__none__' then
+                formatters_by_ft[lang] = { lsp_format = 'never' }
             else
-                formatter_config['__default__'](formatter)
+                formatters_by_ft[lang] = { formatter.name }
+
+                local cfg = formatter_config[formatter.name]
+                if cfg ~= nil then
+                    cfg(formatter)
+                else
+                    formatter_config['__default__'](formatter)
+                end
             end
         end
     end

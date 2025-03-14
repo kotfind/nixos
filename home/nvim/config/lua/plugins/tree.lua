@@ -1,8 +1,8 @@
 local function setup_tree()
     Map('n', '<leader>tt', ':NvimTreeToggle<CR>')
-    require 'nvim-tree'.setup {
+    require('nvim-tree').setup {
         view = {
-            width = 60,
+            width = 40,
         },
     }
 end
