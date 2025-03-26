@@ -22,6 +22,7 @@
         pavucontrol
         libreoffice
         pinta
+        inkscape
 
         zoom-us
       ])
