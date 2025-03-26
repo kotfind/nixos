@@ -2,7 +2,9 @@
   pkgs,
   config,
   ...
-}: {
+}: let
+  inherit (config.cfgLib) matchFor hosts;
+in {
   # Boot
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -24,12 +26,23 @@
 
   documentation.dev.enable = true;
 
-  # GnuPG
+  # Security Agents
   programs.gnupg.agent = {
     enable = true;
     pinentryPackage = pkgs.pinentry-tty;
   };
 
+  security.polkit.enable = true;
+
   # Programs
-  programs.light.enable = with config.cfgLib; matchFor hosts.laptop;
+  programs.light.enable = matchFor hosts.laptop;
+
+  # Virtual Camera plugin (for OBS Studio)
+  boot.extraModulePackages = with config.boot.kernelPackages; [
+    v4l2loopback
+  ];
+
+  boot.extraModprobeConfig = ''
+    options v4l2loopback devices=1 video_nr=1 card_label="OBS Cam" exclusive_caps=1
+  '';
 }
