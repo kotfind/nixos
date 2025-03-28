@@ -3,7 +3,9 @@
   pkgs,
   lib,
   ...
-}: {
+}: let
+  inherit (lib) getExe;
+in {
   home.packages = with pkgs; [
     wget
     curl
@@ -19,6 +21,7 @@
     just
     p7zip
     unzip
+    unrar-free
     gnutar
     cloc
   ];
@@ -31,11 +34,13 @@
     htop.enable = true;
   };
 
-  programs.direnv = (with config.cfgLib; enableFor users.kotfind) {
+  programs.direnv = {
     enable = true;
-
     nix-direnv.enable = true;
   };
 
-  programs.fish.shellAliases."j" = lib.getExe pkgs.just;
+  programs.fish.shellAliases = {
+    "j" = getExe pkgs.just;
+    "unrar" = getExe pkgs.unrar-free;
+  };
 }
