@@ -24,6 +24,7 @@ in {
     unrar-free
     gnutar
     cloc
+    binutils
   ];
 
   programs = {
