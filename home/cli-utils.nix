@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   lib,
   ...
@@ -25,6 +24,7 @@ in {
     gnutar
     cloc
     binutils
+    jpegoptim
   ];
 
   programs = {
