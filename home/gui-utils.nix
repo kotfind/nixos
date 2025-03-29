@@ -3,13 +3,15 @@
   config,
   lib,
   ...
-}: {
+}: let
+  inherit (config.cfgLib) users enableFor matchFor;
+in {
   home.packages = with pkgs;
     lib.mkMerge [
       [
         sxiv
       ]
-      ((with config.cfgLib; enableFor users.kotfind) [
+      (enableFor users.kotfind [
         # Run this to make fcitx5 to work in telegram
         #   sudo dbus-update-activation-environment --all
         # or run telegram from terminal:
@@ -24,12 +26,22 @@
         pinta
         inkscape
 
+        # NOTE: current version from unstable is broken
+        # See
+        #     https://github.com/NixOS/nixpkgs/pull/348263
+        # and
+        #     https://github.com/NixOS/nixpkgs/issues/345314
+        # Current workarround:
+        #     nix run github:nixos/nixpkgs/nixos-24.05#openshot-qt
+        #
+        # openshot-qt
+
         zoom-us
       ])
     ];
 
-  programs = (with config.cfgLib; enableFor users.kotfind) {
-    zathura.enable = true;
-    obs-studio.enable = true;
+  programs = {
+    zathura.enable = matchFor users.kotfind;
+    obs-studio.enable = matchFor users.kotfind;
   };
 }
