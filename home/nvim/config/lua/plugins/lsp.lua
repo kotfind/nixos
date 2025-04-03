@@ -111,7 +111,7 @@ local function setup_servers()
         ['rust_analyzer'] = function(server)
             -- Export env vars
             local vars_to_export =
-                { 'PATH', 'LD_LIBRARY_PATH', 'PKG_CONFIG_PATH' }
+            { 'PATH', 'LD_LIBRARY_PATH', 'PKG_CONFIG_PATH' }
             local cmd = ''
             for _, env_name in ipairs(vars_to_export) do
                 local env_val = os.getenv(env_name)

@@ -7,15 +7,18 @@
 }:
 # TODO?: don't install lsp servers for root?
 let
+  inherit (lib) getExe getExe';
+  inherit (lib.strings) escape concatMapStringsSep concatMapAttrsStringSep;
+
   # Format:
   # <language_name> = {
   #   server = {
   #     name = <lspconfig-name>;
-  #     path = lib.getExe pkgs.<package-name>;
+  #     path = getExe pkgs.<package-name>;
   #   };
   #   formatter = {
   #     name = <conform-name>;
-  #     path = lib.getExe pkgs.<package-name>;
+  #     path = getExe pkgs.<package-name>;
   #   };
   # }
   # Lspconfig server name list:
@@ -26,106 +29,106 @@ let
     python = {
       server = {
         name = "pyright";
-        path = lib.getExe pkgs.pyright;
+        path = getExe pkgs.pyright;
       };
       formatter = {
         name = "yapf";
-        path = lib.getExe pkgs.yapf;
+        path = getExe pkgs.yapf;
       };
     };
 
     c = {
       server = {
         name = "ccls";
-        path = lib.getExe pkgs.ccls;
+        path = getExe pkgs.ccls;
       };
     };
 
     rust = {
       server = {
         name = "rust_analyzer";
-        path = lib.getExe pkgs.rust-analyzer;
+        path = getExe pkgs.rust-analyzer;
       };
       formatter = {
         name = "rustfmt";
-        path = lib.getExe pkgs.rustfmt;
+        path = getExe pkgs.rustfmt;
       };
       linter = {
         name = "clippy";
-        path = lib.getExe pkgs.clippy;
+        path = getExe pkgs.clippy;
       };
     };
 
     lua = {
       server = {
         name = "lua_ls";
-        path = lib.getExe pkgs.lua-language-server;
+        path = getExe pkgs.lua-language-server;
       };
       formatter = {
         name = "stylua";
-        path = lib.getExe pkgs.stylua;
+        path = getExe pkgs.stylua;
       };
     };
 
     typst = {
       server = {
         name = "tinymist";
-        path = lib.getExe pkgs.tinymist;
+        path = getExe pkgs.tinymist;
       };
       formatter = {
         name = "typstyle";
-        path = lib.getExe pkgs.typstyle;
+        path = getExe pkgs.typstyle;
       };
     };
 
     bash = {
       server = {
         name = "bashls";
-        path = lib.getExe pkgs.bash-language-server;
+        path = getExe pkgs.bash-language-server;
       };
       formatter = {
         name = "shfmt";
-        path = lib.getExe pkgs.shfmt;
+        path = getExe pkgs.shfmt;
       };
     };
 
     html = {
       server = {
         name = "html";
-        path = lib.getExe' pkgs.vscode-langservers-extracted "vscode-html-language-server";
+        path = getExe' pkgs.vscode-langservers-extracted "vscode-html-language-server";
       };
       formatter = {
         name = "htmlbeautifier";
-        path = lib.getExe pkgs.rubyPackages.htmlbeautifier;
+        path = getExe pkgs.rubyPackages.htmlbeautifier;
       };
     };
 
     css = {
       server = {
         name = "cssls";
-        path = lib.getExe' pkgs.vscode-langservers-extracted "vscode-css-language-server";
+        path = getExe' pkgs.vscode-langservers-extracted "vscode-css-language-server";
       };
       formatter = {
         name = "stylelint";
-        path = lib.getExe pkgs.stylelint;
+        path = getExe pkgs.stylelint;
       };
     };
 
     json = {
       server = {
         name = "jsonls";
-        path = lib.getExe' pkgs.vscode-langservers-extracted "vscode-json-language-server";
+        path = getExe' pkgs.vscode-langservers-extracted "vscode-json-language-server";
       };
       formatter = {
         name = "fixjson";
-        path = lib.getExe pkgs.fixjson;
+        path = getExe pkgs.fixjson;
       };
     };
 
     javascript = {
       server = {
         name = "eslint";
-        path = lib.getExe' pkgs.vscode-langservers-extracted "vscode-eslint-language-server";
+        path = getExe' pkgs.vscode-langservers-extracted "vscode-eslint-language-server";
       };
       formatt = {
         name = "__none__";
@@ -135,18 +138,18 @@ let
     kotlin = {
       # server = {
       #   name = "kotlin_language_server";
-      #   path = lib.getExe' pkgs.kotlin-language-server "kotlin-language-server";
+      #   path = getExe' pkgs.kotlin-language-server "kotlin-language-server";
       # };
       # formatter = {
       #   name = "ktfmt";
-      #   path = lib.getExe pkgs.ktfmt;
+      #   path = getExe pkgs.ktfmt;
       # };
     };
 
     java = {
       server = {
         name = "jdtls";
-        path = lib.getExe pkgs.jdt-language-server;
+        path = getExe pkgs.jdt-language-server;
       };
       formatter = {
         name = "__none__";
@@ -156,18 +159,18 @@ let
     nix = {
       server = {
         name = "nixd";
-        path = lib.getExe pkgs.nixd;
+        path = getExe pkgs.nixd;
       };
       formatter = {
         name = "alejandra";
-        path = lib.getExe pkgs.alejandra;
+        path = getExe pkgs.alejandra;
       };
     };
 
     dot = {
       server = {
         name = "dotls";
-        path = lib.getExe pkgs.dot-language-server;
+        path = getExe pkgs.dot-language-server;
       };
     };
   };
@@ -176,11 +179,11 @@ let
     if v == null
     then "nil"
     else if builtins.isString v
-    then "'" + lib.strings.escape ["'" "\\"] v + "'"
+    then "'" + escape ["'" "\\"] v + "'"
     else if builtins.isList v
-    then "{" + lib.strings.concatMapStringsSep "," toLua v + "}"
+    then "{" + concatMapStringsSep "," toLua v + "}"
     else if builtins.isAttrs v
-    then "{" + lib.strings.concatMapAttrsStringSep "," (name: value: name + "=" + toLua value) v + "}"
+    then "{" + concatMapAttrsStringSep "," (name: value: name + "=" + toLua value) v + "}"
     else throw "cannot convert to lua";
 
   codeium-lsp = inputs.codeium.packages.${system}.codeium-lsp;
@@ -214,7 +217,8 @@ in {
 
         -- Export some variables
         LangCfg = ${toLua langCfg}
-        CodeiumPath = '${lib.getExe' codeium-lsp "codeium-lsp"}'
+
+        CodeiumPath = '${getExe' codeium-lsp "codeium-lsp"}'
 
         -- require actual init file
         require 'main'
@@ -272,13 +276,5 @@ in {
       "${spellPath}/ru.utf-8.sug".source = inputs.nvim-sug-ru;
       "${spellPath}/en.utf-8.spl".source = inputs.nvim-spl-en;
       "${spellPath}/en.utf-8.sug".source = inputs.nvim-sug-en;
-    })
-    // {
-      ".stylua.toml".source = (pkgs.formats.toml {}).generate ".stylua.toml" {
-        column_width = 80;
-        indent_type = "Spaces";
-        quote_style = "AutoPreferSingle";
-        call_parentheses = "None";
-      };
-    };
+    });
 }

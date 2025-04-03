@@ -1,5 +1,6 @@
 local function setup_conform()
-    local util = require('conform').util
+    local conform = require 'conform'
+    local util = conform.util
     local formatters_by_ft = {}
     local formatters = {}
 
@@ -10,7 +11,7 @@ local function setup_conform()
             }
         end,
 
-        ['__none__'] = function(formatter)
+        ['__none__'] = function(_formatter)
             error 'this function should never be called'
         end,
 
@@ -18,6 +19,24 @@ local function setup_conform()
             formatters[formatter.name] = {
                 command = formatter.path,
                 append_args = { '--tab-width', '4' },
+            }
+        end,
+
+        ['stylua'] = function(formatter)
+            formatters[formatter.name] = {
+                command = formatter.path,
+                append_args = {
+                    '--column-width',
+                    '80',
+                    '--indent-type',
+                    'Spaces',
+                    '--quote-style',
+                    'AutoPreferSingle',
+                    '--call-parentheses',
+                    'None',
+                    '--indent-width',
+                    '4',
+                },
             }
         end,
 
@@ -60,7 +79,7 @@ local function setup_conform()
         end
     end
 
-    require('conform').setup {
+    conform.setup {
         formatters_by_ft = formatters_by_ft,
         formatters = formatters,
         format_after_save = {
