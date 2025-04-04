@@ -25,6 +25,7 @@ in {
         libreoffice
         pinta
         inkscape
+        gimp
 
         # NOTE: current version from unstable is broken
         # See
