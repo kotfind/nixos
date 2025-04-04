@@ -25,6 +25,7 @@ in {
     cloc
     binutils
     jpegoptim
+    ascii
   ];
 
   programs = {
