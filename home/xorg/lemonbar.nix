@@ -189,7 +189,6 @@
         done
 
         cfg \
-            | ${pkgs.toybox}/bin/tee "/tmp/.lemonbar.log" \
             | ${lemonbar} \
                 -d \
                 -g "$(bar_width)x''${height}x0x1000" \
