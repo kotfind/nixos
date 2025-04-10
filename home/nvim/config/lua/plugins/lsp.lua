@@ -3,8 +3,8 @@ local function setup_typst_preview()
         open_cmd = 'firefox --new-window %s',
 
         dependencies_bin = {
-            ['tinymist'] = '/usr/bin/tinymist', -- FIXME
-            ['websocat'] = '/usr/bin/websocat', -- FIXME
+            ['tinymist'] = 'tinymist',
+            ['websocat'] = 'websocat',
         },
 
         get_main_file = function(bufpath)
@@ -65,7 +65,6 @@ local function setup_diagnostics()
 
     local lsp_lines = require 'lsp_lines'
     lsp_lines.setup {}
-
     Map('n', '<leader>tl', lsp_lines.toggle)
 end
 
@@ -76,23 +75,17 @@ local function setup_servers()
     -- LSP Confi docs:
     -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
     local server_config = {
-        ['__default__'] = function(server)
-            lspconfig[server.name].setup {
+        ['__default__'] = function()
+            return {
                 on_attach = on_attach,
                 capabilities = capabilities(),
-                cmd = { server.path },
             }
         end,
 
-        ['jdtls'] = function(server)
-            local server_config = lspconfig[server.name]
-            local cmd = server_config.config_def.default_config.cmd
-            cmd[1] = server.path
-
-            server_config.setup {
+        ['jdtls'] = function()
+            return {
                 on_attach = on_attach,
                 capabilities = capabilities(),
-                cmd = cmd,
                 settings = {
                     java = {
                         import = {
@@ -108,10 +101,10 @@ local function setup_servers()
             }
         end,
 
-        ['rust_analyzer'] = function(server)
+        ['rust_analyzer'] = function()
             -- Export env vars
             local vars_to_export =
-            { 'PATH', 'LD_LIBRARY_PATH', 'PKG_CONFIG_PATH' }
+                { 'PATH', 'LD_LIBRARY_PATH', 'PKG_CONFIG_PATH' }
             local cmd = ''
             for _, env_name in ipairs(vars_to_export) do
                 local env_val = os.getenv(env_name)
@@ -120,7 +113,7 @@ local function setup_servers()
                     cmd = cmd .. env_name .. "='" .. env_val .. "' "
                 end
             end
-            cmd = cmd .. server.name
+            cmd = cmd .. 'rust_analyzer'
 
             -- Common settings
             --
@@ -154,7 +147,7 @@ local function setup_servers()
                 args = { '-c', cmd },
             }
 
-            lspconfig.rust_analyzer.setup {
+            return {
                 on_attach = on_attach,
                 capabilities = capabilities(),
                 cmd = vim.lsp.rpc.connect('127.0.0.1', 27631),
@@ -164,11 +157,10 @@ local function setup_servers()
             }
         end,
 
-        ['lua_ls'] = function(server)
-            lspconfig.lua_ls.setup {
+        ['lua_ls'] = function()
+            return {
                 on_attach = on_attach,
                 capabilities = capabilities(),
-                cmd = { server.path },
 
                 root_dir = util.root_pattern { '.git' },
 
@@ -196,11 +188,10 @@ local function setup_servers()
             }
         end,
 
-        ['tinymist'] = function(server)
-            lspconfig.tinymist.setup {
+        ['tinymist'] = function()
+            return {
                 on_attach = on_attach,
                 capabilities = capabilities(),
-                cmd = { server.path },
                 settings = {
                     exportPdf = 'onType',
                     outputPath = '$name',
@@ -209,17 +200,25 @@ local function setup_servers()
         end,
     }
 
-    for _, lang_data in pairs(LangCfg) do
-        local server = lang_data.server
+    local server_list = {
+        'pyright',
+        'ccls',
+        'rust_analyzer',
+        'lua_ls',
+        'tinymist',
+        'bashls',
+        'jdtls',
+        'nixd',
+        'dotls',
+    }
 
-        if server ~= nil then
-            local cfg = server_config[server.name]
-            if cfg == nil then
-                server_config['__default__'](server)
-            else
-                cfg(server)
-            end
+    for _, server_name in pairs(server_list) do
+        local cfg = server_config[server_name]
+        if cfg == nil then
+            cfg = server_config['__default__']
         end
+
+        lspconfig[server_name].setup(cfg())
     end
 end
 

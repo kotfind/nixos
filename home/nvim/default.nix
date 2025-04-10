@@ -7,190 +7,40 @@
 }:
 # TODO?: don't install lsp servers for root?
 let
-  inherit (lib) getExe getExe';
+  inherit (builtins) isString isList isAttrs;
+  inherit (lib) getExe';
   inherit (lib.strings) escape concatMapStringsSep concatMapAttrsStringSep;
-
-  # Format:
-  # <language_name> = {
-  #   server = {
-  #     name = <lspconfig-name>;
-  #     path = getExe pkgs.<package-name>;
-  #   };
-  #   formatter = {
-  #     name = <conform-name>;
-  #     path = getExe pkgs.<package-name>;
-  #   };
-  # }
-  # Lspconfig server name list:
-  #   https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
-  # or
-  #   :help lspconfig-all
-  langCfg = {
-    python = {
-      server = {
-        name = "pyright";
-        path = getExe pkgs.pyright;
-      };
-      formatter = {
-        name = "yapf";
-        path = getExe pkgs.yapf;
-      };
-    };
-
-    c = {
-      server = {
-        name = "ccls";
-        path = getExe pkgs.ccls;
-      };
-    };
-
-    rust = {
-      server = {
-        name = "rust_analyzer";
-        path = getExe pkgs.rust-analyzer;
-      };
-      formatter = {
-        name = "rustfmt";
-        path = getExe pkgs.rustfmt;
-      };
-      linter = {
-        name = "clippy";
-        path = getExe pkgs.clippy;
-      };
-    };
-
-    lua = {
-      server = {
-        name = "lua_ls";
-        path = getExe pkgs.lua-language-server;
-      };
-      formatter = {
-        name = "stylua";
-        path = getExe pkgs.stylua;
-      };
-    };
-
-    typst = {
-      server = {
-        name = "tinymist";
-        path = getExe pkgs.tinymist;
-      };
-      formatter = {
-        name = "typstyle";
-        path = getExe pkgs.typstyle;
-      };
-    };
-
-    bash = {
-      server = {
-        name = "bashls";
-        path = getExe pkgs.bash-language-server;
-      };
-      formatter = {
-        name = "shfmt";
-        path = getExe pkgs.shfmt;
-      };
-    };
-
-    html = {
-      server = {
-        name = "html";
-        path = getExe' pkgs.vscode-langservers-extracted "vscode-html-language-server";
-      };
-      formatter = {
-        name = "htmlbeautifier";
-        path = getExe pkgs.rubyPackages.htmlbeautifier;
-      };
-    };
-
-    css = {
-      server = {
-        name = "cssls";
-        path = getExe' pkgs.vscode-langservers-extracted "vscode-css-language-server";
-      };
-      formatter = {
-        name = "stylelint";
-        path = getExe pkgs.stylelint;
-      };
-    };
-
-    json = {
-      server = {
-        name = "jsonls";
-        path = getExe' pkgs.vscode-langservers-extracted "vscode-json-language-server";
-      };
-      formatter = {
-        name = "fixjson";
-        path = getExe pkgs.fixjson;
-      };
-    };
-
-    javascript = {
-      server = {
-        name = "eslint";
-        path = getExe' pkgs.vscode-langservers-extracted "vscode-eslint-language-server";
-      };
-      formatt = {
-        name = "__none__";
-      };
-    };
-
-    kotlin = {
-      # server = {
-      #   name = "kotlin_language_server";
-      #   path = getExe' pkgs.kotlin-language-server "kotlin-language-server";
-      # };
-      # formatter = {
-      #   name = "ktfmt";
-      #   path = getExe pkgs.ktfmt;
-      # };
-    };
-
-    java = {
-      server = {
-        name = "jdtls";
-        path = getExe pkgs.jdt-language-server;
-      };
-      formatter = {
-        name = "__none__";
-      };
-    };
-
-    nix = {
-      server = {
-        name = "nixd";
-        path = getExe pkgs.nixd;
-      };
-      formatter = {
-        name = "alejandra";
-        path = getExe pkgs.alejandra;
-      };
-    };
-
-    dot = {
-      server = {
-        name = "dotls";
-        path = getExe pkgs.dot-language-server;
-      };
-    };
-  };
 
   toLua = v:
     if v == null
     then "nil"
-    else if builtins.isString v
+    else if isString v
     then "'" + escape ["'" "\\"] v + "'"
-    else if builtins.isList v
+    else if isList v
     then "{" + concatMapStringsSep "," toLua v + "}"
-    else if builtins.isAttrs v
+    else if isAttrs v
     then "{" + concatMapAttrsStringSep "," (name: value: name + "=" + toLua value) v + "}"
     else throw "cannot convert to lua";
 
   codeium-lsp = inputs.codeium.packages.${system}.codeium-lsp;
 
-  packages = [
-    pkgs.xclip
-    codeium-lsp
+  packages = with pkgs;
+    [
+      xclip
+      websocat
+    ]
+    ++ [codeium-lsp];
+
+  formatters = with pkgs; [
+    alejandra
+    stylua
+    typstyle
+  ];
+
+  lspServers = with pkgs; [
+    nixd
+    lua-language-server
+    tinymist
   ];
 in {
   programs.neovim = {
@@ -206,7 +56,7 @@ in {
     withPython3 = false;
     withRuby = false;
 
-    extraPackages = packages;
+    extraPackages = packages ++ formatters ++ lspServers;
 
     extraLuaConfig =
       /*
@@ -216,8 +66,6 @@ in {
         -- this file was generatred by nix
 
         -- Export some variables
-        LangCfg = ${toLua langCfg}
-
         CodeiumPath = '${getExe' codeium-lsp "codeium-lsp"}'
 
         -- require actual init file
