@@ -123,21 +123,9 @@ local function setup_servers()
                 },
             }
 
-            -- lspMux
-            settings.lspMux = {
-                version = '1',
-                method = 'connect',
-
-                -- I'm using this workarround as ra-multiplex's `pass_environment` don't work.
-                -- It seems that the PATH are not used when looking for `cargo` and `rustc` executables.
-                server = '/bin/sh',
-                args = { '-c', 'rust-analyzer' },
-            }
-
             return {
                 on_attach = on_attach,
                 capabilities = capabilities(),
-                cmd = vim.lsp.rpc.connect('127.0.0.1', 27631),
                 settings = {
                     ['rust-analyzer'] = settings,
                 },
