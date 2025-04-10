@@ -102,19 +102,6 @@ local function setup_servers()
         end,
 
         ['rust_analyzer'] = function()
-            -- Export env vars
-            local vars_to_export =
-                { 'PATH', 'LD_LIBRARY_PATH', 'PKG_CONFIG_PATH' }
-            local cmd = ''
-            for _, env_name in ipairs(vars_to_export) do
-                local env_val = os.getenv(env_name)
-                if env_val ~= nil then
-                    env_val = env_val:gsub("'", "\\'")
-                    cmd = cmd .. env_name .. "='" .. env_val .. "' "
-                end
-            end
-            cmd = cmd .. 'rust_analyzer'
-
             -- Common settings
             --
             -- List of all options:
@@ -144,7 +131,7 @@ local function setup_servers()
                 -- I'm using this workarround as ra-multiplex's `pass_environment` don't work.
                 -- It seems that the PATH are not used when looking for `cargo` and `rustc` executables.
                 server = '/bin/sh',
-                args = { '-c', cmd },
+                args = { '-c', 'rust-analyzer' },
             }
 
             return {
