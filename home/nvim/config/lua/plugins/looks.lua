@@ -1,5 +1,5 @@
 local function setup_cyberdream()
-    require 'cyberdream'.setup {
+    require('cyberdream').setup {
         italic_comments = true,
         borderless_pickers = true,
         variant = 'auto',
@@ -20,12 +20,12 @@ local function setup_cyberdream()
 end
 
 local function setup_lualine()
-    require 'lualine'.setup {
+    require('lualine').setup {
         options = {
             theme = require 'lualine.themes.cyberdream',
             component_separators = {
                 left = '',
-                right = ''
+                right = '',
             },
         },
 
@@ -34,8 +34,8 @@ local function setup_lualine()
                 {
                     'filename',
                     newfile_status = true,
-                    path = 1
-                }
+                    path = 1,
+                },
             },
             lualine_b = { 'branch' },
             lualine_c = {},
@@ -43,7 +43,7 @@ local function setup_lualine()
                 {
                     'diagnostics',
                     update_in_insert = true,
-                }
+                },
             },
             lualine_y = { 'filetype' },
             lualine_z = { 'location', 'progress' },
@@ -54,14 +54,14 @@ local function setup_lualine()
                 {
                     'filename',
                     newfile_status = true,
-                    path = 1
-                }
+                    path = 1,
+                },
             },
             lualine_b = {},
             lualine_c = {},
             lualine_x = {},
             lualine_y = {},
-            lualine_z = {}
+            lualine_z = {},
         },
     }
 end
@@ -83,9 +83,9 @@ return {
     {
         'mhinz/vim-signify',
         config = function()
-            vim.o.signcolumn = 'yes:1'
+            vim.o.signcolumn = 'yes:2'
             vim.o.updatetime = 10
-        end
+        end,
     },
 
     {
