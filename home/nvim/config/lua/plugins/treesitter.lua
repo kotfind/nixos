@@ -1,5 +1,5 @@
 local function setup_treesitter()
-    require 'nvim-treesitter.configs'.setup {
+    require('nvim-treesitter.configs').setup {
         ensure_installed = {},
 
         auto_install = false,
@@ -42,11 +42,11 @@ local function setup_textobjects()
     local objects = {
         { 'f', 'function' },
         { 'l', 'loop' },
-        { 'm', 'conditional' }, -- m is for "match"
+        { 'm', 'conditional' }, -- m for "match"
         { 'c', 'class' },
-        { 'n', 'comment' },     -- n is for "note"
-        { 'a', 'parameter' },   -- a is for "argument"
-        { 's', 'statement' },
+        { 'n', 'comment' }, -- n for "note"
+        { 'a', 'parameter' }, -- a for "argument"
+        { 't', 'statement' }, -- t for "sTatement" (s is for spelling)
     }
 
     local select = {}
@@ -59,7 +59,7 @@ local function setup_textobjects()
         local letter = object[1]
         local name = object[2]
 
-        assert(letter:match('^%l$') ~= nil, 'lowercase letter expected')
+        assert(letter:match '^%l$' ~= nil, 'lowercase letter expected')
 
         local inner = '@' .. name .. '.inner'
         local outer = '@' .. name .. '.outer'
@@ -72,7 +72,7 @@ local function setup_textobjects()
         goto_previous_end['[' .. letter:upper()] = outer
     end
 
-    require 'nvim-treesitter.configs'.setup {
+    require('nvim-treesitter.configs').setup {
         textobjects = {
             select = {
                 enable = true,
@@ -90,16 +90,16 @@ local function setup_textobjects()
                 goto_previous_start = goto_previous_start,
                 goto_previous_end = goto_previous_end,
             },
-        }
+        },
     }
 
     -- make moves repeatable with ; and .
     local ts_repeat_move = require 'nvim-treesitter.textobjects.repeatable_move'
 
-    Map({ 'n', 'x', 'o' }, ';', ts_repeat_move.repeat_last_move_next)
-    Map({ 'n', 'x', 'o' }, ',', ts_repeat_move.repeat_last_move_previous)
+    Map({ 'n', 'x', 'o' }, ';', ts_repeat_move.repeat_last_move)
+    Map({ 'n', 'x', 'o' }, ',', ts_repeat_move.repeat_last_move_opposite)
 
-    for _, key in ipairs({ 'f', 't', 'F', 'T' }) do
+    for _, key in ipairs { 'f', 't', 'F', 'T' } do
         Map(
             { 'n', 'x', 'o' },
             key,
