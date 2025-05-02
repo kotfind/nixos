@@ -2,10 +2,13 @@
   pkgs,
   config,
   ...
-}: {
+}: let
+  inherit (config.cfgLib) enableFor users;
+in {
   sops = {
     age = {
       sshKeyPaths = [];
+
       # FIXME: custom user
       keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
     };
@@ -14,7 +17,7 @@
   };
 
   home.packages =
-    (with config.cfgLib; enableFor users.kotfind)
+    (enableFor users.kotfind)
     (with pkgs; [
       sops
       age

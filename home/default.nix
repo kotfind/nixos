@@ -1,12 +1,15 @@
-{config, ...}: {
+{config, ...}: let
+  inherit (config.cfgLib) user;
+in {
   imports = [
     ./alacritty
+    ./backup.nix
     ./chromium.nix
     ./cli-utils.nix
+    ./downloaders.nix
     ./firefox.nix
     ./fish
     ./fonts.nix
-    ./downloaders.nix
     ./git.nix
     ./gui-utils.nix
     ./keyboard
@@ -26,10 +29,7 @@
   home = {
     stateVersion = "24.11";
 
-    homeDirectory = let
-      user = config.cfgLib.user;
-    in
-      user.data.homeDir or "/home/${user.name}";
+    homeDirectory = user.data.homeDir or "/home/${user.name}";
   };
 
   programs.home-manager.enable = true;

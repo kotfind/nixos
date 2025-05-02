@@ -3,7 +3,11 @@
   lib,
   pkgs,
   ...
-}: {
+}: let
+  inherit (lib) escapeShellArg;
+  inherit (config.cfgLib) matchFor enableFor hosts users;
+  inherit (config.sops) secrets;
+in {
   # XXX: secrets are installed for all users, though files
   # are linked correctly
   sops.secrets = {
@@ -11,46 +15,40 @@
 
     "kotfind@kotfindPC/ssh/id_rsa" = {
       path =
-        (with config.cfgLib; enableFor hosts.pc.users.kotfind)
+        (enableFor hosts.pc.users.kotfind)
         "${config.home.homeDirectory}/.ssh/id_rsa";
     };
 
     "kotfind@kotfindPC/ssh/id_rsa.pub" = {
       path =
-        (with config.cfgLib; enableFor hosts.pc.users.kotfind)
+        (enableFor hosts.pc.users.kotfind)
         "${config.home.homeDirectory}/.ssh/id_rsa.pub";
     };
 
     "kotfind@kotfindLT/ssh/id_rsa" = {
       path =
-        (with config.cfgLib; enableFor hosts.laptop.users.kotfind)
+        (enableFor hosts.laptop.users.kotfind)
         "${config.home.homeDirectory}/.ssh/id_rsa";
     };
 
     "kotfind@kotfindLT/ssh/id_rsa.pub" = {
       path =
-        (with config.cfgLib; enableFor hosts.laptop.users.kotfind)
+        (enableFor hosts.laptop.users.kotfind)
         "${config.home.homeDirectory}/.ssh/id_rsa.pub";
     };
   };
 
-  programs.ssh = (with config.cfgLib; enableFor users.kotfind) {
-    enable = true;
+  programs.ssh = {
+    enable = matchFor users.kotfind;
   };
 
-  home.packages = (with config.cfgLib; enableFor users.kotfind) (with pkgs; [
+  home.packages = (enableFor users.kotfind) (with pkgs; [
     sshfs
   ]);
 
   programs.bash.bashrcExtra =
-    (with config.cfgLib; enableFor users.kotfind)
-    /*
-    bash
-    */
+    (enableFor users.kotfind)
     ''
-      export kotfindPC="''$(cat ${
-        lib.escapeShellArg
-        config.sops.secrets.kotfindPC-ip-address.path
-      })"
+      export kotfindPC="''$(cat ${escapeShellArg secrets.kotfindPC-ip-address.path})"
     '';
 }

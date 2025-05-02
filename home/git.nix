@@ -3,17 +3,16 @@
   lib,
   pkgs,
   ...
-}: {
+}: let
+  inherit (config.cfgLib) users enableFor matchFor;
+  inherit (lib) getExe;
+in {
   programs.git = {
-    enable = true;
+    enable = matchFor users.kotfind;
 
-    userName = with config.cfgLib;
-      enableFor users.kotfind
-      users.kotfind.name;
+    userName = users.kotfind.name;
 
-    userEmail = with config.cfgLib;
-      enableFor users.kotfind
-      users.kotfind.data.email;
+    userEmail = users.kotfind.data.email;
 
     extraConfig = {
       core.quotepath = false;
@@ -23,7 +22,7 @@
   };
 
   home.packages =
-    (with config.cfgLib; enableFor users.kotfind)
+    (enableFor users.kotfind)
     (with pkgs; [
       gh
     ]);
@@ -31,35 +30,31 @@
   sops = let
     token_secret = "kotfind/gh/oauth_token";
   in {
-    secrets = (with config.cfgLib; enableFor users.kotfind) {
+    secrets = (enableFor users.kotfind) {
       ${token_secret} = {};
     };
 
     templates.gh_hosts = {
       content = let
         oauth_token = "${config.sops.placeholder.${token_secret}}";
-      in
-        /*
-        yaml
-        */
-        ''
-          github.com:
-              users:
-                  kotfind:
-                      oauth_token: ${oauth_token}
-              git_protocol: ssh
-              user: kotfind
-              oauth_token: ${oauth_token}
-        '';
+      in ''
+        github.com:
+            users:
+                kotfind:
+                    oauth_token: ${oauth_token}
+            git_protocol: ssh
+            user: kotfind
+            oauth_token: ${oauth_token}
+      '';
 
       path =
-        (with config.cfgLib; enableFor users.kotfind)
+        (enableFor users.kotfind)
         "${config.home.homeDirectory}/.config/gh/hosts.yml";
     };
   };
 
   programs.fish.shellAliases = let
-    git = lib.getExe pkgs.git;
+    git = getExe pkgs.git;
   in {
     gs = "${git} status --short";
     ga = "${git} add";
