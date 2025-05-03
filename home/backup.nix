@@ -37,6 +37,8 @@
               "target"
               "build"
               "bin"
+              ".gradle"
+              "venv"
             ];
           };
 
