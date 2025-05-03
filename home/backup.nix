@@ -9,8 +9,6 @@
   inherit (lib) getExe;
   inherit (pkgs) writeShellApplication;
 
-  yaml = (pkgs.formats.yaml {}).generate;
-
   names = {
     backends.local = "local";
     locations.prog = "prog";
@@ -31,7 +29,21 @@
         from = "/home/kotfind/prog";
         to = names.backends.local;
 
-        options.backup."exclude-caches" = true;
+        options = {
+          backup = {
+            "exclude-caches" = true;
+
+            exclude = [
+              "target"
+              "build"
+              "bin"
+            ];
+          };
+
+          forget = {
+            "keep-within" = "60d";
+          };
+        };
       };
     };
   };
@@ -46,7 +58,7 @@ in {
       autorestic
     ]);
 
-  home.file.".config/autorestic/.autorestic.yml".source = yaml "autorestic.yml" cfg;
+  home.file.".config/autorestic/.autorestic.yml".source = (pkgs.formats.yaml {}).generate "autorestic.yml" cfg;
 
   sops = {
     secrets.${localBackendPasswordSecret} = {};
@@ -88,7 +100,7 @@ in {
       Timer = {
         Unit = "restic-${names.locations.prog}.service";
 
-        OnCalendar = "*-*-* *:00:00";
+        OnCalendar = "*-*-* 16:00:00";
       };
 
       Install = {
