@@ -1,4 +1,4 @@
-# This value is passed to outputs.nixosConfiguration.system
+# This value is passed to outputs.nixosConfiguration.default
 {
   nixpkgs,
   home-manager,

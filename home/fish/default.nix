@@ -56,20 +56,4 @@
     # for yazi image preview
     ueberzugpp
   ];
-
-  programs.bash = {
-    enable = true;
-    bashrcExtra =
-      /*
-      bash
-      */
-      ''
-        # Make fish an a default interactive shell
-        # from https://wiki.archlinux.org/title/Fish#Modify_.bashrc_to_drop_into_fish
-        if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]; then
-           shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
-           exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
-        fi
-      '';
-  };
 }

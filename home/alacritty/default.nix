@@ -4,6 +4,8 @@
   lib,
   ...
 }: let
+  inherit (lib) getExe;
+
   activeThemeFile = "${config.home.homeDirectory}/.config/alacritty/active-theme.toml";
 
   toml = (pkgs.formats.toml {}).generate;
@@ -40,6 +42,8 @@ in {
   programs.alacritty = (with config.cfgLib; enableFor users.kotfind) {
     enable = true;
     settings = {
+      terminal.shell = getExe pkgs.fish;
+
       general.import = [activeThemeFile];
 
       # TODO: enableFor -> matchCfg

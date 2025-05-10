@@ -47,7 +47,7 @@
         WorkingDirectory = "/hdd/_data/rust_tagserver/";
 
         ExecStart = let
-          app = "/hdd/data/prog/rust_tagserver/target/back-target/release/back";
+          app = "/home/kotfind/prog/pet/rust-tagserver/target/back-target/release/back";
         in "${app} run --port 8080";
       };
     };
