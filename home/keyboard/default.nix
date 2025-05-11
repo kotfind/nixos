@@ -3,15 +3,23 @@
   config,
   ...
 }: let
+  inherit (config.cfgLib) users enableFor;
+
   dir = ".config/fcitx5";
 in {
-  home.file = (with config.cfgLib; enableFor users.kotfind) {
+  home.file = enableFor users.kotfind {
     "${dir}/conf/xcb.conf".source = ./conf/xcb.conf;
-    "${dir}/config".source = ./config;
-    "${dir}/profile".source = ./profile;
+    "${dir}/config" = {
+      source = ./config;
+      force = true;
+    };
+    "${dir}/profile" = {
+      source = ./profile;
+      force = true;
+    };
   };
 
-  i18n.inputMethod = (with config.cfgLib; enableFor users.kotfind) {
+  i18n.inputMethod = enableFor users.kotfind {
     enabled = "fcitx5";
     fcitx5 = {
       addons = with pkgs; [
