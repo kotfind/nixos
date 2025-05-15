@@ -26,6 +26,7 @@ in {
     binutils
     jpegoptim
     ascii
+    usbutils
   ];
 
   programs = {
