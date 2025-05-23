@@ -1,16 +1,27 @@
-{pkgs, ...}:
-# Common
 {
-  p3 = "${pkgs.python3}/bin/python3";
-  e = "exec";
-}
-# Eza
-// (let
-  eza = "${pkgs.eza}/bin/eza --group-directories-first --color=always";
+  pkgs,
+  lib,
+  ...
+}: let
+  inherit (lib) getExe;
+
+  python = getExe pkgs.python3;
+
+  eza_ = getExe pkgs.eza;
+  eza = "${eza_} --group-directories-first --color=always";
+
+  podman = getExe pkgs.podman;
+  podman-compose = getExe pkgs.podman-compose;
 in {
+  p3 = "${python}";
+  e = "exec";
+
+  pd = "${podman}";
+  pc = "${podman-compose}";
+
   ls = "${eza} --git-ignore";
   l = "${eza} --git-ignore -hl";
   L = "${eza} -ahl";
   t = "${eza} --tree --git-ignore -hl";
   T = "${eza} --tree -ahl";
-})
+}

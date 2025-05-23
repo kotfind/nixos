@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   programs.fish = {
     enable = true;
 
@@ -21,7 +25,7 @@
           '';
       };
 
-    shellAliases = import ./aliases.nix {inherit pkgs;};
+    shellAliases = import ./aliases.nix {inherit pkgs lib;};
 
     interactiveShellInit =
       /*
