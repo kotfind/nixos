@@ -14,6 +14,7 @@
     with pkgs; [
       zoom-us
       codeium
+      steam-unwrapped
     ];
 
   homeMod = {

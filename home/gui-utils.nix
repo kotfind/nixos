@@ -4,7 +4,7 @@
   lib,
   ...
 }: let
-  inherit (config.cfgLib) users enableFor matchFor;
+  inherit (config.cfgLib) users hosts enableFor matchFor;
 in {
   home.packages = with pkgs;
     lib.mkMerge [
@@ -38,6 +38,10 @@ in {
         # openshot-qt
 
         zoom-us
+      ])
+
+      (enableFor hosts.pc.users.kotfind [
+        steam-run
       ])
     ];
 
