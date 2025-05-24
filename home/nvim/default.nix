@@ -8,7 +8,6 @@
   masterPkgName = "nixCats";
 
   categoryDefinitions = {pkgs, ...}: let
-    plug = pkgs.vimPlugins;
   in {
     lspsAndRuntimeDeps = {
       general = with pkgs; [
@@ -16,8 +15,8 @@
       ];
     };
 
-    startupPlugins = {
-      general = with plug; [
+    startupPlugins = with pkgs.vimPlugins; {
+      general = [
         lze
 
         cyberdream-nvim
@@ -25,6 +24,13 @@
         smear-cursor-nvim
         neoscroll-nvim
         nvim-notify
+
+        comment-nvim
+        nvim-ts-context-commentstring
+
+        nvim-ts-autotag
+        autoclose-nvim
+        nvim-surround
       ];
     };
   };
