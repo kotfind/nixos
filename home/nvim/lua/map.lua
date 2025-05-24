@@ -14,38 +14,38 @@ function Feed(keys)
 end
 
 -- Langmap
-vim.opt.langmap =
-'ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz'
+vim.opt.langmap = 'ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz'
 
 -- Set leader
 vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
 Map('n', '<space>', '')
 
 -- Move between windows
-Map({ 'n', 't' }, '<C-h>', '<C-w>h')
-Map({ 'n', 't' }, '<C-j>', '<C-w>j')
-Map({ 'n', 't' }, '<C-k>', '<C-w>k')
-Map({ 'n', 't' }, '<C-l>', '<C-w>l')
+Map({'n', 't'}, '<C-h>', '<C-w>h')
+Map({'n', 't'}, '<C-j>', '<C-w>j')
+Map({'n', 't'}, '<C-k>', '<C-w>k')
+Map({'n', 't'}, '<C-l>', '<C-w>l')
 
 -- Reselect on shift
 Map('v', '<', '<gv')
 Map('v', '>', '>gv')
 
 -- Move on wrapped lines
-Map({ 'n', 'x' }, 'j', 'gj')
-Map({ 'n', 'x' }, 'k', 'gk')
-Map({ 'n', 'x' }, '^', 'g^')
-Map({ 'n', 'x' }, '$', 'g$')
+Map({'n', 'x'}, 'j', 'gj')
+Map({'n', 'x'}, 'k', 'gk')
+Map({'n', 'x'}, '^', 'g^')
+Map({'n', 'x'}, '$', 'g$')
 
-Map({ 'n', 'x' }, 'gj', 'j')
-Map({ 'n', 'x' }, 'gk', 'k')
-Map({ 'n', 'x' }, 'g^', '^')
-Map({ 'n', 'x' }, 'g$', '$')
+Map({'n', 'x'}, 'gj', 'j')
+Map({'n', 'x'}, 'gk', 'k')
+Map({'n', 'x'}, 'g^', '^')
+Map({'n', 'x'}, 'g$', '$')
 
 -- No highlight
 Map('n', '<leader><esc>', ':nohlsearch<CR>')
 
--- escape
+-- Insert -> Normal
 Map('i', 'jk', '<esc>')
 Map('i', 'Jk', '<esc>')
 Map('i', 'jK', '<esc>')
@@ -55,9 +55,9 @@ Map('i', 'JK', '<esc>')
 Map('t', '<esc><esc>', '<C-\\><C-N>')
 
 -- Global buffer yank/ paste
-Map({ 'n', 'x' }, '<leader>p', '"+p')
-Map({ 'n', 'x' }, '<leader>P', '"+P')
-Map({ 'n', 'x' }, '<leader>y', '"+y')
+Map({'n', 'x'}, '<leader>p', '"+p')
+Map({'n', 'x'}, '<leader>P', '"+P')
+Map({'n', 'x'}, '<leader>y', '"+y')
 Map('n', '<leader>yy', '"+yy')
 
 -- Select pasted
