@@ -1,51 +1,57 @@
--- Mouse
-vim.opt.mouse = 'a'
+local M = {}
 
--- Tab
-vim.opt.tabstop = 4
-vim.opt.expandtab = true
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
+function M.setup()
+    -- Mouse
+    vim.opt.mouse = 'a'
 
--- UI
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.cursorline = true
+    -- Tab
+    vim.opt.tabstop = 4
+    vim.opt.expandtab = true
+    vim.opt.softtabstop = 4
+    vim.opt.shiftwidth = 4
 
-vim.opt.termguicolors = true
-vim.opt.showmode = false
+    -- UI
+    vim.opt.number = true
+    vim.opt.relativenumber = true
+    vim.opt.cursorline = true
 
-vim.opt.scrolloff = 5
+    vim.opt.termguicolors = true
+    vim.opt.showmode = false
 
--- Split
-vim.opt.splitbelow = true
-vim.opt.splitright = true
+    vim.opt.scrolloff = 5
 
--- Search
-vim.opt.hlsearch = true
-vim.opt.incsearch = true
-vim.opt.ignorecase = true
+    -- Split
+    vim.opt.splitbelow = true
+    vim.opt.splitright = true
 
--- Undo file
-vim.opt.undofile = true
+    -- Search
+    vim.opt.hlsearch = true
+    vim.opt.incsearch = true
+    vim.opt.ignorecase = true
 
--- Wrap
-vim.opt.wrap = false
-vim.opt.linebreak = true
-vim.opt.breakindent = true
-vim.opt.breakindentopt = 'shift:' .. vim.fn.shiftwidth()
+    -- Undo file
+    vim.opt.undofile = true
 
--- Preserve cursor position
-vim.api.nvim_create_autocmd({'BufWinEnter'}, {
-    command = [[ silent! normal! g`"zv' ]]
-})
+    -- Wrap
+    vim.opt.wrap = false
+    vim.opt.linebreak = true
+    vim.opt.breakindent = true
+    vim.opt.breakindentopt = 'shift:' .. vim.fn.shiftwidth()
 
--- Spell
-vim.opt.spell = true
-vim.opt.spelllang = {'en', 'ru'}
+    -- Preserve cursor position
+    vim.api.nvim_create_autocmd({'BufWinEnter'}, {
+        command = [[ silent! normal! g`"zv' ]]
+    })
 
-vim.api.nvim_create_autocmd({'TermOpen'}, {
-    callback = function()
-        vim.opt.spell = false
-    end
-})
+    -- Spell
+    vim.opt.spell = true
+    vim.opt.spelllang = {'en', 'ru'}
+
+    vim.api.nvim_create_autocmd({'TermOpen'}, {
+        callback = function()
+            vim.opt.spell = false
+        end
+    })
+end
+
+return M

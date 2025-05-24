@@ -18,8 +18,13 @@
 
     startupPlugins = {
       general = with plug; [
-        cyberdream-nvim
         lze
+
+        cyberdream-nvim
+        lualine-nvim
+        smear-cursor-nvim
+        neoscroll-nvim
+        nvim-notify
       ];
     };
   };
@@ -53,6 +58,7 @@ in {
 
   home.sessionVariables = {
     MANPAGER = "nvim +Man! -c ':set signcolumn=no'";
+    EDITOR = "nvim";
   };
 
   # TODO: spell files
