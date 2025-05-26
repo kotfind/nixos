@@ -12,6 +12,8 @@
     lspsAndRuntimeDeps = {
       general = with pkgs; [
         xclip
+        fd
+        ripgrep
       ];
     };
 
@@ -24,6 +26,7 @@
         smear-cursor-nvim
         neoscroll-nvim
         nvim-notify
+        nvim-web-devicons
 
         comment-nvim
         nvim-ts-context-commentstring
@@ -31,6 +34,9 @@
         nvim-ts-autotag
         autoclose-nvim
         nvim-surround
+
+        telescope-nvim
+        telescope-undo-nvim
       ];
     };
   };
