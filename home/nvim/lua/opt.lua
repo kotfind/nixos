@@ -33,21 +33,28 @@ function M.setup()
     vim.opt.undofile = true
 
     -- Wrap
-    vim.opt.wrap = false
+    vim.opt.wrap = true
     vim.opt.linebreak = true
     vim.opt.breakindent = true
     vim.opt.breakindentopt = 'shift:' .. vim.fn.shiftwidth()
 
+    -- list chars
+    vim.opt.list = true
+    vim.opt.listchars = {
+        tab = '>-',
+        trail = '#',
+    }
+
     -- Preserve cursor position
-    vim.api.nvim_create_autocmd({'BufWinEnter'}, {
+    vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
         command = [[ silent! normal! g`"zv' ]]
     })
 
     -- Spell
     vim.opt.spell = true
-    vim.opt.spelllang = {'en', 'ru'}
+    vim.opt.spelllang = { 'en', 'ru' }
 
-    vim.api.nvim_create_autocmd({'TermOpen'}, {
+    vim.api.nvim_create_autocmd({ 'TermOpen' }, {
         callback = function()
             vim.opt.spell = false
         end

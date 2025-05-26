@@ -11,6 +11,9 @@ local function setup_theme()
 
                 Comment = { fg = colors.magenta, bg = 'NONE', italic = true },
                 ['@note.comment'] = { fg = colors.cyan, bold = true },
+
+                -- for listchars
+                Whitespace = { fg = colors.white, bg = colors.red }
             }
         end,
     }
