@@ -39,6 +39,9 @@
         telescope-nvim
         telescope-undo-nvim
         nvim-tree-lua
+
+        nvim-treesitter
+        treewalker-nvim
       ];
     };
   };
