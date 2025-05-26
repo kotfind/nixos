@@ -44,7 +44,7 @@ local function telescope_apply_on_selection(func)
     end
 end
 
-function setup_telescope()
+local function setup_telescope()
     local telescope = require 'telescope'
     local builtin = require 'telescope.builtin'
     local actions = require 'telescope.actions'
@@ -141,8 +141,40 @@ function setup_telescope()
     Map('n', '<leader>F', builtin.resume)
 end
 
+local function setup_tree()
+    -- disable netrw
+    vim.g.loaded_netrw = 1
+    vim.g.loaded_netrwPlugin = 1
+
+    local api = require 'nvim-tree.api'
+
+    Map('n', '<leader>tt', api.tree.toggle)
+    require 'nvim-tree'.setup {
+        hijack_cursor = true,
+        disable_netrw = true,
+        view = {
+            width = {
+                min = 20,
+                max = 60,
+                padding = 1,
+            },
+        },
+        renderer = {
+            group_empty = true,
+            add_trailing = true,
+        },
+        tab = {
+            sync = {
+                open = true,
+                close = true,
+            },
+        },
+    }
+end
+
 function M.setup()
     setup_telescope()
+    setup_tree()
 end
 
 return M

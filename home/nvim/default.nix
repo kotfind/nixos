@@ -14,6 +14,7 @@
         xclip
         fd
         ripgrep
+        glib # for gio for nvim-tree.lua
       ];
     };
 
@@ -37,6 +38,7 @@
 
         telescope-nvim
         telescope-undo-nvim
+        nvim-tree-lua
       ];
     };
   };
