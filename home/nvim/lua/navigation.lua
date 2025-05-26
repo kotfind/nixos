@@ -77,6 +77,7 @@ function setup_telescope()
                     end,
 
                     -- open
+                    -- FIXME: works correctly on file pickers only
                     ['<c-x>'] = telescope_apply_on_selection 'split %s',
                     ['<c-v>'] = telescope_apply_on_selection 'vsplit %s',
                     ['<c-t>'] = telescope_apply_on_selection 'tabe %s',
@@ -95,18 +96,49 @@ function setup_telescope()
         }
     }
     telescope.load_extension 'undo'
+    telescope.load_extension 'notify'
 
+    -- files
     Map('n', '<leader>ff', builtin.find_files)
-    Map('n', '<leader>fg', builtin.live_grep)
-    Map('n', '<leader>f*', builtin.grep_string)
-    Map('n', '<leader>f/', builtin.current_buffer_fuzzy_find)
     Map('n', '<leader>fb', builtin.buffers)
-    Map('n', '<leader>fu', '<cmd>Telescope undo<cr>')
+
+    -- find
+    Map('n', '<leader>fg', builtin.live_grep)
+    Map('n', '<leader>f/', builtin.current_buffer_fuzzy_find)
+
+    -- lsp
     Map('n', '<leader>fs', builtin.lsp_document_symbols)
     Map('n', '<leader>fS', builtin.lsp_workspace_symbols)
-    Map('n', '<leader>fe', function() builtin.diagnostics { bufnr = 0, severity_limit = "WARN" } end)
-    Map('n', '<leader>fE', function() builtin.diagnostics { severity_limit = "WARN" } end)
+
+    Map('n', '<leader>fd', function()
+        builtin.diagnostics {
+            severity_limit = 'WARN',
+            bufnr = 0,
+        }
+    end)
+    Map('n', '<leader>fD', function()
+        builtin.diagnostics {
+            severity_limit = 'WARN',
+        }
+    end)
+
+    Map('n', '<leader>fr', builtin.lsp_references)
+
+    -- extensions
+    Map('n', '<leader>fu', telescope.extensions.undo.undo)
+    Map('n', '<leader>fn', telescope.extensions.notify.notify)
+
+    -- other
     Map('n', '<leader>fl', builtin.spell_suggest)
+    Map('n', 'z=', function()
+        vim.notify(
+            '"z=" is disabled, use "<leader>fl" instead',
+            vim.log.levels.ERROR
+        )
+    end)
+
+    Map('n', '<leader>fh', builtin.help_tags)
+    Map('n', '<leader>F', builtin.resume)
 end
 
 function M.setup()
