@@ -2,10 +2,18 @@ local M = {}
 
 --- returns:
 --- {
----     path = <absolute path>|nil,
----     type = 'local'|'global'|'not_found',
---- }
-local function resolve_lsp(lsp_local_path, lsp_global_path)
+---     path = <absolute path>,
+---     type = 'local'|'global',
+--- } | nil
+local function resolve_lsp_path(name)
+    local cats_paths = nixCats.extra.lsps[name]
+    if cats_paths == nil then
+        error('lsp "' .. name .. '" is not defined in nixCats')
+    end
+
+    local lsp_local_path = cats_paths.rel
+    local lsp_global_path = cats_paths.abs
+
     if lsp_local_path ~= nil then
         lsp_local_path = vim.fn.exepath(lsp_local_path)
 
@@ -18,62 +26,107 @@ local function resolve_lsp(lsp_local_path, lsp_global_path)
         lsp_global_path = nil
     end
 
-    local type
-    local path
-
     if lsp_local_path ~= nil then
-        type = 'local'
-        path = lsp_local_path
+        return {
+            type = 'local',
+            path = lsp_local_path,
+        }
     elseif lsp_global_path ~= nil then
-        type = 'global'
-        path = lsp_global_path
+        return {
+            type = 'global',
+            path = lsp_global_path,
+        }
     else
-        type = 'not_found'
-        path = nil
+        return nil
     end
-
-    return {
-        type = type,
-        path = path,
-    }
 end
 
-local function setup_lsp()
-    for name, paths in pairs(nixCats.extra.lsps) do
-        local resolved = resolve_lsp(paths.rel, paths.abs)
-        local type = resolved.type
-        local path = resolved.path
+local function resolve_cmd(name, path, config_cmd)
+    local cmd
+    local default_config = vim.lsp.config[name]
 
-        if path == nil then
-            goto next_lsp
+    if config_cmd ~= nil then
+        cmd = config_cmd
+        cmd[1] = path
+    elseif default_config ~= nil then
+        cmd = default_config.cmd
+        cmd[1] = path
+    else
+        cmd = { path }
+    end
+
+    return cmd
+end
+
+local function resolve_on_attach(name, path_type, config_on_attach)
+    return function(client, bufnr)
+        vim.notify(
+            'attached ' .. path_type .. ' "' .. name .. '" lsp server',
+            vim.log.levels.INFO
+        )
+
+        if config_on_attach ~= nil then
+            config_on_attach(client, bufnr)
         end
+    end
+end
 
-        local default_config = vim.lsp.config[name]
-        local cmd
-        if default_config ~= nil then
-            cmd = default_config.cmd
-            cmd[1] = path
-        else
-            cmd = path
-        end
+local function setup_lsp_server(name, config)
+    local lsp_path = resolve_lsp_path(name)
+    if lsp_path == nil then
+        return
+    end
 
-        vim.lsp.enable(name)
-        vim.lsp.config(name, {
-            cmd = cmd,
-            on_attach = function()
-                vim.notify(
-                    'attached ' .. type .. ' "' .. name .. '" lsp server',
-                    vim.log.levels.INFO
-                )
-            end
-        })
+    local cmd = resolve_cmd(name, lsp_path.path, config.cmd)
+    local on_attach = resolve_on_attach(name, lsp_path.type, config.on_attach)
 
-        ::next_lsp::
+    config.cmd = cmd
+    config.on_attach = on_attach
+
+    vim.lsp.enable(name)
+    vim.lsp.config(name, config)
+end
+
+local function setup_lsp(lsps)
+    for name, config in pairs(lsps) do
+        setup_lsp_server(name, config)
     end
 end
 
 function M.setup()
-    setup_lsp()
+    local lsps = {
+        lua_ls = {
+            -- make lua_ls behave, when editing nvim config
+            --
+            -- modified from `:help lspconfig-all` (`lua_ls` section)
+            on_init = function(client)
+                if string.find(vim.fn.expand('%:p'), 'nvim') == nil then
+                    return
+                end
+
+                client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+                    runtime = {
+                        version = 'LuaJIT',
+                        path = {
+                            'lua/?.lua',
+                            'lua/?/init.lua',
+                        },
+                    },
+
+                    workspace = {
+                        checkThirdParty = false,
+                        library = { vim.env.VIMRUNTIME },
+                    },
+                })
+            end,
+
+            settings = {
+                Lua = {},
+            },
+        }
+    }
+
+    setup_lsp(lsps)
 end
 
 return M
