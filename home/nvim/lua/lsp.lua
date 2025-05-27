@@ -33,8 +33,43 @@ local function on_attach(client, bufnr)
     bmap({ 'n', 'x' }, '<leader>lc', vim.lsp.buf.incoming_calls)
 end
 
+---@return nil
+local function setup_diagnostics()
+    vim.diagnostic.config {
+        underline = false,
+        severity_sort = true,
+
+        -- disable built-in diagnostics display
+        virtual_text = false,
+
+        -- disable lsp_lines at start
+        virtual_lines = false,
+    }
+
+
+    Map('n', '<leader>ld', vim.diagnostic.open_float)
+    Map('n', '<leader>lD', vim.diagnostic.setloclist)
+    Map('n', '[d', function()
+        vim.diagnostic.jump { count = 1, float = true }
+    end)
+    Map('n', ']d', function()
+        vim.diagnostic.jump { count = -1, float = true }
+    end)
+end
+
+---@return nil
+local function setup_lsp_lines()
+    local lsp_lines = require 'lsp_lines'
+
+    lsp_lines.setup {}
+
+    Map('n', '<leader>tl', lsp_lines.toggle)
+end
+
 local lsps = {
     lua_ls = {
+        on_attach = on_attach,
+
         -- make lua_ls behave, when editing nvim config
         --
         -- modified from `:help lspconfig-all` (`lua_ls` section)
@@ -59,8 +94,6 @@ local lsps = {
             })
         end,
 
-        on_attach = on_attach,
-
         settings = {
             Lua = {
                 diagnostics = {
@@ -73,8 +106,10 @@ local lsps = {
 
 ---@return nil
 function M.setup()
-    local lsp_utils = require 'utils.lsp'
-    lsp_utils.setup_lsps(lsps)
+    require 'utils.lsp'.setup_lsps(lsps)
+
+    setup_diagnostics()
+    setup_lsp_lines()
 end
 
 return M

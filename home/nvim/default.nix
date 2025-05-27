@@ -54,6 +54,7 @@
 
       lsp = [
         nvim-lspconfig
+        lsp_lines-nvim
       ];
     };
   };
