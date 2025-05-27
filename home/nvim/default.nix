@@ -40,7 +40,7 @@
         telescope-undo-nvim
         nvim-tree-lua
 
-        nvim-treesitter
+        nvim-treesitter.withAllGrammars
         nvim-treesitter-textobjects
         treewalker-nvim
       ];
