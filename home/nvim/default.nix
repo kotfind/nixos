@@ -41,6 +41,7 @@
         nvim-tree-lua
 
         nvim-treesitter
+        nvim-treesitter-textobjects
         treewalker-nvim
       ];
     };
