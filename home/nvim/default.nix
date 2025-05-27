@@ -21,25 +21,33 @@
     startupPlugins = with pkgs.vimPlugins; {
       general = [
         lze
+      ];
 
+      looks = [
         cyberdream-nvim
         lualine-nvim
         smear-cursor-nvim
         neoscroll-nvim
         nvim-notify
         nvim-web-devicons
+      ];
 
+      manipulation = [
         comment-nvim
         nvim-ts-context-commentstring
 
         nvim-ts-autotag
         autoclose-nvim
         nvim-surround
+      ];
 
+      navigation = [
         telescope-nvim
         telescope-undo-nvim
         nvim-tree-lua
+      ];
 
+      treesitter = [
         nvim-treesitter.withAllGrammars
         nvim-treesitter-textobjects
         treewalker-nvim
@@ -57,6 +65,10 @@
 
     categories = {
       general = true;
+      looks = true;
+      manipulation = true;
+      navigation = true;
+      treesitter = true;
     };
   };
 
