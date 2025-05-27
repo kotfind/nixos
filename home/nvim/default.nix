@@ -7,10 +7,9 @@
 
   masterPkgName = "nixCats";
 
-  categoryDefinitions = {pkgs, ...}: let
-  in {
-    lspsAndRuntimeDeps = {
-      general = with pkgs; [
+  categoryDefinitions = {pkgs, ...}: {
+    lspsAndRuntimeDeps = with pkgs; {
+      general = [
         xclip
         fd
         ripgrep
@@ -52,10 +51,14 @@
         nvim-treesitter-textobjects
         treewalker-nvim
       ];
+
+      lsp = [
+        nvim-lspconfig
+      ];
     };
   };
 
-  packageDefinitions.${masterPkgName} = {...}: {
+  packageDefinitions.${masterPkgName} = {pkgs, ...}: {
     settings = {
       aliases = ["nvim" "vim"];
 
@@ -69,6 +72,27 @@
       manipulation = true;
       navigation = true;
       treesitter = true;
+      lsp = true;
+    };
+
+    extra = {
+        # specifying lsps here, not to alter the $PATH
+        #
+        # type:
+        # {
+        #     <lspconfigName> = {
+        #         rel = <relativePath>;
+        #         abs = <absolutePath>;
+        #     };
+        # }
+        lsps = let
+            inherit (pkgs.lib) getExe;
+        in {
+            lua_ls = {
+                rel = "lua-language-server";
+                abs = getExe pkgs.lua-language-server;
+            };
+        };
     };
   };
 

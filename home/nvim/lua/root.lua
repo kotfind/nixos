@@ -4,3 +4,4 @@ require 'looks'.setup {}
 require 'manipulation'.setup {}
 require 'navigation'.setup {}
 require 'treesitter'.setup {}
+require 'lsp'.setup {}

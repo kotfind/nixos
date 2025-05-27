@@ -64,6 +64,10 @@ function M.setup()
             vim.opt.spell = false
         end
     })
+
+    -- signcolumn
+    vim.opt.signcolumn = 'yes:2'
+    vim.opt.updatetime = 10
 end
 
 return M
