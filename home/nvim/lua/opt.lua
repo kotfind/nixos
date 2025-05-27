@@ -44,6 +44,11 @@ function M.setup()
         tab = '>-',
         trail = '#',
     }
+    vim.api.nvim_create_autocmd({ 'ModeChanged' }, {
+        callback = function()
+            vim.opt.list = vim.v.event.new_mode ~= 'i'
+        end
+    })
 
     -- Preserve cursor position
     vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
