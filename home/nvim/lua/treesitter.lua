@@ -1,12 +1,13 @@
 local M = {}
 
---- returns a table of settings, that should be
---- passsed to treesitter config:
---- ```
---- require 'nvim-treesitter.configs' = {
----     textobjects = <HERE>
---- }
---- ```
+---@return table textobjects_config #
+---     table of settings, that should be
+---     passsed to treesitter config:
+---     ```
+---     require 'nvim-treesitter.configs' = {
+---         textobjects = <HERE>
+---     }
+---     ```
 local function setup_textobjects()
     -- textobjects list: https://github.com/nvim-treesitter/nvim-treesitter-textobjects?tab=readme-ov-file#built-in-textobjects
     local objects = {
@@ -79,6 +80,8 @@ local function setup_textobjects()
     return textobjects_config
 end
 
+---@param textobjects_config table a value, returned from setup_textobjects() function
+---@return nil
 local function setup_treesitter(textobjects_config)
     local config = require 'nvim-treesitter.configs'
 
@@ -93,6 +96,7 @@ local function setup_treesitter(textobjects_config)
     }
 end
 
+---@return nil
 local function setup_treewalker()
     require 'treewalker'.setup {}
 
@@ -107,6 +111,7 @@ local function setup_treewalker()
     Map('n', '<m-c-l>', '<cmd>Treewalker SwapRight<cr>')
 end
 
+---@return nil
 function M.setup()
     local textobjects_config = setup_textobjects()
     setup_treesitter(textobjects_config)

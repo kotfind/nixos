@@ -1,10 +1,7 @@
 local M = {}
 
---- returns:
---- {
----     path = <absolute path>,
----     type = 'local'|'global',
---- } | nil
+---@param name string name of lsp server, as specified in lspconfig
+---@return { path: string, type: 'local' | 'global' }?
 local function resolve_lsp_path(name)
     local cats_paths = nixCats.extra.lsps[name]
     if cats_paths == nil then
@@ -41,6 +38,11 @@ local function resolve_lsp_path(name)
     end
 end
 
+---@param name string name of lsp server, as specified in lspconfig
+---@param path string absolute path to lsp server executable
+---@param config_cmd string[]? command and arguments to execute lsp server,
+---     the first argument will be overridden
+---@return string[]
 local function resolve_cmd(name, path, config_cmd)
     local cmd
     local default_config = vim.lsp.config[name]
@@ -50,6 +52,7 @@ local function resolve_cmd(name, path, config_cmd)
         cmd[1] = path
     elseif default_config ~= nil then
         cmd = default_config.cmd
+        assert(type(cmd) == 'table')
         cmd[1] = path
     else
         cmd = { path }
@@ -58,6 +61,10 @@ local function resolve_cmd(name, path, config_cmd)
     return cmd
 end
 
+---@param name string name of lsp server, as specified in lspconfig
+---@param path_type ('local' | 'global') value from resolve_lsp_path
+---@param config_on_attach fun(self: vim.lsp.Client, bufnr: integer)? your custom on_attach function
+---@return nil
 local function resolve_on_attach(name, path_type, config_on_attach)
     return function(client, bufnr)
         vim.notify(
@@ -71,13 +78,18 @@ local function resolve_on_attach(name, path_type, config_on_attach)
     end
 end
 
+---@param name string name of lsp server, as specified in lspconfig
+---@param config vim.lsp.Config
+---@return nil
 local function setup_lsp_server(name, config)
     local lsp_path = resolve_lsp_path(name)
     if lsp_path == nil then
         return
     end
 
-    local cmd = resolve_cmd(name, lsp_path.path, config.cmd)
+    local cmd = resolve_cmd(name, lsp_path.path, config.cmd --[[@as string[]?]])
+
+    ---@diagnostic disable-next-line: param-type-mismatch
     local on_attach = resolve_on_attach(name, lsp_path.type, config.on_attach)
 
     config.cmd = cmd
@@ -87,12 +99,15 @@ local function setup_lsp_server(name, config)
     vim.lsp.config(name, config)
 end
 
+---@param lsps table<string, table<any, any>> name of lsp server -> it's settings
+---@return nil
 local function setup_lsp(lsps)
     for name, config in pairs(lsps) do
         setup_lsp_server(name, config)
     end
 end
 
+---@return nil
 function M.setup()
     local lsps = {
         lua_ls = {
@@ -121,7 +136,11 @@ function M.setup()
             end,
 
             settings = {
-                Lua = {},
+                Lua = {
+                    diagnostics = {
+                        globals = { 'nixCats' },
+                    },
+                },
             },
         }
     }

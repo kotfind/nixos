@@ -1,3 +1,7 @@
+---@param modes string|string[]
+---@param key string
+---@param func string|function
+---@param opts vim.keymap.set.Opts?
 function Map(modes, key, func, opts)
     if opts == nil then
         opts = {

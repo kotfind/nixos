@@ -1,6 +1,8 @@
 local M = {}
 
 -- returns current selection (multi or single)
+---@param prompt_bufnr integer
+---@return unknown[]
 local function telescope_get_selection(prompt_bufnr)
     local state = require 'telescope.actions.state'
     local picker = state.get_current_picker(prompt_bufnr)
@@ -13,15 +15,17 @@ local function telescope_get_selection(prompt_bufnr)
     end
 end
 
---- func is either:
----     - function(selection_path, selection_idx)
----     - string with `%s` placeholder for selection_path
+---@param prompt_bufnr integer
+---@param func fun(sel_path: string, sel_idx: integer)|string #
+---     a function to apply to each selected item
+---     or a string with '%s' sel_path placeholder
+---@return nil
 local function telescope_apply_on_selection_inner(prompt_bufnr, func)
     local selection = telescope_get_selection(prompt_bufnr)
     local func_type = type(func)
 
     require 'telescope.actions'.close(prompt_bufnr)
-    
+
     if func_type == "string" then
         for _, sel in pairs(selection) do
             vim.cmd(string.format(func, sel.path))
@@ -38,17 +42,23 @@ local function telescope_apply_on_selection_inner(prompt_bufnr, func)
     end
 end
 
+---@param func fun(sel_path: string, sel_idx: integer)|string #
+---     a function to apply to each selected item
+---     or a string with '%s' sel_path placeholder
+---@return fun(prompt_bufnr: integer)
 local function telescope_apply_on_selection(func)
+
+    ---@param prompt_bufnr integer
     return function(prompt_bufnr)
         telescope_apply_on_selection_inner(prompt_bufnr, func)
     end
 end
 
+---@return nil
 local function setup_telescope()
     local telescope = require 'telescope'
     local builtin = require 'telescope.builtin'
     local actions = require 'telescope.actions'
-    local previewers = require 'telescope.previewers'
 
     telescope.setup {
         defaults = {
@@ -141,6 +151,7 @@ local function setup_telescope()
     Map('n', '<leader>F', builtin.resume)
 end
 
+---@return nil
 local function setup_tree()
     -- disable netrw
     vim.g.loaded_netrw = 1
@@ -172,6 +183,7 @@ local function setup_tree()
     }
 end
 
+---@return nil
 function M.setup()
     setup_telescope()
     setup_tree()

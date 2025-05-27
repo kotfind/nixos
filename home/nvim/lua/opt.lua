@@ -1,5 +1,6 @@
 local M = {}
 
+---@return nil
 function M.setup()
     -- Mouse
     vim.opt.mouse = 'a'
