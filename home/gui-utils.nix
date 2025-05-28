@@ -48,5 +48,6 @@ in {
   programs = {
     zathura.enable = matchFor users.kotfind;
     obs-studio.enable = matchFor users.kotfind;
+    chromium.enable = matchFor users.kotfind;
   };
 }
