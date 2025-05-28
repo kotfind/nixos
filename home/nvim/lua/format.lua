@@ -3,8 +3,10 @@ local M = {}
 function M.setup()
     require('utils.format').setup_conform({
         formatters_by_ft = {
-            lua = { 'stylua' },
             ['*'] = { 'injected' },
+            lua = { 'stylua' },
+            nix = { 'alejandra' },
+            typst = { 'typstyle' },
         },
         formatters = {
             stylua = {

@@ -16,6 +16,20 @@ local function resolve_cmd(name)
     end
 end
 
+--- Populates formatters with values from formatters_by_ft
+---@param formatters table
+---@param formatters_by_ft table<string, string[]>
+---@return nil
+local function populate_formatters(formatters, formatters_by_ft)
+    for _, fmts in pairs(formatters_by_ft) do
+        for _, fmt in ipairs(fmts) do
+            if formatters[fmt] == nil then
+                formatters[fmt] = {}
+            end
+        end
+    end
+end
+
 ---@param formatters table
 ---@param non_exe_formatters string[] formatters, that don't have an executable; like 'injected'
 ---@return string[] disables_formatters formatters, whose executable was not found
@@ -62,10 +76,12 @@ end
 ---@param non_exe_formatters string[] formatters, that don't have an executable; like 'injected'
 ---@return nil
 function M.setup_conform(config, non_exe_formatters)
-    local disables_formatters =
+    populate_formatters(config.formatters, config.formatters_by_ft)
+
+    local disabled_formatters =
         formatters_inject_cmd(config.formatters, non_exe_formatters)
 
-    remove_disabled_formatters(config.formatters_by_ft, disables_formatters)
+    remove_disabled_formatters(config.formatters_by_ft, disabled_formatters)
 
     require('conform').setup(config)
 end

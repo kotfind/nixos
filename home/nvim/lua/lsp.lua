@@ -1,9 +1,96 @@
 local M = {}
 
+local on_attach
+
+local lsps = {
+    lua_ls = {
+        on_attach = on_attach,
+
+        settings = {
+            Lua = {
+                diagnostics = {
+                    globals = { 'nixCats' },
+                },
+            },
+        },
+
+        -- make lua_ls behave, when editing nvim config
+        --
+        -- modified from `:help lspconfig-all` (`lua_ls` section)
+        on_init = function(client)
+            if string.find(vim.fn.expand '%:p', 'nvim') == nil then
+                return
+            end
+
+            client.config.settings.Lua =
+                vim.tbl_deep_extend('force', client.config.settings.Lua, {
+                    runtime = {
+                        version = 'LuaJIT',
+                        path = {
+                            'lua/?.lua',
+                            'lua/?/init.lua',
+                        },
+                    },
+
+                    workspace = {
+                        checkThirdParty = false,
+                        library = { vim.env.VIMRUNTIME },
+                    },
+                })
+        end,
+    },
+
+    jdtls = {
+        on_attach = on_attach,
+        settings = {
+            java = {
+                import = {
+                    gradle = {
+                        enabled = true,
+                    },
+                },
+                format = {
+                    enabled = false,
+                },
+            },
+        },
+    },
+
+    rust_analyzer = {
+        on_attach = on_attach,
+        settings = {
+            -- all settings:
+            -- https://rust-analyzer.github.io/book/configuration.html
+            ['rust-analyzer'] = {
+                allTargets = true,
+
+                check = {
+                    command = 'clippy',
+                },
+
+                diagnostics = {
+                    disabled = { 'dead_code', 'unused_variables' },
+                },
+
+                cargo = {
+                    targetDir = true,
+                    features = 'all',
+                },
+            },
+        },
+    },
+
+    tinymist = { on_attach = on_attach },
+    nixd = { on_attach = on_attach },
+    bashls = { on_attach = on_attach },
+    pyright = { on_attach = on_attach },
+    ccls = { on_attach = on_attach },
+}
+
 ---@param client vim.lsp.Client
 ---@param bufnr integer
 ---@return nil
-local function on_attach(client, bufnr)
+function on_attach(client, bufnr)
     -- buffer mappings
     local function bmap(modes, key, func)
         Map(modes, key, func, {
@@ -46,7 +133,6 @@ local function setup_diagnostics()
         virtual_lines = false,
     }
 
-
     Map('n', '<leader>ld', vim.diagnostic.open_float)
     Map('n', '<leader>lD', vim.diagnostic.setloclist)
     Map('n', '[d', function()
@@ -66,47 +152,9 @@ local function setup_lsp_lines()
     Map('n', '<leader>tl', lsp_lines.toggle)
 end
 
-local lsps = {
-    lua_ls = {
-        on_attach = on_attach,
-
-        -- make lua_ls behave, when editing nvim config
-        --
-        -- modified from `:help lspconfig-all` (`lua_ls` section)
-        on_init = function(client)
-            if string.find(vim.fn.expand('%:p'), 'nvim') == nil then
-                return
-            end
-
-            client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-                runtime = {
-                    version = 'LuaJIT',
-                    path = {
-                        'lua/?.lua',
-                        'lua/?/init.lua',
-                    },
-                },
-
-                workspace = {
-                    checkThirdParty = false,
-                    library = { vim.env.VIMRUNTIME },
-                },
-            })
-        end,
-
-        settings = {
-            Lua = {
-                diagnostics = {
-                    globals = { 'nixCats' },
-                },
-            },
-        },
-    },
-}
-
 ---@return nil
 function M.setup()
-    require 'utils.lsp'.setup_lsps(lsps)
+    require('utils.lsp').setup_lsps(lsps)
 
     setup_diagnostics()
     setup_lsp_lines()

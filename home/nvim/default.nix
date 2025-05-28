@@ -92,24 +92,57 @@
 
     # specifying lsps and foramtters here, not to alter the $PATH
     extra = {
-        lsps = {
-            lua_ls = {
-                rel = "lua-language-server";
-                abs = getExe pkgs.lua-language-server;
-            };
+      lsps = {
+        jdtls.rel = "jdtls";
+        rust_analyzer.rel = "rust-analyzer";
+
+        lua_ls = {
+          rel = "lua-language-server";
+          abs = getExe pkgs.lua-language-server;
         };
 
-        formatters = {
-            stylua = {
-                rel = "stylua";
-                abs = getExe pkgs.stylua;
-            };
-
-            typstyle = {
-                rel = "typstyle";
-                abs = getExe pkgs.typstyle;
-            };
+        tinymist = {
+          rel = "tinymist";
+          abs = getExe pkgs.tinymist;
         };
+
+        nixd = {
+          rel = "nixd";
+          abs = getExe pkgs.nixd;
+        };
+
+        pyright = {
+          rel = "pyright";
+          abs = getExe pkgs.pyright;
+        };
+
+        bashls = {
+          rel = "bash-language-server";
+          abs = getExe pkgs.bash-language-server;
+        };
+
+        ccls = {
+          rel = "ccls";
+          abs = getExe pkgs.ccls;
+        };
+      };
+
+      formatters = {
+        stylua = {
+          rel = "stylua";
+          abs = getExe pkgs.stylua;
+        };
+
+        typstyle = {
+          rel = "typstyle";
+          abs = getExe pkgs.typstyle;
+        };
+
+        alejandra = {
+          rel = "alejandra";
+          abs = getExe pkgs.alejandra;
+        };
+      };
     };
   };
 
