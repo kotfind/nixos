@@ -56,6 +56,5 @@
     args = inputs // {inherit system;};
   in {
     nixosConfigurations.default = import ./default.nix args;
-    apps.${system} = import ./apps.nix args;
   };
 }

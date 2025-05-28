@@ -1,18 +1,3 @@
-# Note on switch and update
-
-Both `nixos-rebuild switch` and `nixos-rebuild update` should NOT be executed
-manually, but through the wrappers:
-
-```bash
-nix run .#switch
-```
-
-and
-
-```bash
-nix run .#update
-```
-
 # Install
 
 ## Create bootable USB
@@ -133,8 +118,7 @@ nix run .#update
 
 1. Switch to configuration
 
-
     ```bash
     cd ~/nixos
-    nix run .#switch
+    sudo nixos-rebuild switch --flake .#default
     ```
