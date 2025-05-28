@@ -83,13 +83,15 @@ local function setup_noice()
     noice.setup {
         cmdline = {
             view = 'cmdline',
-            conceal = false,
+            format = { conceal = false, },
         },
         messages = {
             view = 'cmdline',
             view_search = false,
         },
         lsp = {
+            hover = { enabled = false, },
+            signature = { enabled = false, },
             override = {
                 ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
                 ["vim.lsp.util.stylize_markdown"] = true,

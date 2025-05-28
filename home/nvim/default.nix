@@ -58,6 +58,10 @@
         nvim-lspconfig
         lsp_lines-nvim
       ];
+
+      blink = [
+        blink-cmp
+      ];
     };
   };
 
@@ -76,6 +80,7 @@
       navigation = true;
       treesitter = true;
       lsp = true;
+      blink = true;
     };
 
     extra = {
