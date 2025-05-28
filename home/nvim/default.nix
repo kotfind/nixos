@@ -7,6 +7,8 @@
 
   masterPkgName = "nixCats";
 
+  spellPath = ".local/share/nvim/site/spell";
+
   categoryDefinitions = {pkgs, ...}: {
     lspsAndRuntimeDeps = with pkgs; {
       general = [
@@ -165,5 +167,10 @@ in {
     EDITOR = "nvim";
   };
 
-  # TODO: spell files
+  home.file = {
+    "${spellPath}/ru.utf-8.spl".source = inputs.nvim-spl-ru;
+    "${spellPath}/ru.utf-8.sug".source = inputs.nvim-sug-ru;
+    "${spellPath}/en.utf-8.spl".source = inputs.nvim-spl-en;
+    "${spellPath}/en.utf-8.sug".source = inputs.nvim-sug-en;
+  };
 }

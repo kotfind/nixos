@@ -48,22 +48,22 @@ function M.setup()
     vim.api.nvim_create_autocmd({ 'ModeChanged' }, {
         callback = function()
             vim.opt.list = vim.v.event.new_mode ~= 'i'
-        end
+        end,
     })
 
     -- Preserve cursor position
     vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
-        command = [[ silent! normal! g`"zv' ]]
+        command = [[ silent! normal! g`"zv' ]],
     })
 
     -- Spell
-    vim.opt.spell = true
+    vim.opt.spell = false
     vim.opt.spelllang = { 'en', 'ru' }
 
     vim.api.nvim_create_autocmd({ 'TermOpen' }, {
         callback = function()
             vim.opt.spell = false
-        end
+        end,
     })
 
     -- signcolumn
