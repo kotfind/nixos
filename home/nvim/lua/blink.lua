@@ -8,13 +8,6 @@ function M.setup()
         fuzzy = { implementation = 'prefer_rust_with_warning', },
         signature = { enabled = true, },
 
-        completion = {
-            accept = {
-                -- seems to be broken, using separate plugin instead
-                auto_brackets = { enabled = false, },
-            },
-        },
-
         keymap = {
             preset = 'none',
 
@@ -23,8 +16,8 @@ function M.setup()
             ['<up>'] = { 'select_prev', 'fallback' },
             ['<down>'] = { 'select_next', 'fallback' },
 
-            ['<tab>'] = { 'select_prev', 'fallback' },
-            ['<s-tab>'] = { 'select_next', 'fallback' },
+            ['<tab>'] = { 'select_next', 'fallback' },
+            ['<s-tab>'] = { 'select_prev', 'fallback' },
 
             ['<cr>'] = { 'select_and_accept', 'fallback' },
         },

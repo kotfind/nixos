@@ -1,44 +1,6 @@
 local M = {}
 
 ---@param name string name of lsp server, as specified in lspconfig
----@return { path: string, type: 'local' | 'global' }?
-local function resolve_cmd_path(name)
-    local cats_paths = nixCats.extra.lsps[name]
-    if cats_paths == nil then
-        error('lsp "' .. name .. '" is not defined in nixCats')
-    end
-
-    local lsp_local_path = cats_paths.rel
-    local lsp_global_path = cats_paths.abs
-
-    if lsp_local_path ~= nil then
-        lsp_local_path = vim.fn.exepath(lsp_local_path)
-
-        if lsp_local_path == "" then
-            lsp_local_path = nil
-        end
-    end
-
-    if lsp_global_path == "" then
-        lsp_global_path = nil
-    end
-
-    if lsp_local_path ~= nil then
-        return {
-            type = 'local',
-            path = lsp_local_path,
-        }
-    elseif lsp_global_path ~= nil then
-        return {
-            type = 'global',
-            path = lsp_global_path,
-        }
-    else
-        return nil
-    end
-end
-
----@param name string name of lsp server, as specified in lspconfig
 ---@param path string absolute path to lsp server executable
 ---@param config_cmd string[]? command and arguments to execute lsp server,
 ---     the first argument will be overridden
@@ -82,7 +44,12 @@ end
 ---@param config vim.lsp.Config
 ---@return nil
 function M.setup_lsp_server(name, config)
-    local lsp_path = resolve_cmd_path(name)
+    local cats_paths = nixCats.extra.lsps[name]
+    if cats_paths == nil then
+        error('lsp server "' .. name .. '" is not specified in nixCats')
+    end
+
+    local lsp_path = require('utils.path').resolve_cmd_path(cats_paths)
     if lsp_path == nil then
         return
     end

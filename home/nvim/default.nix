@@ -62,10 +62,16 @@
       blink = [
         blink-cmp
       ];
+
+      format = [
+        conform-nvim
+      ];
     };
   };
 
-  packageDefinitions.${masterPkgName} = {pkgs, ...}: {
+  packageDefinitions.${masterPkgName} = {pkgs, ...}: let
+    inherit (pkgs.lib) getExe;
+  in {
     settings = {
       aliases = ["nvim" "vim"];
 
@@ -81,24 +87,27 @@
       treesitter = true;
       lsp = true;
       blink = true;
+      format = true;
     };
 
+    # specifying lsps and foramtters here, not to alter the $PATH
     extra = {
-        # specifying lsps here, not to alter the $PATH
-        #
-        # type:
-        # {
-        #     <lspconfigName> = {
-        #         rel = <relativePath>;
-        #         abs = <absolutePath>;
-        #     };
-        # }
-        lsps = let
-            inherit (pkgs.lib) getExe;
-        in {
+        lsps = {
             lua_ls = {
                 rel = "lua-language-server";
                 abs = getExe pkgs.lua-language-server;
+            };
+        };
+
+        formatters = {
+            stylua = {
+                rel = "stylua";
+                abs = getExe pkgs.stylua;
+            };
+
+            typstyle = {
+                rel = "typstyle";
+                abs = getExe pkgs.typstyle;
             };
         };
     };

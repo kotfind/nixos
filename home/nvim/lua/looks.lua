@@ -78,26 +78,23 @@ local function setup_notify()
 end
 
 local function setup_noice()
-    local noice = require 'noice'
-
-    noice.setup {
-        cmdline = {
-            view = 'cmdline',
-            format = { conceal = false, },
-        },
-        messages = {
-            view = 'cmdline',
-            view_search = false,
-        },
-        lsp = {
-            hover = { enabled = false, },
-            signature = { enabled = false, },
-            override = {
-                ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-                ["vim.lsp.util.stylize_markdown"] = true,
-            },
-        },
-    }
+    -- local noice = require 'noice'
+    --
+    -- noice.setup {
+    --     cmdline = {
+    --         view = 'cmdline',
+    --         format = { conceal = false, },
+    --     },
+    --     messages = { view_search = false, },
+    --     lsp = {
+    --         hover = { enabled = false, },
+    --         signature = { enabled = false, },
+    --         override = {
+    --             ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+    --             ["vim.lsp.util.stylize_markdown"] = true,
+    --         },
+    --     },
+    -- }
 end
 
 function M.setup()
