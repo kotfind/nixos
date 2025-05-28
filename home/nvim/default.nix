@@ -29,6 +29,7 @@
         neoscroll-nvim
         nvim-notify
         nvim-web-devicons
+        vim-signify
       ];
 
       manipulation = [
