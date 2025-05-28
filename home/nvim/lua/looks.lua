@@ -86,6 +86,7 @@ function M.setup()
     require 'smear_cursor'.setup {}
     require 'neoscroll'.setup {}
     require 'nvim-web-devicons'.setup {}
+    require 'fidget'.setup {}
 end
 
 return M
