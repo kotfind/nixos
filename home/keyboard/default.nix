@@ -4,23 +4,18 @@
   ...
 }: let
   inherit (config.cfgLib) users enableFor;
-
-  dir = ".config/fcitx5";
 in {
   home.file = enableFor users.kotfind {
-    "${dir}/conf/xcb.conf".source = ./conf/xcb.conf;
-    "${dir}/config" = {
+    ".config/fcitx5" = {
       source = ./config;
       force = true;
-    };
-    "${dir}/profile" = {
-      source = ./profile;
-      force = true;
+      recursive = true;
     };
   };
 
   i18n.inputMethod = enableFor users.kotfind {
-    enabled = "fcitx5";
+    enable = true;
+    type = "fcitx5";
     fcitx5 = {
       addons = with pkgs; [
         fcitx5-anthy

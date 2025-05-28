@@ -53,7 +53,7 @@ in {
     enable = true;
     enableFishIntegration = true;
     enableBashIntegration = true;
-    pinentryPackage = pkgs.pinentry-rofi;
+    pinentry.package = pkgs.pinentry-rofi;
   };
 
   services.screen-locker = (with config.cfgLib; enableFor users.kotfind) {

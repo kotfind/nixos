@@ -1,128 +1,176 @@
 {
-  pkgs,
   inputs,
-  lib,
   system,
   ...
-}:
-# TODO?: don't install lsp servers for root?
-let
-  inherit (builtins) isString isList isAttrs;
-  inherit (lib) getExe';
-  inherit (lib.strings) escape concatMapStringsSep concatMapAttrsStringSep;
+}: let
+  inherit (inputs) nixCats;
 
-  toLua = v:
-    if v == null
-    then "nil"
-    else if isString v
-    then "'" + escape ["'" "\\"] v + "'"
-    else if isList v
-    then "{" + concatMapStringsSep "," toLua v + "}"
-    else if isAttrs v
-    then "{" + concatMapAttrsStringSep "," (name: value: name + "=" + toLua value) v + "}"
-    else throw "cannot convert to lua";
+  masterPkgName = "nixCats";
 
-  codeium-lsp = inputs.codeium.packages.${system}.codeium-lsp;
+  spellPath = ".local/share/nvim/site/spell";
 
-  packages = with pkgs;
-    [
-      xclip
-      websocat
-    ]
-    ++ [codeium-lsp];
+  categoryDefinitions = {pkgs, ...}: {
+    lspsAndRuntimeDeps = with pkgs; {
+      general = [
+        xclip
+        fd
+        ripgrep
+        glib # for gio for nvim-tree.lua
+      ];
+    };
 
-  formatters = with pkgs; [
-    alejandra
-    stylua
-    typstyle
-  ];
+    startupPlugins = with pkgs.vimPlugins; {
+      general = [
+        lze
+      ];
 
-  lspServers = with pkgs; [
-    nixd
-    lua-language-server
-    tinymist
-  ];
-in {
-  programs.neovim = {
-    enable = true;
+      looks = [
+        cyberdream-nvim
+        lualine-nvim
+        smear-cursor-nvim
+        neoscroll-nvim
+        nvim-notify
+        nvim-web-devicons
+        vim-signify
+        noice-nvim
+      ];
 
-    defaultEditor = true;
+      manipulation = [
+        comment-nvim
+        nvim-ts-context-commentstring
 
-    vimAlias = true;
-    vimdiffAlias = true;
-    viAlias = true;
+        nvim-ts-autotag
+        autoclose-nvim
+        nvim-surround
+      ];
 
-    withNodeJs = true;
-    withPython3 = false;
-    withRuby = false;
+      navigation = [
+        telescope-nvim
+        telescope-undo-nvim
+        nvim-tree-lua
+      ];
 
-    extraPackages = packages ++ formatters ++ lspServers;
+      treesitter = [
+        nvim-treesitter.withAllGrammars
+        nvim-treesitter-textobjects
+        treewalker-nvim
+      ];
 
-    extraLuaConfig =
-      /*
-      lua
-      */
-      ''
-        -- this file was generatred by nix
+      lsp = [
+        nvim-lspconfig
+        lsp_lines-nvim
+      ];
 
-        -- Export some variables
-        CodeiumPath = '${getExe' codeium-lsp "codeium-lsp"}'
+      blink = [
+        blink-cmp
+      ];
 
-        -- require actual init file
-        require 'main'
-
-        -- Install lazy
-        local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-        if not (vim.uv or vim.loop).fs_stat(lazypath) then
-          local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-          local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
-          if vim.v.shell_error ~= 0 then
-            vim.api.nvim_echo({
-              { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-              { out, "WarningMsg" },
-              { "\nPress any key to exit..." },
-            }, true, {})
-            vim.fn.getchar()
-            os.exit(1)
-          end
-        end
-        vim.opt.rtp:prepend(lazypath)
-
-        -- Init lazy
-        require 'lazy'.setup {
-            spec = { { import = "plugins", }, },
-            install = { colorscheme = {}, },
-            readme = { enabled = false, },
-            profiling = {
-                loader = true,
-                require = true,
-            },
-            pkg = { sources = { 'lazy' }, },
-            rocks = { enabled = false, },
-            headless = {
-                task = false,
-            },
-        }
-      '';
+      format = [
+        conform-nvim
+      ];
+    };
   };
+
+  packageDefinitions.${masterPkgName} = {pkgs, ...}: let
+    inherit (pkgs.lib) getExe;
+  in {
+    settings = {
+      aliases = ["nvim" "vim"];
+
+      hosts.python3.enable = false;
+      hosts.node.enable = false;
+    };
+
+    categories = {
+      general = true;
+      looks = true;
+      manipulation = true;
+      navigation = true;
+      treesitter = true;
+      lsp = true;
+      blink = true;
+      format = true;
+    };
+
+    # specifying lsps and foramtters here, not to alter the $PATH
+    extra = {
+      lsps = {
+        jdtls.rel = "jdtls";
+        rust_analyzer.rel = "rust-analyzer";
+
+        lua_ls = {
+          rel = "lua-language-server";
+          abs = getExe pkgs.lua-language-server;
+        };
+
+        tinymist = {
+          rel = "tinymist";
+          abs = getExe pkgs.tinymist;
+        };
+
+        nixd = {
+          rel = "nixd";
+          abs = getExe pkgs.nixd;
+        };
+
+        pyright = {
+          rel = "pyright";
+          abs = getExe pkgs.pyright;
+        };
+
+        bashls = {
+          rel = "bash-language-server";
+          abs = getExe pkgs.bash-language-server;
+        };
+
+        ccls = {
+          rel = "ccls";
+          abs = getExe pkgs.ccls;
+        };
+      };
+
+      formatters = {
+        stylua = {
+          rel = "stylua";
+          abs = getExe pkgs.stylua;
+        };
+
+        typstyle = {
+          rel = "typstyle";
+          abs = getExe pkgs.typstyle;
+        };
+
+        alejandra = {
+          rel = "alejandra";
+          abs = getExe pkgs.alejandra;
+        };
+      };
+    };
+  };
+
+  builder =
+    nixCats.utils.baseBuilder
+    ./.
+    {
+      inherit system;
+      inherit (inputs) nixpkgs;
+    }
+    categoryDefinitions
+    packageDefinitions;
+
+  masterPkg = builder masterPkgName;
+in {
+  home.packages = [masterPkg];
 
   home.sessionVariables = {
     MANPAGER = "nvim +Man! -c ':set signcolumn=no'";
+    EDITOR = "nvim";
   };
 
-  home.file =
-    {
-      ".config/nvim" = {
-        source = ./config;
-        recursive = true;
-      };
-    }
-    // (let
-      spellPath = ".local/share/nvim/site/spell";
-    in {
-      "${spellPath}/ru.utf-8.spl".source = inputs.nvim-spl-ru;
-      "${spellPath}/ru.utf-8.sug".source = inputs.nvim-sug-ru;
-      "${spellPath}/en.utf-8.spl".source = inputs.nvim-spl-en;
-      "${spellPath}/en.utf-8.sug".source = inputs.nvim-sug-en;
-    });
+  home.file = {
+    "${spellPath}/ru.utf-8.spl".source = inputs.nvim-spl-ru;
+    "${spellPath}/ru.utf-8.sug".source = inputs.nvim-sug-ru;
+    "${spellPath}/en.utf-8.spl".source = inputs.nvim-spl-en;
+    "${spellPath}/en.utf-8.sug".source = inputs.nvim-sug-en;
+  };
 }

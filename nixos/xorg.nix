@@ -7,7 +7,6 @@
           enable = true;
           greeter.enable = false;
         };
-        defaultSession = "xsession";
         session = [
           {
             manage = "desktop";
@@ -18,9 +17,12 @@
       };
     };
 
-    displayManager.autoLogin = {
-      enable = true;
-      user = config.cfgLib.users.kotfind.name;
+    displayManager = {
+      defaultSession = "xsession";
+      autoLogin = {
+        enable = true;
+        user = config.cfgLib.users.kotfind.name;
+      };
     };
   };
 }

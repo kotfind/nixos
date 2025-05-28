@@ -11,15 +11,11 @@
   };
 
   inputs = {
+    # -------------------- General --------------------
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    codeium = {
-      url = "github:Exafunction/codeium.nvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -28,6 +24,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # -------------------- NeoVim --------------------
+    codeium = {
+      url = "github:Exafunction/codeium.nvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nixCats.url = "github:BirdeeHub/nixCats-nvim";
+
+    # -------------------- NeoVim.Spelling --------------------
     nvim-spl-ru = {
       url = "https://ftp.nluug.nl/pub/vim/runtime/spell/ru.utf-8.spl";
       flake = false;
@@ -51,6 +56,5 @@
     args = inputs // {inherit system;};
   in {
     nixosConfigurations.default = import ./default.nix args;
-    apps.${system} = import ./apps.nix args;
   };
 }
