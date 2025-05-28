@@ -1,59 +1,5 @@
 local M = {}
 
--- returns current selection (multi or single)
----@param prompt_bufnr integer
----@return unknown[]
-local function telescope_get_selection(prompt_bufnr)
-    local state = require 'telescope.actions.state'
-    local picker = state.get_current_picker(prompt_bufnr)
-    local multi = picker:get_multi_selection()
-
-    if not vim.tbl_isempty(multi) then
-        return multi
-    else
-        return { picker:get_selection() }
-    end
-end
-
----@param prompt_bufnr integer
----@param func fun(sel_path: string, sel_idx: integer)|string #
----     a function to apply to each selected item
----     or a string with '%s' sel_path placeholder
----@return nil
-local function telescope_apply_on_selection_inner(prompt_bufnr, func)
-    local selection = telescope_get_selection(prompt_bufnr)
-    local func_type = type(func)
-
-    require 'telescope.actions'.close(prompt_bufnr)
-
-    if func_type == "string" then
-        for _, sel in pairs(selection) do
-            vim.cmd(string.format(func, sel.path))
-        end
-    elseif func_type == "function" then
-        for i, sel in pairs(selection) do
-            func(sel.path, i)
-        end
-    else
-        error(
-            'unexpected function type: expected "string" or "function", got: '
-            .. func_type
-        )
-    end
-end
-
----@param func fun(sel_path: string, sel_idx: integer)|string #
----     a function to apply to each selected item
----     or a string with '%s' sel_path placeholder
----@return fun(prompt_bufnr: integer)
-local function telescope_apply_on_selection(func)
-
-    ---@param prompt_bufnr integer
-    return function(prompt_bufnr)
-        telescope_apply_on_selection_inner(prompt_bufnr, func)
-    end
-end
-
 ---@return nil
 local function setup_telescope()
     local telescope = require 'telescope'
@@ -86,24 +32,11 @@ local function setup_telescope()
                         actions.move_selection_previous(prompt_bufnr)
                     end,
 
-                    -- open
-                    -- FIXME: works correctly on file pickers only
-                    ['<c-x>'] = telescope_apply_on_selection 'split %s',
-                    ['<c-v>'] = telescope_apply_on_selection 'vsplit %s',
-                    ['<c-t>'] = telescope_apply_on_selection 'tabe %s',
-                    ['<cr>'] = telescope_apply_on_selection(function(path, idx)
-                        if idx == 1 then
-                            vim.cmd('edit ' .. path)
-                        else
-                            vim.cmd('tabe ' .. path)
-                        end
-                    end),
-
                     -- exit
                     ['<esc>'] = actions.close,
-                }
+                },
             },
-        }
+        },
     }
     telescope.load_extension 'undo'
     telescope.load_extension 'notify'
@@ -160,7 +93,7 @@ local function setup_tree()
     local api = require 'nvim-tree.api'
 
     Map('n', '<leader>tt', api.tree.toggle)
-    require 'nvim-tree'.setup {
+    require('nvim-tree').setup {
         hijack_cursor = true,
         disable_netrw = true,
         view = {
