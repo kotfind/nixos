@@ -30,7 +30,7 @@
         nvim-notify
         nvim-web-devicons
         vim-signify
-        fidget-nvim
+        noice-nvim
       ];
 
       manipulation = [

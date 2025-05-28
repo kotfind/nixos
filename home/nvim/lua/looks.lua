@@ -70,7 +70,6 @@ end
 
 local function setup_notify()
     local notify = require 'notify'
-    vim.notify = notify
 
     notify.setup {
         render = 'wrapped-compact',
@@ -78,15 +77,36 @@ local function setup_notify()
     }
 end
 
+local function setup_noice()
+    local noice = require 'noice'
+
+    noice.setup {
+        cmdline = {
+            view = 'cmdline',
+            conceal = false,
+        },
+        messages = {
+            view = 'cmdline',
+            view_search = false,
+        },
+        lsp = {
+            override = {
+                ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+                ["vim.lsp.util.stylize_markdown"] = true,
+            },
+        },
+    }
+end
+
 function M.setup()
     setup_theme()
     setup_lualine()
     setup_notify()
+    setup_noice()
 
     require 'smear_cursor'.setup {}
     require 'neoscroll'.setup {}
     require 'nvim-web-devicons'.setup {}
-    require 'fidget'.setup {}
 end
 
 return M
