@@ -49,10 +49,10 @@ local function setup_diagnostics()
     Map('n', '<leader>ld', vim.diagnostic.open_float)
     Map('n', '<leader>lD', vim.diagnostic.setloclist)
     Map('n', '[d', function()
-        vim.diagnostic.jump { count = 1, float = true }
+        vim.diagnostic.jump { count = -1, float = true }
     end)
     Map('n', ']d', function()
-        vim.diagnostic.jump { count = -1, float = true }
+        vim.diagnostic.jump { count = 1, float = true }
     end)
 end
 
