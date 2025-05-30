@@ -15,7 +15,6 @@ in {
     ./mime.nix
     ./nvim
     ./pass.nix
-    ./proxy.nix
     ./rust.nix
     ./scripts
     ./secrets
