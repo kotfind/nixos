@@ -143,7 +143,14 @@ local lsps = {
         },
     },
 
-    tinymist = { on_attach = on_attach },
+    tinymist = {
+        on_attach = on_attach,
+        settings = {
+            exportPdf = 'onType',
+            outputPath = '$root/target/$name',
+        },
+    },
+
     nixd = { on_attach = on_attach },
     bashls = { on_attach = on_attach },
     pyright = { on_attach = on_attach },
