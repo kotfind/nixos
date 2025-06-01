@@ -127,6 +127,11 @@
           rel = "ccls";
           abs = getExe pkgs.ccls;
         };
+
+        dotls = {
+          rel = "dot-language-server";
+          abs = getExe pkgs.dot-language-server;
+        };
       };
 
       formatters = {

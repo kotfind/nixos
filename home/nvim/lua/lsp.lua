@@ -148,6 +148,7 @@ local lsps = {
     bashls = { on_attach = on_attach },
     pyright = { on_attach = on_attach },
     ccls = { on_attach = on_attach },
+    dotls = { on_attach = on_attach },
 }
 
 ---@return nil
