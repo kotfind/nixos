@@ -27,6 +27,7 @@ in {
     jpegoptim
     ascii
     usbutils
+    poppler-utils # for pdftotext
   ];
 
   programs = {
