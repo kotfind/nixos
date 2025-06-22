@@ -119,19 +119,13 @@ local function setup_noice()
     local noice = require 'noice'
 
     noice.setup {
-        cmdline = {
-            view = 'cmdline',
-            format = {
-                cmdline = { conceal = false },
-                search_down = { conceal = false },
-                search_up = { conceal = false },
-                filter = { conceal = false },
-                lua = { conceal = false },
-                help = { conceal = false },
-                input = { conceal = false },
-            },
+        cmdline = { view = 'cmdline' },
+        messages = {
+            view = 'mini',
+            view_error = 'mini',
+            view_warn = 'mini',
+            view_search = false,
         },
-        messages = { view_search = false },
         lsp = {
             hover = { enabled = false },
             signature = { enabled = false },

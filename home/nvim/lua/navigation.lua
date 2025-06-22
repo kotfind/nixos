@@ -39,7 +39,7 @@ local function setup_telescope()
         },
     }
     telescope.load_extension 'undo'
-    telescope.load_extension 'notify'
+    telescope.load_extension 'noice'
 
     -- files
     Map('n', '<leader>ff', builtin.find_files)
@@ -69,7 +69,6 @@ local function setup_telescope()
 
     -- extensions
     Map('n', '<leader>fu', telescope.extensions.undo.undo)
-    Map('n', '<leader>fn', telescope.extensions.notify.notify)
 
     -- other
     Map('n', '<leader>fl', builtin.spell_suggest)
