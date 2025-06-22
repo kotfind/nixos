@@ -26,6 +26,7 @@ in {
         pinta
         inkscape
         gimp
+        localsend
 
         # NOTE: current version from unstable is broken
         # See
