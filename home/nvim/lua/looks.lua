@@ -107,12 +107,12 @@ local function setup_lualine()
 end
 
 local function setup_notify()
-    local notify = require 'notify'
-
-    notify.setup {
-        render = 'wrapped-compact',
-        stages = 'fade',
-    }
+    -- local notify = require 'notify'
+    --
+    -- notify.setup {
+    --     render = 'wrapped-compact',
+    --     stages = 'fade',
+    -- }
 end
 
 local function setup_noice()

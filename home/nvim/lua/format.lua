@@ -7,6 +7,7 @@ function M.setup()
             lua = { 'stylua' },
             nix = { 'alejandra' },
             typst = { 'typstyle' },
+            rust = { 'rustfmt' },
         },
         formatters = {
             stylua = {

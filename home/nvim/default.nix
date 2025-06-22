@@ -29,7 +29,7 @@
         lualine-nvim
         smear-cursor-nvim
         neoscroll-nvim
-        nvim-notify
+        # nvim-notify
         nvim-web-devicons
         vim-signify
         noice-nvim
@@ -148,6 +148,10 @@
         alejandra = {
           rel = "alejandra";
           abs = getExe pkgs.alejandra;
+        };
+
+        rustfmt = {
+          rel = "rustfmt";
         };
       };
     };
