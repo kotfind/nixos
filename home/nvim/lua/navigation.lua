@@ -99,7 +99,7 @@ local function setup_tree()
         view = {
             width = {
                 min = 20,
-                max = 60,
+                max = 30,
                 padding = 1,
             },
         },
