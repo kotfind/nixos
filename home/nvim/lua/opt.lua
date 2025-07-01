@@ -6,10 +6,26 @@ function M.setup()
     vim.opt.mouse = 'a'
 
     -- Tab
-    vim.opt.tabstop = 4
-    vim.opt.expandtab = true
-    vim.opt.softtabstop = 4
-    vim.opt.shiftwidth = 4
+    ---@param w integer tab width
+    local function set_tab_width(w)
+        vim.opt.tabstop = w
+        vim.opt.expandtab = true
+        vim.opt.softtabstop = w
+        vim.opt.shiftwidth = w
+    end
+
+    set_tab_width(4)
+    vim.api.nvim_create_autocmd('FileType', {
+        callback = function(args)
+            local ft = vim.bo[args.buf].filetype
+
+            if vim.tbl_contains({ 'nix', 'yaml' }, ft) then
+                set_tab_width(2)
+            else
+                set_tab_width(4)
+            end
+        end,
+    })
 
     -- UI
     vim.opt.number = true
