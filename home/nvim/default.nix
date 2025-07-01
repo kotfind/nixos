@@ -29,7 +29,6 @@
         lualine-nvim
         smear-cursor-nvim
         neoscroll-nvim
-        # nvim-notify
         nvim-web-devicons
         vim-signify
         noice-nvim
@@ -61,8 +60,9 @@
         lsp_lines-nvim
       ];
 
-      blink = [
+      complete = [
         blink-cmp
+        luasnip
       ];
 
       format = [
@@ -88,7 +88,7 @@
       navigation = true;
       treesitter = true;
       lsp = true;
-      blink = true;
+      complete = true;
       format = true;
     };
 
