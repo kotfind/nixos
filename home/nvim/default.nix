@@ -153,6 +153,10 @@
         rustfmt = {
           rel = "rustfmt";
         };
+
+        leptosfmt = {
+          rel = "leptosfmt";
+        };
       };
     };
   };
