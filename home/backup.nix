@@ -39,6 +39,7 @@
               "bin"
               ".gradle"
               "venv"
+              ".direnv"
             ];
           };
 
