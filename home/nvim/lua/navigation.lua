@@ -40,6 +40,7 @@ local function setup_telescope()
     }
     telescope.load_extension 'undo'
     telescope.load_extension 'noice'
+    telescope.load_extension 'ui-select'
 
     -- files
     Map('n', '<leader>ff', builtin.find_files)

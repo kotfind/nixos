@@ -46,6 +46,7 @@
       navigation = [
         telescope-nvim
         telescope-undo-nvim
+        telescope-ui-select-nvim
         nvim-tree-lua
       ];
 
