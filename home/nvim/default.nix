@@ -133,6 +133,8 @@
           rel = "dot-language-server";
           abs = getExe pkgs.dot-language-server;
         };
+
+        kotlin_language_server.rel = "kotlin-language-server";
       };
 
       formatters = {

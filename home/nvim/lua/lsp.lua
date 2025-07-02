@@ -149,6 +149,7 @@ local lsps = {
     pyright = { on_attach = on_attach },
     ccls = { on_attach = on_attach },
     dotls = { on_attach = on_attach },
+    kotlin_language_server = { on_attach = on_attach },
 }
 
 ---@return nil
