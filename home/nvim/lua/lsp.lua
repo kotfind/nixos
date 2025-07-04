@@ -125,19 +125,21 @@ local lsps = {
             -- all settings:
             -- https://rust-analyzer.github.io/book/configuration.html
             ['rust-analyzer'] = {
-                allTargets = true,
+                cargo = {
+                    allTargets = true,
+                    targetDir = true,
+                    features = 'all',
+                },
 
                 check = {
                     command = 'clippy',
+                    ignore = { 'dead_code' },
                 },
+
+                checkOnSave = { command = 'clippy' },
 
                 diagnostics = {
-                    disabled = { 'dead_code', 'unused_variables' },
-                },
-
-                cargo = {
-                    targetDir = true,
-                    features = 'all',
+                    disabled = { 'dead_code' },
                 },
             },
         },
