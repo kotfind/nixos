@@ -14,14 +14,18 @@ function Map(modes, key, func, opts)
 end
 
 function Feed(keys)
-    vim.fn.feedkeys(vim.api.nvim_replace_termcodes(keys, true, true, true), true)
+    vim.fn.feedkeys(
+        vim.api.nvim_replace_termcodes(keys, true, true, true),
+        true
+    )
 end
 
 local M = {}
 
 function M.setup()
     -- Langmap
-    vim.opt.langmap = 'ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz'
+    vim.opt.langmap =
+        'ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz'
 
     -- Set leader
     vim.g.mapleader = ' '
@@ -29,28 +33,28 @@ function M.setup()
     Map('n', '<space>', '')
 
     -- Move between windows
-    Map({'n', 't'}, '<C-h>', '<C-w>h')
-    Map({'n', 't'}, '<C-j>', '<C-w>j')
-    Map({'n', 't'}, '<C-k>', '<C-w>k')
-    Map({'n', 't'}, '<C-l>', '<C-w>l')
+    Map({ 'n', 't' }, '<C-h>', '<C-w>h')
+    Map({ 'n', 't' }, '<C-j>', '<C-w>j')
+    Map({ 'n', 't' }, '<C-k>', '<C-w>k')
+    Map({ 'n', 't' }, '<C-l>', '<C-w>l')
 
     -- Reselect on shift
     Map('v', '<', '<gv')
     Map('v', '>', '>gv')
 
     -- Move on wrapped lines
-    Map({'n', 'x'}, 'j', 'gj')
-    Map({'n', 'x'}, 'k', 'gk')
-    Map({'n', 'x'}, '^', 'g^')
-    Map({'n', 'x'}, '$', 'g$')
+    Map({ 'n', 'x' }, 'j', 'gj')
+    Map({ 'n', 'x' }, 'k', 'gk')
+    Map({ 'n', 'x' }, '^', 'g^')
+    Map({ 'n', 'x' }, '$', 'g$')
 
-    Map({'n', 'x'}, 'gj', 'j')
-    Map({'n', 'x'}, 'gk', 'k')
-    Map({'n', 'x'}, 'g^', '^')
-    Map({'n', 'x'}, 'g$', '$')
+    Map({ 'n', 'x' }, 'gj', 'j')
+    Map({ 'n', 'x' }, 'gk', 'k')
+    Map({ 'n', 'x' }, 'g^', '^')
+    Map({ 'n', 'x' }, 'g$', '$')
 
     -- No highlight
-    Map('n', '<leader><esc>', ':nohlsearch<CR>')
+    Map('n', '<leader><esc>', ':nohlsearch<cr>')
 
     -- Insert -> Normal
     Map('i', 'jk', '<esc>')
@@ -61,10 +65,11 @@ function M.setup()
     -- Terminal -> Normal
     Map('t', '<esc><esc>', '<C-\\><C-N>')
 
-    -- Global buffer yank/ paste
-    Map({'n', 'x'}, '<leader>p', '"+p')
-    Map({'n', 'x'}, '<leader>P', '"+P')
-    Map({'n', 'x'}, '<leader>y', '"+y')
+    -- Global buffer yank/ paste/ delete
+    Map({ 'n', 'x' }, '<leader>p', '"+p')
+    Map({ 'n', 'x' }, '<leader>P', '"+P')
+    Map({ 'n', 'x' }, '<leader>d', '"+d')
+    Map({ 'n', 'x' }, '<leader>y', '"+y')
     Map('n', '<leader>yy', '"+yy')
 
     -- Select pasted
@@ -74,6 +79,12 @@ function M.setup()
     Map('n', '<leader>ts', function()
         vim.opt.spell = not vim.opt.spell:get()
     end)
+
+    -- Quicklist
+    Map('n', '<leader>qn', ':cnext<cr>')
+    Map('n', '<leader>qp', ':cprev<cr>')
+    Map('n', '<leader>qf', ':cfirst<cr>')
+    Map('n', '<leader>ql', ':clast<cr>')
 end
 
 return M
