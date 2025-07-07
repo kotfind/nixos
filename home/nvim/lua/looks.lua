@@ -14,6 +14,8 @@ local function setup_theme()
 
                 -- for listchars
                 Whitespace = { fg = colors.white, bg = colors.red },
+
+                NormalFloat = { bg = colors.bg_alt },
             }
         end,
     }
