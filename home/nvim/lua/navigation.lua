@@ -113,6 +113,10 @@ local function setup_tree()
                 close = true,
             },
         },
+        filters = {
+            git_ignored = true,
+            dotfiles = true,
+        },
     }
 end
 
