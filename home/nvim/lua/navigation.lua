@@ -117,6 +117,9 @@ local function setup_tree()
             git_ignored = true,
             dotfiles = true,
         },
+        update_focused_file = {
+            enable = true,
+        },
     }
 end
 
