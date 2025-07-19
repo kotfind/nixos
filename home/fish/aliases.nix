@@ -5,15 +5,13 @@
 }: let
   inherit (lib) getExe;
 
-  python = getExe pkgs.python3;
-
   eza_ = getExe pkgs.eza;
   eza = "${eza_} --group-directories-first --color=always";
 
   podman = getExe pkgs.podman;
   podman-compose = getExe pkgs.podman-compose;
 in {
-  p3 = "${python}";
+  p3 = "python3";
   e = "exec";
 
   pd = "${podman}";

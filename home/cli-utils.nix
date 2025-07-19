@@ -28,6 +28,7 @@ in {
     ascii
     usbutils
     poppler-utils # for pdftotext
+    python3
   ];
 
   programs = {

@@ -73,7 +73,7 @@
   };
 
   packageDefinitions.${masterPkgName} = {pkgs, ...}: let
-    inherit (pkgs.lib) getExe;
+    inherit (pkgs.lib) getExe getExe';
   in {
     settings = {
       aliases = ["nvim" "vim"];
@@ -114,9 +114,9 @@
           abs = getExe pkgs.nixd;
         };
 
-        pyright = {
-          rel = "pyright";
-          abs = getExe pkgs.pyright;
+        pyright = rec {
+          rel = "pyright-langserver";
+          abs = getExe' pkgs.pyright rel;
         };
 
         bashls = {
