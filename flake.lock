@@ -21,6 +21,29 @@
         "type": "github"
       }
     },
+    "fcitx5-ilo-sitelen": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1755635313,
+        "narHash": "sha256-hGWewpknjI+qb1dz9xoJzfdMveFSa4FkGUxRnhXeaUQ=",
+        "owner": "kotfind",
+        "repo": "ilo-sitelen",
+        "rev": "203269427bf7678384e8e165fda6bdef2e292524",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kotfind",
+        "repo": "ilo-sitelen",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
@@ -31,6 +54,24 @@
         "owner": "numtide",
         "repo": "flake-utils",
         "rev": "4022d587cbbfd70fe950c1e2083a02621806a725",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_2": {
+      "inputs": {
+        "systems": "systems_2"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
         "type": "github"
       },
       "original": {
@@ -56,6 +97,29 @@
       "original": {
         "owner": "nix-community",
         "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "nasin-nanpa": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1755635907,
+        "narHash": "sha256-GRjKcopEKoyvwW4jRYo5P/OTRkAcjkPGMuC0+YE4QNc=",
+        "owner": "kotfind",
+        "repo": "nasin-nanpa",
+        "rev": "4ecb826670f3508bd9152651b0be964492816d75",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kotfind",
+        "repo": "nasin-nanpa",
         "type": "github"
       }
     },
@@ -141,7 +205,10 @@
     "root": {
       "inputs": {
         "codeium": "codeium",
+        "fcitx5-ilo-sitelen": "fcitx5-ilo-sitelen",
+        "flake-utils": "flake-utils_2",
         "home-manager": "home-manager",
+        "nasin-nanpa": "nasin-nanpa",
         "nixCats": "nixCats",
         "nixpkgs": "nixpkgs",
         "nvim-spl-en": "nvim-spl-en",
@@ -172,6 +239,21 @@
       }
     },
     "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_2": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",

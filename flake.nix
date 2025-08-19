@@ -13,6 +13,7 @@
   inputs = {
     # -------------------- General --------------------
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -22,6 +23,20 @@
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # -------------------- Toki Pona --------------------
+
+    fcitx5-ilo-sitelen = {
+      url = "github:kotfind/ilo-sitelen";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+
+    nasin-nanpa = {
+      url = "github:kotfind/nasin-nanpa";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
 
     # -------------------- NeoVim --------------------

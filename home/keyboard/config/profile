@@ -20,7 +20,7 @@ Layout=
 
 [Groups/1]
 # Group Name
-Name=Japanese
+Name=Other
 # Layout
 Default Layout=us
 # Default Input Method
@@ -32,6 +32,13 @@ Name=anthy
 # Layout
 Layout=
 
+[Groups/1/Items/1]
+# Name
+Name=ilo-sitelen
+# Layout
+Layout=
+
 [GroupOrder]
 0=European
-1=Japanese
+1=Other
+
