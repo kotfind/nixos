@@ -29,6 +29,7 @@ in {
     usbutils
     poppler-utils # for pdftotext
     python3
+    xh
 
     wineWowPackages.stable # TODO: move to other file?
   ];
