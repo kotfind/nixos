@@ -3,23 +3,26 @@
   pkgs,
   lib,
   ...
-}: {
+}: let
+  inherit (config.cfgLib) enableFor hosts;
+  inherit (lib) getExe;
+in {
   programs = {
-    gallery-dl = (with config.cfgLib; enableFor hosts.pc.users.kotfind) {
+    gallery-dl = enableFor hosts.pc.users.kotfind {
       enable = true;
     };
 
-    yt-dlp = (with config.cfgLib; enableFor hosts.pc.users.kotfind) {
+    yt-dlp = enableFor hosts.pc.users.kotfind {
       enable = true;
     };
 
-    fish.shellAliases = (with config.cfgLib; enableFor hosts.pc.users.kotfind) {
-      gdl = lib.getExe pkgs.gallery-dl;
-      ydl = lib.getExe pkgs.yt-dlp;
-    };
+    fish.shellAliases = enableFor hosts.pc.users.kotfind (with pkgs; {
+      gdl = getExe gallery-dl;
+      ydl = getExe yt-dlp;
+    });
   };
 
-  home.packages = (with config.cfgLib; enableFor hosts.pc.users.kotfind) (with pkgs; [
+  home.packages = enableFor hosts.pc.users.kotfind (with pkgs; [
     gdown
   ]);
 }

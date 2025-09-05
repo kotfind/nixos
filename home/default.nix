@@ -4,6 +4,7 @@ in {
   imports = [
     ./alacritty
     ./backup.nix
+    ./beet.nix
     ./cli-utils.nix
     ./downloaders.nix
     ./firefox.nix
