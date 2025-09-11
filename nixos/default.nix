@@ -12,6 +12,7 @@
     ./other.nix
     ./services.nix
     ./ssh.nix
+    ./sunshine.nix
     ./users.nix
     ./virtualization.nix
     ./xorg.nix

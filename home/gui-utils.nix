@@ -27,6 +27,8 @@ in {
         inkscape
         gimp
         localsend
+        zoom-us
+        moonlight-qt
 
         # NOTE: current version from unstable is broken
         # See
@@ -37,8 +39,6 @@ in {
         #     nix run github:nixos/nixpkgs/nixos-24.05#openshot-qt
         #
         # openshot-qt
-
-        zoom-us
       ])
 
       (enableFor hosts.pc.users.kotfind [
