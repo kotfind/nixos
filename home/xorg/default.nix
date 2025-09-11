@@ -5,6 +5,9 @@
   ...
 }: let
   autostartService = import ./autostart-service.nix {inherit lib;};
+
+  inherit (config.cfgLib) matchFor enableFor users hosts;
+  inherit (lib) getExe getExe';
 in {
   imports = [
     ./bspwm.nix
@@ -12,30 +15,23 @@ in {
     ./lemonbar.nix
   ];
 
-  xsession = (with config.cfgLib; enableFor users.kotfind) {
-    enable = true;
-  };
+  xsession.enable = matchFor users.kotfind;
 
-  systemd.user.services.polkit =
-    (with config.cfgLib; enableFor users.kotfind)
-    (autostartService {
-      cmd = "${pkgs.lxqt.lxqt-policykit}/bin/lxqt-policykit-agent";
-    });
+  systemd.user.services.polkit = enableFor users.kotfind (autostartService {
+    cmd = getExe' pkgs.lxqt.lxqt-policykit "lxqt-policykit-agent";
+  });
 
   # install networkmanagerapplet for all hosts, but autostart in on the laptop only
-  systemd.user.services.network-manager-applet =
-    (with config.cfgLib; enableFor hosts.laptop.users.kotfind)
-    (autostartService {
-      cmd = lib.getExe pkgs.networkmanagerapplet;
-    });
+  systemd.user.services.network-manager-applet = enableFor hosts.laptop.users.kotfind (autostartService {
+    cmd = getExe pkgs.networkmanagerapplet;
+  });
 
-  home.packages = with pkgs;
-    (with config.cfgLib; enableFor users.kotfind) [
-      networkmanagerapplet
-    ];
+  home.packages = enableFor users.kotfind (with pkgs; [
+    networkmanagerapplet
+  ]);
 
-  services.batsignal = (with config.cfgLib; enableFor hosts.laptop.users.kotfind) {
-    enable = true;
+  services.batsignal = {
+    enable = matchFor hosts.laptop.users.kotfind;
     extraArgs = [
       "-f"
       "99"
@@ -49,25 +45,25 @@ in {
     ];
   };
 
-  services.gpg-agent = (with config.cfgLib; enableFor users.kotfind) {
-    enable = true;
+  services.gpg-agent = {
+    enable = matchFor users.kotfind;
     enableFishIntegration = true;
     enableBashIntegration = true;
     pinentry.package = pkgs.pinentry-rofi;
   };
 
-  services.screen-locker = (with config.cfgLib; enableFor users.kotfind) {
-    enable = true;
-    lockCmd = "${pkgs.xlockmore}/bin/xlock -echokeys";
+  services.screen-locker = {
+    enable = matchFor users.kotfind;
+    lockCmd = "${getExe' pkgs.xlockmore "xlock"} -echokeys";
   };
 
-  home.sessionVariables = (with config.cfgLib; enableFor users.kotfind) {
+  home.sessionVariables = enableFor users.kotfind {
     # for some java gui apps to work:
     _JAVA_AWT_WM_NONREPARENTING = 1;
   };
 
   systemd.user.tmpfiles.rules =
-    (with config.cfgLib; enableFor users.kotfind)
+    enableFor users.kotfind
     (let
       user = config.cfgLib.user.name;
       home = config.home.homeDirectory;

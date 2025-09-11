@@ -13,6 +13,7 @@ in {
     ./git.nix
     ./gui-utils.nix
     ./keyboard
+    ./mail.nix
     ./mime.nix
     ./nvim
     ./pass.nix
