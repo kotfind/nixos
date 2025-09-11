@@ -1,9 +1,10 @@
 # This value is passed to outputs.nixosConfiguration.default
 {
+  system,
   nixpkgs,
   home-manager,
   sops-nix,
-  system,
+  nix-index-database,
   ...
 } @ inputs: let
   specialArgs = {
@@ -53,6 +54,7 @@ in
     modules = [
       ./nixos
       ./profiles.nix
+      nix-index-database.nixosModules.nix-index
       homeMod
       sops-nix.nixosModules.sops
 
