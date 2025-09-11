@@ -2,8 +2,10 @@
   config,
   lib,
   ...
-}: {
-  users.users."${config.cfgLib.users.kotfind.name}" = {
+}: let
+  inherit (config.cfgLib) enableFor users hosts;
+in {
+  users.users."${users.kotfind.name}" = {
     isNormalUser = true;
     linger = true;
     extraGroups = lib.mkMerge [
@@ -12,10 +14,10 @@
         "networkmanager"
         "pipewire"
         "docker"
+        "dialout" # for arduino
       ]
-      ((with config.cfgLib; enableFor hosts.laptop) [
-        # For light commands
-        "video"
+      (enableFor hosts.laptop [
+        "video" # for light command
       ])
     ];
     openssh.authorizedKeys.keys = [
