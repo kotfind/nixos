@@ -152,6 +152,7 @@ local lsps = {
     ccls = { on_attach = on_attach },
     dotls = { on_attach = on_attach },
     kotlin_language_server = { on_attach = on_attach },
+    arduino_language_server = { on_attach = on_attach },
 }
 
 ---@return nil

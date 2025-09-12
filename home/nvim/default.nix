@@ -135,6 +135,8 @@
         };
 
         kotlin_language_server.rel = "kotlin-language-server";
+
+        arduino_language_server.rel = "arduino-language-server";
       };
 
       formatters = {
