@@ -13,6 +13,7 @@ in {
     ./bspwm.nix
     ./sxhkd.nix
     ./lemonbar.nix
+    ./dunst.nix
   ];
 
   xsession.enable = matchFor users.kotfind;

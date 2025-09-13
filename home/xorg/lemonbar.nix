@@ -6,22 +6,26 @@
 }: let
   autostartService = import ./autostart-service.nix {inherit lib;};
 
-  date = "${pkgs.toybox}/bin/date";
-  echo = "${pkgs.toybox}/bin/echo";
-  top = "${pkgs.toybox}/bin/top";
-  grep = "${pkgs.toybox}/bin/grep";
-  printf = "${pkgs.toybox}/bin/printf";
-  sleep = "${pkgs.toybox}/bin/sleep";
-  free = "${pkgs.toybox}/bin/free";
-  sed = "${pkgs.toybox}/bin/sed";
-  cat = "${pkgs.toybox}/bin/cat";
-  bspc = "${pkgs.bspwm}/bin/bspc";
-  pactl = "${pkgs.pulseaudio}/bin/pactl";
-  xtitle = lib.getExe pkgs.xtitle;
-  awk = lib.getExe pkgs.gawk;
-  xrandr = lib.getExe pkgs.xorg.xrandr;
-  trayer = lib.getExe pkgs.trayer;
-  lemonbar = lib.getExe pkgs.lemonbar-xft;
+  inherit (lib) getExe getExe';
+  inherit (config.cfgLib) enableFor users;
+
+  date = getExe' pkgs.toybox "date";
+  echo = getExe' pkgs.toybox "echo";
+  top = getExe' pkgs.toybox "top";
+  grep = getExe' pkgs.toybox "grep";
+  printf = getExe' pkgs.toybox "printf";
+  sleep = getExe' pkgs.toybox "sleep";
+  free = getExe' pkgs.toybox "free";
+  sed = getExe' pkgs.toybox "sed";
+  cat = getExe' pkgs.toybox "cat";
+
+  bspc = getExe' pkgs.bspwm "bspc";
+  pactl = getExe' pkgs.pulseaudio "pactl";
+  xtitle = getExe pkgs.xtitle;
+  awk = getExe pkgs.gawk;
+  xrandr = getExe pkgs.xorg.xrandr;
+  trayer = getExe pkgs.trayer;
+  lemonbar = getExe pkgs.lemonbar-xft;
   bash = pkgs.runtimeShell;
 
   lemonbarScript = pkgs.writeShellScriptBin "lemonbar-script" ''
@@ -206,9 +210,7 @@
     run
   '';
 in {
-  systemd.user.services.lemonbar =
-    (with config.cfgLib; enableFor users.kotfind)
-    (autostartService {
-      cmd = lib.getExe lemonbarScript;
-    });
+  systemd.user.services.lemonbar = enableFor users.kotfind (autostartService {
+    cmd = lib.getExe lemonbarScript;
+  });
 }
