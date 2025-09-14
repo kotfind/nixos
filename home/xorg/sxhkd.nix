@@ -6,7 +6,17 @@
 }: let
   inherit (lib) getExe getExe' escapeShellArgs;
   inherit (pkgs) writeShellScriptBin;
-  inherit (config.cfgLib) enableFor matchFor hosts users;
+  inherit (config.cfgLib) matchFor hosts users;
+
+  focusOrOpenFirefox = getExe (import ./scripts/focus-or-open-firefox.nix {inherit pkgs;});
+  bspcResizeNode = getExe (import ./scripts/bspc-resize-node.nix {inherit pkgs;});
+
+  showVolumeNotify = getExe (import ./scripts/show-volume-notify.nix {inherit pkgs;});
+  showMusicNotify = getExe (import ./scripts/show-music-notify.nix {inherit pkgs;});
+  showBrightnessNotify =
+    if matchFor hosts.laptop
+    then (getExe (import ./scripts/show-brightness-notify.nix {inherit pkgs config;}))
+    else "";
 
   bspc = getExe' pkgs.bspwm "bspc";
   alacritty = getExe pkgs.alacritty;
@@ -18,21 +28,43 @@
   loginctl = getExe' pkgs.systemd "loginctl";
   rofi-pass = getExe pkgs.rofi-pass;
   pkill = getExe' pkgs.toybox "pkill";
-  xprop = getExe pkgs.xorg.xprop;
-  sed = getExe pkgs.gnused;
-  firefox = getExe pkgs.firefox;
-  true_ = getExe' pkgs.toybox "true";
-  echo = getExe' pkgs.toybox "echo";
-  grep = getExe pkgs.gnugrep;
+  scrot = getExe pkgs.scrot;
 
   scrotWithArgs = args:
-    escapeShellArgs
-    ([(getExe pkgs.scrot)]
+    escapeShellArgs (
+      [scrot]
       ++ args
-      ++ ["/tmp/screenshots/%s.png"]);
+      ++ ["/tmp/screenshots/%s.png"]
+    );
 
-  keybindings =
-    {
+  muteVolume = writeShellScriptBin "mute-volume" ''
+    ${pactl} set-sink-mute @DEFAULT_SINK@ toggle
+    ${showVolumeNotify}
+  '';
+
+  changeVolume = writeShellScriptBin "change-volume" ''
+    ${pactl} set-sink-volume @DEFAULT_SINK@ ''${1}5%
+    ${showVolumeNotify}
+  '';
+
+  changeBrightness = writeShellScriptBin "change-brightness" ''
+    ${light} $1 5
+    ${showBrightnessNotify}
+  '';
+
+  doMediaAction = writeShellScriptBin "do-media-action" ''
+    ${playerctl} $1
+    ${showMusicNotify}
+  '';
+
+  restartBspwm = writeShellScriptBin "restart-bspwm" ''
+    ${bspc} wm -r
+    ${pkill} -l USR1 -x sxhkd
+  '';
+in {
+  services.sxhkd = {
+    enable = matchFor users.kotfind;
+    keybindings = {
       # -------------------- Launch --------------------
 
       # launch terminal
@@ -40,26 +72,19 @@
 
       # launch app
       "super + @space" = "${rofi} -show drun";
-    }
-    // {
+
       # -------------------- Quit / reload --------------------
 
       # quit bspwm
       "super + alt + q" = "${bspc} quit";
 
       # restart bspwm (and sxhkd)
-      "super + alt + r" = getExe (
-        writeShellScriptBin "restart-bspwm" ''
-          ${bspc} wm -r
-          ${pkill} -l USR1 -x sxhkd
-        ''
-      );
+      "super + alt + r" = "${getExe restartBspwm}";
 
       # close/ kill a window
       "super + w" = "${bspc} node -c";
       "super + shift + w" = "${bspc} node -k";
-    }
-    // {
+
       # -------------------- Layout --------------------
 
       # switch layout
@@ -79,8 +104,7 @@
 
       # rotate parent
       "super + r" = "${bspc} node @parent -R 90";
-    }
-    // {
+
       # -------------------- Move / Focus / Resize Windows --------------------
 
       # focus window in direction
@@ -99,20 +123,8 @@
       "super + {Left,Down,Up,Right}" = "${bspc} node -v {-20 0,0 20,0 -20,20 0}";
 
       # smart resize node
-      "super + alt + {h, j, k, l}" = let
-        script = writeShellScriptBin "bspc-resize-node" ''
-          dir="$1"
-          step=20
-          case $dir in
-              'left')   { bspc node -z left   -$step 0 || bspc node -z right  -$step 0; } ;;
-              'top')    { bspc node -z top    0 +$step || bspc node -z bottom 0 +$step; } ;;
-              'bottom') { bspc node -z bottom 0 -$step || bspc node -z top    0 -$step; } ;;
-              'right')  { bspc node -z right  +$step 0 || bspc node -z left   +$step 0; } ;;
-          esac
-        '';
-      in "${getExe script} {'left','top','bottom','right'}";
-    }
-    // {
+      "super + alt + {h, j, k, l}" = "${bspcResizeNode} {'left','top','bottom','right'}";
+
       # -------------------- Preselection --------------------
 
       # preselect direction
@@ -126,8 +138,7 @@
 
       # send (move) node to preselected area
       "super + ctrl + Return" = "${bspc} node -n 'last.!automatic.local'";
-    }
-    // {
+
       # -------------------- Focus / Move Desktops --------------------
 
       # focus next desktop (on the same monitor)
@@ -144,8 +155,7 @@
 
       # send window to another monitor
       "super + shift + {comma,period}" = "${bspc} node -m {prev,next}";
-    }
-    // {
+
       # -------------------- Special Keys --------------------
 
       # screenshot whole screen / selected area / current window
@@ -154,73 +164,30 @@
       "ctrl + Print" = scrotWithArgs ["-f" "-u"];
 
       # volume mute / up / down
-      "XF86AudioMute" = "${pactl} set-sink-mute @DEFAULT_SINK@ toggle";
-      "{XF86AudioRaiseVolume,XF86AudioLowerVolume}" = "${pactl} set-sink-volume @DEFAULT_SINK@ {+,-}5%";
+      "XF86AudioMute" = "${getExe muteVolume}";
+      "{XF86AudioRaiseVolume,XF86AudioLowerVolume}" = "${getExe changeVolume} {+,-}";
 
       # brightness up / down
       "XF86MonBrightness{Up,Down}" =
-        enableFor
-        hosts.laptop
-        "${light} {-A,-U} 5";
+        if matchFor hosts.laptop
+        then "${getExe changeBrightness} {-A,-U}"
+        else "";
 
       # media keys
-      "XF86{Play,Stop,Pause,Next,Prev}" = "${playerctl} {play-pause,play-pause,play-pause,next,previous}";
+      "XF86{Play,Stop,Pause,Next,Prev}" = "${getExe doMediaAction} {play-pause,stop,pause,next,previous}";
 
       # lock / suspend / hibernate
       "super + z" = "${loginctl} lock-session";
       "super + shift + z" = "${systemctl} suspend -i";
       "super + shift + ctrl + z" = "${systemctl} hibernate -i";
-    }
-    // {
+
       # -------------------- Miscellaneous --------------------
 
       # run/ focus firefox firefox
-      "super + {_, shift} + f" = let
-        script = writeShellScriptBin "focus-or-open-firefox" ''
-          set -euo pipefail
-          set -x
-
-          case "$1" in
-            'normal')
-              wm_name_suffix='Mozilla Firefox'
-              firefox_flag='--new-window'
-              ;;
-
-            'private')
-              wm_name_suffix='Mozilla Firefox Private Browsing'
-              firefox_flag='--private-window'
-              ;;
-
-            *)
-              echo "unknown window type '$1'" 1>&2
-              exit 1
-              ;;
-          esac
-
-          ids=($(${bspc} query -N -n '.local.window' | ${true_}))
-          for id in "''${ids[@]}"; do
-            name="$(
-              ${xprop} -id "$id" -notype WM_NAME | \
-              ${sed} 's/^WM_NAME = "\(.*\)"$/\1/' | \
-              ${sed} 's/\"/"/'
-            )"
-
-            if ${echo} "$name" | ${grep} -q "$wm_name_suffix$"; then
-              ${bspc} node -f "$id"
-              exit 0
-            fi
-          done
-
-          ${firefox} "$firefox_flag"
-        '';
-      in "${getExe script} {normal,private}";
+      "super + {_, shift} + f" = "${focusOrOpenFirefox} {normal,private}";
 
       # password
       "super + e" = rofi-pass;
     };
-in {
-  services.sxhkd = {
-    enable = matchFor users.kotfind;
-    inherit keybindings;
   };
 }

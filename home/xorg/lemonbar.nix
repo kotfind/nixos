@@ -7,7 +7,7 @@
   autostartService = import ./autostart-service.nix {inherit lib;};
 
   inherit (lib) getExe getExe';
-  inherit (config.cfgLib) enableFor users;
+  inherit (config.cfgLib) enableFor matchFor users hosts;
 
   date = getExe' pkgs.toybox "date";
   echo = getExe' pkgs.toybox "echo";
@@ -72,22 +72,14 @@
 
     battery() {
     ${
-      if (with config.cfgLib; matchFor hosts.laptop)
-      then
-        /*
-        bash
-        */
-        ''
-          capacity="$(${cat} /sys/class/power_supply/BAT0/capacity)"
-          printf "B: %2d%%" "$capacity"
-        ''
-      else
-        /*
-        bash
-        */
-        ''
-          ${echo} -en "NOBAT"
-        ''
+      if (matchFor hosts.laptop)
+      then ''
+        capacity="$(${cat} /sys/class/power_supply/BAT0/capacity)"
+        printf "B: %2d%%" "$capacity"
+      ''
+      else ''
+        ${echo} -en "NOBAT"
+      ''
     }
     }
 

@@ -11,10 +11,13 @@ in {
       # -------------------- General --------------------
       global = {
         # -------------------- General.Layout --------------------
-        width = 300;
+        width = 350;
 
         padding = 5;
         horizontal_padding = 5;
+
+        progress_bar_min_width = 10000;
+        progress_bar_max_width = 10000;
 
         # -------------------- General.Positioning --------------------
         origin = "bottom-right";
@@ -25,11 +28,16 @@ in {
         # -------------------- General.Actions --------------------
         mouse_left_click = "do_action,close_current";
         mouse_middle_click = "close_all";
-        mouse_middle_right = "close_current";
+        mouse_right_click = "close_current";
 
         # -------------------- General.Looks --------------------
         background = "#000000";
         foreground = "#ffffff";
+
+        min_icon_size = 80;
+        max_icon_size = 80;
+
+        line_height = 1;
 
         font = "DejaVu Sans";
 
@@ -39,31 +47,77 @@ in {
         enable_posix_regex = true;
       };
 
-      # -------------------- Urgencies --------------------
-      urgency_critical = {
+      # -------------------- Rules --------------------
+
+      # NOTE: Some of the rules are named in `{number}-{name}` style.
+      # NOTE: This enforces their order in resulting config file.
+
+      # -------------------- Rules.Urgencies --------------------
+      "00-urgency-critical" = {
+        msg_urgency = "critical";
+
         fullscreen = "show";
         frame_color = "#ff0000";
 
-        timeout = 0;
+        timeout = "0s";
       };
 
-      urgency_normal = {
+      "00-urgency-normal" = {
+        msg_urgency = "normal";
+
         fullscreen = "delay";
         frame_color = "#dddddd";
       };
 
-      urgency_low = {
+      "00-urgency-low" = {
+        msg_urgency = "low";
+
         fullscreen = "delay";
         frame_color = "#999999";
       };
 
-      # -------------------- Custom Rules --------------------
+      # -------------------- Rules.Custom --------------------
       ignore-fcitx5 = {
-        appname = "fcitx5";
+        appname = "^Input Method$";
 
         skip_display = true;
         history_ignore = true;
       };
+
+      "volume-set-icon" = {
+        appname = "^volume$";
+
+        new_icon = "${./icons/volume.svg}";
+        min_icon_size = 50;
+        max_icon_size = 50;
+
+        set_stack_tag = 0;
+        timeout = "1s";
+      };
+
+      "volume-muted-set-icon" = {
+        appname = "^volume-muted$";
+
+        new_icon = "${./icons/volume-muted.svg}";
+        min_icon_size = 50;
+        max_icon_size = 50;
+
+        set_stack_tag = 0;
+        timeout = "1s";
+      };
+
+      brightnes-set-icon = {
+        appname = "^brightness$";
+
+        new_icon = "${./icons/brightness.svg}";
+        min_icon_size = 50;
+        max_icon_size = 50;
+
+        set_stack_tag = 0;
+        timeout = "1s";
+      };
+
+      # TODO: batsignal icons
     };
   };
 
