@@ -13,7 +13,6 @@ pkgs.writeShellApplication {
       notify-send \
           -u 'critical' \
           -a 'volume-muted' \
-          -h "int:value:0" \
           'Volume [MUTED]'
     else
       notify-send \

@@ -1,9 +1,18 @@
 {
   pkgs,
   config,
+  lib,
   ...
 }: let
   inherit (config.cfgLib) matchFor users;
+  inherit (lib) getExe getExe';
+  inherit (pkgs) writeShellScriptBin;
+
+  xkbbell = getExe' pkgs.xorg.xkbutils "xkbbell";
+
+  just-beep = writeShellScriptBin "just-beep" ''
+    ${xkbbell}
+  '';
 in {
   services.dunst = {
     enable = matchFor users.kotfind;
@@ -77,14 +86,14 @@ in {
       };
 
       # -------------------- Rules.Custom --------------------
-      ignore-fcitx5 = {
+      fcitx5 = {
         appname = "^Input Method$";
 
         skip_display = true;
         history_ignore = true;
       };
 
-      "volume-set-icon" = {
+      volume = {
         appname = "^volume$";
 
         new_icon = "${./icons/volume.svg}";
@@ -95,7 +104,7 @@ in {
         timeout = "1s";
       };
 
-      "volume-muted-set-icon" = {
+      volume-muted = {
         appname = "^volume-muted$";
 
         new_icon = "${./icons/volume-muted.svg}";
@@ -106,7 +115,7 @@ in {
         timeout = "1s";
       };
 
-      brightnes-set-icon = {
+      brightnes = {
         appname = "^brightness$";
 
         new_icon = "${./icons/brightness.svg}";
@@ -115,6 +124,18 @@ in {
 
         set_stack_tag = 0;
         timeout = "1s";
+      };
+
+      fish-command-executed = {
+        appname = "^fish-command-executed$";
+
+        new_icon = "${./icons/cmd.svg}";
+        min_icon_size = 50;
+        max_icon_size = 50;
+
+        script = "${getExe just-beep}";
+
+        timeout = "5s";
       };
 
       # TODO: batsignal icons

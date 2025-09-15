@@ -30,6 +30,7 @@ in {
     poppler-utils # for pdftotext
     python3
     xh
+    ueberzugpp # for yazi image preview
 
     wineWowPackages.stable # TODO: move to other file?
   ];
@@ -50,5 +51,12 @@ in {
   programs.fish.shellAliases = {
     "j" = getExe pkgs.just;
     "unrar" = getExe pkgs.unrar-free;
+  };
+
+  programs.eza.enable = true;
+
+  programs.yazi = {
+    enable = true;
+    enableFishIntegration = true;
   };
 }

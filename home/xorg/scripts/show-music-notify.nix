@@ -19,6 +19,7 @@ pkgs.writeShellApplication {
 
     notify-send \
       -u 'critical' \
+      -a 'music-track' \
       -h "string:image-path:$image_path" \
       "Track$paused_msg" \
       "$body"
