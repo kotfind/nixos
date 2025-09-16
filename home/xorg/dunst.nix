@@ -13,6 +13,8 @@
   just-beep = writeShellScriptBin "just-beep" ''
     ${xkbbell}
   '';
+
+  rofi = getExe pkgs.rofi;
 in {
   services.dunst = {
     enable = matchFor users.kotfind;
@@ -54,6 +56,8 @@ in {
         notification_limit = 7;
 
         enable_posix_regex = true;
+
+        dmenu = "${rofi} -dmenu -p dunst";
       };
 
       # -------------------- Rules --------------------
