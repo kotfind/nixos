@@ -27,6 +27,8 @@ in {
         padding = 5;
         horizontal_padding = 5;
 
+        frame_width = 2;
+
         progress_bar_min_width = 10000;
         progress_bar_max_width = 10000;
 
@@ -45,12 +47,12 @@ in {
         background = "#000000";
         foreground = "#ffffff";
 
-        min_icon_size = 80;
-        max_icon_size = 80;
+        min_icon_size = 64;
+        max_icon_size = 64;
+
+        font = "DejaVu Sans 11";
 
         line_height = 1;
-
-        font = "DejaVu Sans";
 
         # -------------------- General.Other --------------------
         notification_limit = 7;
