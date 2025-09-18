@@ -61,5 +61,8 @@ in {
     ''
       # manually load an --on-event function
       source ~/.config/fish/functions/notify-on-finish.fish
+
+      # completion for start
+      complete -c start -xa "(__fish_complete_subcommand)"
     '';
 }
