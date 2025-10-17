@@ -36,7 +36,14 @@ in {
     _notify-on-finish_notify =
       # fish
       ''
-        set -l focused_window_pid (${xdotool} getwindowfocus getwindowpid)
+        set -l focused_window_pid "$(
+          ${xdotool} getwindowfocus getwindowpid 2> /dev/null
+        )"
+
+        if [ $status -ne 0 ]
+          return
+        end
+
         if [ -z "$focused_window_pid" ]
           return
         end
