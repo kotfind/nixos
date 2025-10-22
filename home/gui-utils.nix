@@ -29,6 +29,8 @@ in {
         localsend
         zoom-us
         moonlight-qt
+        loupe
+        kdePackages.gwenview
 
         # NOTE: current version from unstable is broken
         # See
