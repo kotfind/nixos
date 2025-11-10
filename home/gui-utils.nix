@@ -31,6 +31,7 @@ in {
         moonlight-qt
         loupe
         kdePackages.gwenview
+        flacon # cutting flac's
 
         # NOTE: current version from unstable is broken
         # See
