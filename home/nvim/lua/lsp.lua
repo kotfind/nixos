@@ -153,6 +153,7 @@ local lsps = {
     dotls = { on_attach = on_attach },
     kotlin_language_server = { on_attach = on_attach },
     arduino_language_server = { on_attach = on_attach },
+    jinja_lsp = { on_attach = on_attach },
 }
 
 ---@return nil

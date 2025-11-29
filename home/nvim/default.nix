@@ -137,6 +137,11 @@
         kotlin_language_server.rel = "kotlin-language-server";
 
         arduino_language_server.rel = "arduino-language-server";
+
+        jinja_lsp = {
+          rel = "jinja-lsp";
+          abs = getExe pkgs.jinja-lsp;
+        };
       };
 
       formatters = {
@@ -155,12 +160,18 @@
           abs = getExe pkgs.alejandra;
         };
 
-        rustfmt = {
-          rel = "rustfmt";
+        rustfmt.rel = "rustfmt";
+
+        leptosfmt.rel = "leptosfmt";
+
+        black = {
+          rel = "black";
+          abs = getExe pkgs.black;
         };
 
-        leptosfmt = {
-          rel = "leptosfmt";
+        djlint = {
+          rel = "djlint";
+          abs = getExe pkgs.djlint;
         };
       };
     };

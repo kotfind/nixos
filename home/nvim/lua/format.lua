@@ -8,6 +8,8 @@ function M.setup()
             nix = { 'alejandra' },
             typst = { 'typstyle' },
             rust = { 'leptosfmt', 'rustfmt' },
+            python = { 'black' },
+            jinja = { 'djlint' },
         },
         formatters = {
             stylua = {
