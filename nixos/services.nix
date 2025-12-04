@@ -30,26 +30,5 @@
         ExecStop = "${cmd} down";
       };
     };
-
-    rust-tagserver = (with config.cfgLib; enableFor hosts.pc) {
-      description = "Rust Tagserver";
-
-      enable = true;
-
-      wantedBy = ["multi-user.target"];
-      after = ["network.target"];
-
-      serviceConfig = {
-        User = "kotfind";
-
-        Type = "simple";
-
-        WorkingDirectory = "/hdd/_data/rust_tagserver/";
-
-        ExecStart = let
-          app = "/home/kotfind/prog/pet/rust-tagserver/target/back-target/release/back";
-        in "${app} run --port 8080";
-      };
-    };
   };
 }

@@ -5,6 +5,7 @@
   ...
 }: let
   inherit (config.cfgLib) enableFor matchFor users;
+  inherit (lib) getExe;
 
   autostartService = import ./xorg/autostart-service.nix {inherit lib;};
 in {
@@ -27,6 +28,6 @@ in {
   ]);
 
   systemd.user.services.birdtray = enableFor users.kotfind (autostartService {
-    cmd = pkgs.birdtray;
+    cmd = getExe pkgs.birdtray;
   });
 }
