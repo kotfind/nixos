@@ -10,15 +10,21 @@ in {
   programs.git = {
     enable = matchFor users.kotfind;
 
-    userName = users.kotfind.name;
+    settings = {
+      user = with users.kotfind; {
+        inherit name;
+        inherit (data) email;
+      };
 
-    userEmail = users.kotfind.data.email;
-
-    extraConfig = {
-      core.quotepath = false;
+      extraConfig = {
+        core.quotepath = false;
+      };
     };
+  };
 
-    difftastic.enable = true;
+  programs.difftastic = {
+    enable = true;
+    git.enable = true;
   };
 
   home.packages =

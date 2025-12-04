@@ -45,10 +45,6 @@ in {
     androidGroups
   );
 
-  services.udev.packages = with pkgs; [
-    android-udev-rules
-  ];
-
   services.udev.extraRules =
     lib.strings.concatMapStringsSep
     "\n"
