@@ -154,6 +154,7 @@ local lsps = {
     kotlin_language_server = { on_attach = on_attach },
     arduino_language_server = { on_attach = on_attach },
     jinja_lsp = { on_attach = on_attach },
+    elmls = { on_attach = on_attach },
 }
 
 ---@return nil

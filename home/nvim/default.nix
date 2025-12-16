@@ -142,6 +142,8 @@
           rel = "jinja-lsp";
           abs = getExe pkgs.jinja-lsp;
         };
+
+        elmls.rel = "elm-language-server";
       };
 
       formatters = {
