@@ -31,6 +31,7 @@ in {
     python3
     xh
     ueberzugpp # for yazi image preview
+    sshpass
 
     wineWowPackages.stable # TODO: move to other file?
   ];
