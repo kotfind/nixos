@@ -10,6 +10,7 @@
     ./networking.nix
     ./nix.nix
     ./other.nix
+    ./rpi.nix
     ./services.nix
     ./ssh.nix
     ./sunshine.nix

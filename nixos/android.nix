@@ -1,10 +1,13 @@
 {
-  pkgs,
   config,
   lib,
   ...
 }: let
-  users = with config.cfgLib.users; [
+  inherit (builtins) listToAttrs;
+  inherit (lib.strings) concatMapStringsSep;
+  inherit (config) cfgLib;
+
+  users = with cfgLib.users; [
     kotfind
   ];
 
@@ -27,7 +30,7 @@
     "kvm"
   ];
 in {
-  users.users = builtins.listToAttrs (builtins.map
+  users.users = listToAttrs (map
     (user: {
       name = user.name;
       value = {
@@ -36,8 +39,8 @@ in {
     })
     users);
 
-  users.groups = builtins.listToAttrs (
-    builtins.map
+  users.groups = listToAttrs (
+    map
     (group: {
       name = group;
       value = {};
@@ -46,7 +49,7 @@ in {
   );
 
   services.udev.extraRules =
-    lib.strings.concatMapStringsSep
+    concatMapStringsSep
     "\n"
     ({
       idVendor,

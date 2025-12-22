@@ -14,7 +14,7 @@ in {
         "networkmanager"
         "pipewire"
         "docker"
-        "dialout" # for arduino
+        "dialout" # for arduino & rpi pico
       ]
       (enableFor hosts.laptop [
         "video" # for light command
