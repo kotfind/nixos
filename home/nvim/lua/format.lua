@@ -10,6 +10,7 @@ function M.setup()
             rust = { 'leptosfmt', 'rustfmt' },
             python = { 'black' },
             jinja = { 'djlint' },
+            toml = { 'tombi' },
         },
         formatters = {
             stylua = {

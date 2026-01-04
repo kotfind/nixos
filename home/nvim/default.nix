@@ -144,6 +144,11 @@
         };
 
         elmls.rel = "elm-language-server";
+
+        tombi = {
+          rel = "tombi";
+          abs = getExe pkgs.tombi;
+        };
       };
 
       formatters = {
@@ -174,6 +179,11 @@
         djlint = {
           rel = "djlint";
           abs = getExe pkgs.djlint;
+        };
+
+        tombi = {
+          rel = "tombi";
+          abs = getExe pkgs.tombi;
         };
       };
     };
