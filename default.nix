@@ -16,6 +16,7 @@
       zoom-us
       codeium
       steam-unwrapped
+      hplipWithPlugin
     ];
 
   homeMod = {
