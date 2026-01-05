@@ -1,9 +1,12 @@
 {
   inputs,
   system,
+  pkgs,
   ...
 }: let
   inherit (inputs) nixCats;
+
+  toToml = (pkgs.formats.toml {}).generate;
 
   masterPkgName = "nixCats";
 
@@ -213,5 +216,12 @@ in {
     "${spellPath}/ru.utf-8.sug".source = inputs.nvim-sug-ru;
     "${spellPath}/en.utf-8.spl".source = inputs.nvim-spl-en;
     "${spellPath}/en.utf-8.sug".source = inputs.nvim-sug-en;
+  };
+
+  home.file.".config/tombi/config.toml".source = toToml "tombi-config.toml" {
+    format.rules = {
+      indent-width = 4;
+      trailing-comment-space-width = 1;
+    };
   };
 }
