@@ -15,6 +15,8 @@ in {
         "pipewire"
         "docker"
         "dialout" # for arduino & rpi pico
+        "scanner"
+        "lp" # printing
       ]
       (enableFor hosts.laptop [
         "video" # for light command

@@ -32,6 +32,7 @@ in {
         loupe
         kdePackages.gwenview
         flacon # cutting flac's
+        simple-scan
 
         # NOTE: current version from unstable is broken
         # See

@@ -12,6 +12,7 @@
     ./other.nix
     ./printing.nix
     ./rpi.nix
+    ./scanning.nix
     ./services.nix
     ./ssh.nix
     ./sunshine.nix
