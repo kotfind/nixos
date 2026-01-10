@@ -33,6 +33,7 @@ in {
         kdePackages.gwenview
         flacon # cutting flac's
         simple-scan
+        librepcb
 
         # NOTE: current version from unstable is broken
         # See
