@@ -34,6 +34,7 @@ in {
         flacon # cutting flac's
         simple-scan
         librepcb
+        webcamoid
 
         # NOTE: current version from unstable is broken
         # See
