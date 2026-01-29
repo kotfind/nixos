@@ -27,8 +27,13 @@ in {
     git.enable = true;
   };
 
+  programs.lazygit = {
+    enable = true;
+    enableFishIntegration = true;
+  };
+
   home.packages =
-    (enableFor users.kotfind)
+    enableFor users.kotfind
     (with pkgs; [
       gh
     ]);
