@@ -7,7 +7,7 @@
     ./android.nix
     ./audio.nix
     ./bluetooth.nix
-    ./networking.nix
+    ./networking
     ./nix.nix
     ./other.nix
     ./printing.nix
