@@ -4,7 +4,9 @@
   pkgs,
   ...
 }: let
+  inherit (config) sops;
   inherit (config.cfgLib) users enableFor matchFor;
+  inherit (config.home) homeDirectory;
   inherit (lib) getExe;
 in {
   programs.git = {
@@ -38,29 +40,25 @@ in {
       gh
     ]);
 
-  sops = let
-    token_secret = "kotfind/gh/oauth_token";
-  in {
-    secrets = (enableFor users.kotfind) {
-      ${token_secret} = {};
+  sops = {
+    secrets = enableFor users.kotfind {
+      "kotfind/gh/oauth_token" = {};
     };
 
     templates.gh_hosts = {
-      content = let
-        oauth_token = "${config.sops.placeholder.${token_secret}}";
-      in ''
+      content = ''
         github.com:
-            users:
-                kotfind:
-                    oauth_token: ${oauth_token}
-            git_protocol: ssh
-            user: kotfind
-            oauth_token: ${oauth_token}
+          users:
+            kotfind:
+              oauth_token: ${sops.placeholder."kotfind/gh/oauth_token"}
+          git_protocol: ssh
+          user: kotfind
+          oauth_token: ${sops.placeholder."kotfind/gh/oauth_token"}
       '';
 
       path =
         enableFor users.kotfind
-        "${config.home.homeDirectory}/.config/gh/hosts.yml";
+        "${homeDirectory}/.config/gh/hosts.yml";
     };
   };
 
