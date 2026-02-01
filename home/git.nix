@@ -59,7 +59,7 @@ in {
       '';
 
       path =
-        (enableFor users.kotfind)
+        enableFor users.kotfind
         "${config.home.homeDirectory}/.config/gh/hosts.yml";
     };
   };

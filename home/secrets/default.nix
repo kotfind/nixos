@@ -8,8 +8,6 @@ in {
   sops = {
     age = {
       sshKeyPaths = [];
-
-      # FIXME: custom user
       keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
     };
 
@@ -17,7 +15,7 @@ in {
   };
 
   home.packages =
-    (enableFor users.kotfind)
+    enableFor users.kotfind
     (with pkgs; [
       sops
       age
