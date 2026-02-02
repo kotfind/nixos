@@ -8,13 +8,12 @@
   inherit (config) sops;
   inherit (lib.attrsets) nameValuePair mapAttrsRecursive mapAttrsToListRecursive;
 
-  mihomoConfig = rec {
+  mihomoConfig = {
     mode = "global";
     secret = ph.secret;
 
-    # FIXME: allow https only
-    external-controller = "localhost:4343";
-    external-controller-tls = external-controller;
+    external-controller = "localhost:0"; # FIXME: disable
+    external-controller-tls = "localhost:4343";
 
     allow-lan = false;
 
