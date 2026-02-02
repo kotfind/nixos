@@ -10,7 +10,7 @@ in {
     ./firefox.nix
     ./fish
     ./fonts.nix
-    ./git.nix
+    ./git
     ./gui-utils.nix
     ./keyboard
     ./mail.nix

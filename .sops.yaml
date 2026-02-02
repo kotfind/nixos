@@ -2,9 +2,17 @@ keys:
   - &key age1aj2l0lkpe4lxuu3l5esv3k74lhrxffg2znzv7gj3ddtqchrdsa3qgzzuy6
 
 creation_rules:
+  # TODO: remove
   - path_regex: .*/secrets/.*\.(?:yaml|yml)
+    key_groups: [{ age: [*key] }]
+
+  - path_regex: ^.*\.enc(?:\..*)?$
     key_groups: [{ age: [*key] }]
 
 stores:
   yaml:
     indent: 2
+  json:
+    indent: 4
+  json_binary:
+    indent: 4

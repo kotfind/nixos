@@ -4,13 +4,15 @@
   ...
 }: let
   inherit (config.cfgLib) enableFor users;
+  inherit (config.home) homeDirectory;
 in {
   sops = {
     age = {
       sshKeyPaths = [];
-      keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+      keyFile = "${homeDirectory}/.config/sops/age/keys.txt";
     };
 
+    # TODO: remove
     defaultSopsFile = ./default.yaml;
   };
 

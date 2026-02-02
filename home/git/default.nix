@@ -8,6 +8,8 @@
   inherit (config.cfgLib) users enableFor matchFor;
   inherit (config.home) homeDirectory;
   inherit (lib) getExe;
+
+  ph = sops.placeholder;
 in {
   programs.git = {
     enable = matchFor users.kotfind;
@@ -42,23 +44,24 @@ in {
 
   sops = {
     secrets = enableFor users.kotfind {
-      "kotfind/gh/oauth_token" = {};
+      gh_oauth_token = {
+        sopsFile = ./gh_oauth_token.enc;
+        format = "binary";
+      };
     };
 
     templates.gh_hosts = {
-      content = ''
+      content = enableFor users.kotfind ''
         github.com:
           users:
             kotfind:
-              oauth_token: ${sops.placeholder."kotfind/gh/oauth_token"}
+              oauth_token: ${ph.gh_oauth_token}
           git_protocol: ssh
           user: kotfind
-          oauth_token: ${sops.placeholder."kotfind/gh/oauth_token"}
+          oauth_token: ${ph.gh_oauth_token}
       '';
 
-      path =
-        enableFor users.kotfind
-        "${homeDirectory}/.config/gh/hosts.yml";
+      path = enableFor users.kotfind "${homeDirectory}/.config/gh/hosts.yml";
     };
   };
 
