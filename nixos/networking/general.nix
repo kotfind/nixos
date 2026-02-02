@@ -1,4 +1,8 @@
-{config, ...}: let
+{
+  config,
+  pkgs,
+  ...
+}: let
   inherit (config.cfgLib) host;
 in {
   networking = {
@@ -8,4 +12,8 @@ in {
 
     firewall.enable = false;
   };
+
+  environment.systemPackages = with pkgs; [
+    openssl
+  ];
 }

@@ -8,18 +8,27 @@
   inherit (config) sops;
   inherit (lib.attrsets) nameValuePair mapAttrsRecursive mapAttrsToListRecursive;
 
-  mihomoConfig = {
+  mihomoConfig = rec {
     mode = "global";
     secret = ph.secret;
 
-    allow-lan = false;
-    external-controller = "localhost:4343"; # FIXME: https
+    # FIXME: allow https only
+    external-controller = "localhost:4343";
+    external-controller-tls = external-controller;
 
+    allow-lan = false;
+
+    tls = tlsConfig;
     tun = tunConfig;
     dns = dnsConfig;
 
     proxy-providers = providersConfig;
     proxy-groups = groupsConfig;
+  };
+
+  tlsConfig = {
+    certificate = "${credDir}/cert.pem";
+    private-key = "${credDir}/key.pem";
   };
 
   dnsConfig = rec {
@@ -50,11 +59,17 @@
   groupsConfig = [
     (urlTestGroup ph.group-1-name {use = [ph.provider-1-name];})
     (urlTestGroup ph.group-2-name {use = [ph.provider-2-name];})
-    (selectGroup "manual-group" {include-all = true;})
+    (urlTestGroup "auto-all-group" {include-all = true;})
+    (selectGroup "manual-all-group" {include-all = true;})
   ];
 
   secrets = {
     secret = "common/mihomo/secret";
+
+    # openssl ecparam -name prime256v1 -genkey -noout -out key.pem
+    # openssl req -new -x509 -key key.pem -out cert.pem -days 365 -subj "/CN=localhost"
+    tls-cert = "common/mihomo/tls/cert";
+    tls-key = "common/mihomo/tls/key";
 
     provider-1-url = "common/mihomo/providers/1/url";
     provider-1-name = "common/mihomo/providers/1/name";
@@ -96,6 +111,8 @@
 
   ph = mapAttrsRecursive (_path: qual: sops.placeholder.${qual}) secrets;
 
+  loc = mapAttrsRecursive (_path: qual: sops.secrets.${qual}.path) secrets;
+
   secretDefs = listToAttrs (
     map
     (qual: nameValuePair qual {})
@@ -108,7 +125,9 @@
 
   mins = m: m * 6;
 
-  # -------------------- Other --------------------
+  # The $CREDENTIALS_DIRECTORY env var won't eval in some contexts,
+  # so I'm hardcoding it.
+  credDir = "/run/credentials/mihomo.service";
 
   sampleUrl = "https://youtube.com";
 
@@ -127,5 +146,13 @@ in {
       content = readFile rawConfigFile;
       restartUnits = ["mihomo.service"];
     };
+  };
+
+  systemd.services.mihomo = {
+    environment.SAFE_PATHS = credDir;
+    serviceConfig.LoadCredential = [
+      "cert.pem:${loc.tls-cert}"
+      "key.pem:${loc.tls-key}"
+    ];
   };
 }
