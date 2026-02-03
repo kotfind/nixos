@@ -6,7 +6,5 @@
       # FIXME: custom user
       keyFile = "/home/kotfind/.config/sops/age/keys.txt";
     };
-
-    defaultSopsFile = ./default.yaml;
   };
 }

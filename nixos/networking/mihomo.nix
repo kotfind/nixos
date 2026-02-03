@@ -1,16 +1,30 @@
+# Generate CA's key & cert:
+# $ openssl ecparam -genkey -name prime256v1 -out ca.key
+# $ openssl req -subj "/CN=kotfindCA" -new -x509 -key ca.key -out ca.crt
+#
+# Generate mihomo's key:
+# $ openssl req \
+#       -subj "/CN=localhost" -addext "subjectAltName=DNS:localhost,DNS:*.localhost,IP:127.0.0.1" \
+#       -new -key mihomo.key -out mihomo.csr
+# $ openssl x509 \
+#       -CA ca.crt -CAkey ca.key -CAserial ca.srl \
+#       -copy_extensions copy -days 365 \
+#       -req -in mihomo.csr -out mihomo.crt
+#
 {
   pkgs,
-  lib,
   config,
   ...
 }: let
-  inherit (builtins) readFile listToAttrs;
+  inherit (builtins) readFile;
   inherit (config) sops;
-  inherit (lib.attrsets) nameValuePair mapAttrsRecursive mapAttrsToListRecursive;
+
+  ph = sops.placeholder;
+  sec = sops.secrets;
 
   mihomoConfig = {
     mode = "global";
-    secret = ph.secret;
+    secret = ph.mihomoSecret;
 
     external-controller = "localhost:0"; # FIXME: disable
     external-controller-tls = "localhost:4343";
@@ -26,8 +40,8 @@
   };
 
   tlsConfig = {
-    certificate = "${credDir}/cert.pem";
-    private-key = "${credDir}/key.pem";
+    certificate = "${credDir}/mihomo.crt";
+    private-key = "${credDir}/mihomo.key";
   };
 
   dnsConfig = rec {
@@ -51,34 +65,16 @@
   };
 
   providersConfig = {
-    ${ph.provider-1-name} = httpProvider (mins 30) ph.provider-1-url {};
-    ${ph.provider-2-name} = httpProvider (mins 5) ph.provider-2-url {};
+    ${ph.mihomoProvider1Name} = httpProvider (mins 30) ph.mihomoProvider1Url {};
+    ${ph.mihomoProvider2Name} = httpProvider (mins 5) ph.mihomoProvider2Url {};
   };
 
   groupsConfig = [
-    (urlTestGroup ph.group-1-name {use = [ph.provider-1-name];})
-    (urlTestGroup ph.group-2-name {use = [ph.provider-2-name];})
+    (urlTestGroup ph.mihomoGroup1Name {use = [ph.mihomoProvider1Name];})
+    (urlTestGroup ph.mihomoGroup2Name {use = [ph.mihomoProvider2Name];})
     (urlTestGroup "auto-all-group" {include-all = true;})
     (selectGroup "manual-all-group" {include-all = true;})
   ];
-
-  secrets = {
-    secret = "common/mihomo/secret";
-
-    # openssl ecparam -name prime256v1 -genkey -noout -out key.pem
-    # openssl req -new -x509 -key key.pem -out cert.pem -days 365 -subj "/CN=localhost"
-    tls-cert = "common/mihomo/tls/cert";
-    tls-key = "common/mihomo/tls/key";
-
-    provider-1-url = "common/mihomo/providers/1/url";
-    provider-1-name = "common/mihomo/providers/1/name";
-
-    provider-2-url = "common/mihomo/providers/2/url";
-    provider-2-name = "common/mihomo/providers/2/name";
-
-    group-1-name = "common/mihomo/groups/1/name";
-    group-2-name = "common/mihomo/groups/2/name";
-  };
 
   # -------------------- Group Helpers --------------------
 
@@ -106,18 +102,6 @@
   httpProvider = interval: url: extra:
     baseProvider "http" interval ({inherit url;} // extra);
 
-  # -------------------- Sops Helpers --------------------
-
-  ph = mapAttrsRecursive (_path: qual: sops.placeholder.${qual}) secrets;
-
-  loc = mapAttrsRecursive (_path: qual: sops.secrets.${qual}.path) secrets;
-
-  secretDefs = listToAttrs (
-    map
-    (qual: nameValuePair qual {})
-    (mapAttrsToListRecursive (_path: qual: qual) secrets)
-  );
-
   # -------------------- Other Helpers --------------------
 
   toYaml = (pkgs.formats.yaml {}).generate;
@@ -140,7 +124,43 @@ in {
   };
 
   sops = {
-    secrets = secretDefs;
+    secrets = {
+      mihomoSecret = {
+        sopsFile = ./mihomo.enc.yml;
+        key = "secret";
+      };
+
+      mihomoTlsKey = {
+        sopsFile = ./mihomo.enc.key;
+        format = "binary";
+      };
+
+      mihomoProvider1Url = {
+        sopsFile = ./mihomo.enc.yml;
+        key = "providers/1/url";
+      };
+      mihomoProvider1Name = {
+        sopsFile = ./mihomo.enc.yml;
+        key = "providers/1/name";
+      };
+      mihomoProvider2Url = {
+        sopsFile = ./mihomo.enc.yml;
+        key = "providers/2/url";
+      };
+      mihomoProvider2Name = {
+        sopsFile = ./mihomo.enc.yml;
+        key = "providers/2/name";
+      };
+
+      mihomoGroup1Name = {
+        sopsFile = ./mihomo.enc.yml;
+        key = "groups/1/name";
+      };
+      mihomoGroup2Name = {
+        sopsFile = ./mihomo.enc.yml;
+        key = "groups/2/name";
+      };
+    };
     templates."mihomo-config.yml" = {
       content = readFile rawConfigFile;
       restartUnits = ["mihomo.service"];
@@ -150,8 +170,10 @@ in {
   systemd.services.mihomo = {
     environment.SAFE_PATHS = credDir;
     serviceConfig.LoadCredential = [
-      "cert.pem:${loc.tls-cert}"
-      "key.pem:${loc.tls-key}"
+      "mihomo.crt:${./mihomo.crt}"
+      "mihomo.key:${sec.mihomoTlsKey.path}"
     ];
   };
+
+  security.pki.certificateFiles = [./ca.crt];
 }
