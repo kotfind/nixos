@@ -152,6 +152,8 @@
           rel = "tombi";
           abs = getExe pkgs.tombi;
         };
+
+        idris2_lsp.rel = "idris2-lsp";
       };
 
       formatters = {

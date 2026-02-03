@@ -156,6 +156,7 @@ local lsps = {
     jinja_lsp = { on_attach = on_attach },
     elmls = { on_attach = on_attach },
     tombi = { on_attach = on_attach },
+    idris2_lsp = { on_attach = on_attach },
 }
 
 ---@return nil
