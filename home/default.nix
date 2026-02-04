@@ -15,6 +15,7 @@ in {
     ./keyboard
     ./mail.nix
     ./mime.nix
+    ./nix-docs.nix
     ./nvim
     ./pass.nix
     ./rust.nix

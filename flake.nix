@@ -12,6 +12,7 @@
 
   inputs = {
     # -------------------- General --------------------
+
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
@@ -30,6 +31,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-dash-docsets = {
+      url = "github:boinkor-net/nix-dash-docsets";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        home-manager.follows = "home-manager";
+      };
+    };
+
     # -------------------- Toki Pona --------------------
 
     fcitx5-ilo-sitelen = {
@@ -45,6 +54,7 @@
     };
 
     # -------------------- NeoVim --------------------
+
     codeium = {
       url = "github:Exafunction/codeium.nvim";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -53,6 +63,7 @@
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
 
     # -------------------- NeoVim.Spelling --------------------
+
     nvim-spl-ru = {
       url = "https://ftp.nluug.nl/pub/vim/runtime/spell/ru.utf-8.spl";
       flake = false;
