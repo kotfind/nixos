@@ -74,6 +74,7 @@
     (urlTestGroup ph.mihomoGroup2Name {use = [ph.mihomoProvider2Name];})
     (urlTestGroup "auto-all-group" {include-all = true;})
     (selectGroup "manual-all-group" {include-all = true;})
+    (balanceGroup "balance-all-group" {include-all = true;})
   ];
 
   # -------------------- Group Helpers --------------------
@@ -86,8 +87,10 @@
       interval = 6;
     }
     // extra;
+
   selectGroup = baseGroup "select";
   urlTestGroup = baseGroup "url-test";
+  balanceGroup = baseGroup "load-balance";
 
   # -------------------- Provider Helpers --------------------
 
