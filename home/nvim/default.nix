@@ -154,6 +154,8 @@
         };
 
         idris2_lsp.rel = "idris2-lsp";
+
+        tailwindcss.rel = "tailwindcss-language-server";
       };
 
       formatters = {

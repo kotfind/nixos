@@ -157,6 +157,32 @@ local lsps = {
     elmls = { on_attach = on_attach },
     tombi = { on_attach = on_attach },
     idris2_lsp = { on_attach = on_attach },
+    tailwindcss = {
+        on_attach = on_attach,
+        filetypes = {
+            'django-html',
+            'htmldjango',
+            'html',
+            'css',
+            'sass',
+            'scss',
+            'javascript',
+            'typescript',
+            'elm',
+        },
+        settings = {
+            ['tailwindCSS'] = {
+                includeLanguages = {
+                    elm = 'javascript',
+                },
+                classFunctions = {
+                    'cls',
+                    'class',
+                    'classList',
+                },
+            },
+        },
+    },
 }
 
 ---@return nil
