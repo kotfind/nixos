@@ -11,6 +11,7 @@ function M.setup()
             python = { 'black' },
             jinja = { 'djlint' },
             toml = { 'tombi' },
+            elm = { 'topiary_elm' },
         },
         formatters = {
             stylua = {
@@ -31,11 +32,20 @@ function M.setup()
             typstyle = {
                 append_args = { '--tab-width', '4' },
             },
+
+            topiary_elm = {
+                inherit = false,
+                command = 'topiary',
+                args = { 'format', '-l', 'elm' },
+            },
         },
         format_after_save = {
             timeout_ms = 10000,
         },
-    }, { 'injected' })
+    }, {
+        'injected',
+        'topiary_elm'
+    })
 end
 
 return M

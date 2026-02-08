@@ -25,6 +25,7 @@ in {
     ./ssh.nix
     ./tmux
     ./xorg
+    ./topiary
   ];
 
   home = {
