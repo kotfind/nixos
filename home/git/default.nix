@@ -15,13 +15,17 @@ in {
     enable = matchFor users.kotfind;
 
     settings = {
+      core = {
+        quotePath = false;
+      };
+
       user = with users.kotfind; {
         inherit name;
         inherit (data) email;
       };
 
-      extraConfig = {
-        core.quotepath = false;
+      push = {
+        autoSetupRemote = true;
       };
     };
   };
