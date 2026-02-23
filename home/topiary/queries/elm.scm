@@ -76,6 +76,8 @@
 (union_variant name: _ @append_space)
 
 (type_ref) @append_space @prepend_space
+(type_ref "(" @prepend_space)
+(type_ref ")" @append_space)
 
 (type_annotation) @append_hardline @allow_blank_line_before
 
@@ -92,6 +94,12 @@
 
 (function_declaration_left . (_) . pattern: _ @prepend_indent_start) @append_indent_end
 (function_declaration_left . (_) . pattern: (_) @prepend_space)
+
+(union_pattern . _* . argPattern: _ @append_space @prepend_space)
+
+(anonymous_function_expr
+    (arrow) @prepend_spaced_softline @prepend_indent_start
+) @append_indent_end
 
 (case_of_expr (case) @append_space)
 (case_of_expr (of) @prepend_space @append_hardline @append_indent_start)
