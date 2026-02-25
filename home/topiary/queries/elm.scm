@@ -1,6 +1,8 @@
 (string_constant_expr) @leaf
 
-(line_comment) @leaf @append_hardline @prepend_hardline @allow_blank_line_before
+(line_comment) @leaf @append_hardline @prepend_spaced_softline @allow_blank_line_before
+
+(block_comment) @leaf @prepend_spaced_softline @append_spaced_softline
 
 (module_declaration) @append_hardline
 (module_declaration (module) @append_space)
@@ -76,6 +78,7 @@
 (union_variant name: _ @append_space)
 
 (type_ref) @append_space @prepend_space
+(type_ref . _* . part: _ @append_space @prepend_space)
 (type_ref "(" @prepend_space)
 (type_ref ")" @append_space)
 
@@ -111,7 +114,14 @@
 (case_of_branch) @append_indent_end
 
 (operator) @prepend_spaced_softline @append_space
+(cons_pattern "::" @prepend_spaced_softline @append_space)
+
 (record_expr "|" @prepend_space @append_spaced_softline)
+(record_expr
+    (field
+        (eq) @prepend_spaced_softline @prepend_indent_start
+    ) @append_indent_end
+)
 
 (function_call_expr
     .
