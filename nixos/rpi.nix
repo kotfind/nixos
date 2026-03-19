@@ -1,23 +1,44 @@
 {lib, ...}: let
-  inherit (lib.strings) concatMapStringsSep;
+  inherit (lib.strings) concatMapStringsSep concatStringsSep;
 
-  idProducts = [
+  # -------------------- Rpi --------------------
+
+  rpiVendorId = "2e8a";
+  rpiProductIds = [
     "0003"
     "0009"
     "000a"
     "000f"
   ];
-in {
-  services.udev.extraRules =
+
+  rpiRules =
     concatMapStringsSep
     "\n"
-    (idProduct: ''
+    (productId: ''
       SUBSYSTEM=="usb", \
-      ATTRS{idVendor}=="2e8a", \
-      ATTRS{idProduct}=="${idProduct}", \
+      ATTRS{idVendor}=="${rpiVendorId}", \
+      ATTRS{idProduct}=="${productId}", \
       TAG+="uaccess", \
       MODE="660", \
       GROUP="dialout"
     '')
-    idProducts;
+    rpiProductIds;
+
+  # -------------------- Custom Device --------------------
+
+  customDeviceVendorId = "c0de";
+  customDeviceProductId = "cafe";
+
+  customDeviceRules = ''
+    SUBSYSTEM=="usb", \
+    ATTR{idVendor}=="${customDeviceVendorId}", \
+    ATTR{idProduct}=="${customDeviceProductId}", \
+    GROUP="plugdev", \
+    MODE="0660"
+  '';
+in {
+  services.udev.extraRules = concatStringsSep "\n" [
+    rpiRules
+    customDeviceRules
+  ];
 }
