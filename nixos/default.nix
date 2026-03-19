@@ -14,7 +14,6 @@
     ./rpi.nix
     ./scanning.nix
     ./secrets
-    ./services.nix
     ./ssh.nix
     ./sunshine.nix
     ./users.nix
