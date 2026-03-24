@@ -12,6 +12,8 @@ function M.setup()
             jinja = { 'djlint' },
             toml = { 'tombi' },
             elm = { 'topiary_elm' },
+            c = { 'clang-format' },
+            cpp = { 'clang-format' },
         },
         formatters = {
             stylua = {
@@ -44,7 +46,7 @@ function M.setup()
         },
     }, {
         'injected',
-        'topiary_elm'
+        'topiary_elm',
     })
 end
 

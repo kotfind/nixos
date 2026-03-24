@@ -127,10 +127,8 @@
           abs = getExe pkgs.bash-language-server;
         };
 
-        ccls = {
-          rel = "ccls";
-          abs = getExe pkgs.ccls;
-        };
+        # TODO: add abs
+        clangd.rel = "clangd";
 
         dotls = {
           rel = "dot-language-server";
@@ -192,6 +190,8 @@
           rel = "tombi";
           abs = getExe pkgs.tombi;
         };
+
+        clang-format.rel = "clang-format";
       };
     };
   };

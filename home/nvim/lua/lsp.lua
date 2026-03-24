@@ -145,11 +145,11 @@ local lsps = {
         },
     },
 
+    clangd = { on_attach = on_attach },
     tinymist = { on_attach = on_attach },
     nixd = { on_attach = on_attach },
     bashls = { on_attach = on_attach },
     pyright = { on_attach = on_attach },
-    ccls = { on_attach = on_attach },
     dotls = { on_attach = on_attach },
     kotlin_language_server = { on_attach = on_attach },
     arduino_language_server = { on_attach = on_attach },
