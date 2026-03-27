@@ -7,10 +7,11 @@
 in {
   services.caddy = {
     enable = matchFor hosts.pc;
+    enableReload = false;
 
     globalConfig = ''
       admin off
-      auto_https off
+      auto_https disable_certs
     '';
 
     virtualHosts = {
