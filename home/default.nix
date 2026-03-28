@@ -2,13 +2,13 @@
   inherit (config.cfgLib) user;
 in {
   imports = [
-    # ./fish
     ./alacritty
     ./backup.nix
     ./bash
     ./beet.nix
     ./cli-utils.nix
     ./downloaders.nix
+    ./eza.nix
     ./firefox.nix
     ./fonts.nix
     ./git

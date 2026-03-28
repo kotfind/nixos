@@ -17,7 +17,6 @@ in {
     imagemagick
     ffmpeg
     age
-    just
     p7zip
     unzip
     unrar-free
@@ -49,16 +48,12 @@ in {
     nix-direnv.enable = true;
   };
 
-  programs.fish.shellAliases = {
-    "j" = getExe pkgs.just;
+  programs.bash.shellAliases = {
     "unrar" = getExe pkgs.unrar-free;
   };
 
-  programs.eza.enable = true;
-
   programs.yazi = {
     enable = true;
-    enableFishIntegration = true;
     shellWrapperName = "y";
   };
 }

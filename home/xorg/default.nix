@@ -49,8 +49,6 @@ in {
 
   services.gpg-agent = {
     enable = matchFor users.kotfind;
-    enableFishIntegration = true;
-    enableBashIntegration = true;
     pinentry.package = pkgs.pinentry-rofi;
   };
 

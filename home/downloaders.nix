@@ -16,7 +16,7 @@ in {
       enable = true;
     };
 
-    fish.shellAliases = enableFor hosts.pc.users.kotfind (with pkgs; {
+    bash.shellAliases = enableFor hosts.pc.users.kotfind (with pkgs; {
       gdl = getExe gallery-dl;
       ydl = getExe yt-dlp;
     });

@@ -1,8 +1,8 @@
 {...}: {
   imports = [
     ./blesh.nix
-    ./starship.nix
     ./general.nix
+    ./starship.nix
   ];
 
   programs.bash.enable = true;
