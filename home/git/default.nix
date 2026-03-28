@@ -14,6 +14,8 @@ in {
   programs.git = {
     enable = matchFor users.kotfind;
 
+    signing.format = null;
+
     settings = {
       core = {
         quotePath = false;

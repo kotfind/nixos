@@ -8,7 +8,7 @@
   inherit (lib) getExe getExe';
   inherit (pkgs) writeShellScriptBin;
 
-  xkbbell = getExe' pkgs.xorg.xkbutils "xkbbell";
+  xkbbell = getExe' pkgs.xkbutils "xkbbell";
 
   just-beep = writeShellScriptBin "just-beep" ''
     ${xkbbell}

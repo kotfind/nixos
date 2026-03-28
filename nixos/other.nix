@@ -2,9 +2,7 @@
   pkgs,
   config,
   ...
-}: let
-  inherit (config.cfgLib) matchFor hosts;
-in {
+}: {
   # Boot
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -33,9 +31,6 @@ in {
   };
 
   security.polkit.enable = true;
-
-  # Programs
-  programs.light.enable = matchFor hosts.laptop;
 
   # Virtual Camera plugin (for OBS Studio)
   boot.extraModulePackages = with config.boot.kernelPackages; [

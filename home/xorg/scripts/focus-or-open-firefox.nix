@@ -5,7 +5,7 @@ pkgs.writeShellApplication {
 
   runtimeInputs = with pkgs; [
     bspwm
-    xorg.xprop
+    xprop
     gnused
     firefox
     toybox

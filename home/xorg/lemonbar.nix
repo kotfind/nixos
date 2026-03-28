@@ -23,7 +23,7 @@
   pactl = getExe' pkgs.pulseaudio "pactl";
   xtitle = getExe pkgs.xtitle;
   awk = getExe pkgs.gawk;
-  xrandr = getExe pkgs.xorg.xrandr;
+  xrandr = getExe pkgs.xrandr;
   trayer = getExe pkgs.trayer;
   lemonbar = getExe pkgs.lemonbar-xft;
   bash = pkgs.runtimeShell;

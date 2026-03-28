@@ -33,7 +33,7 @@ in {
         kdePackages.gwenview
         flacon # cutting flac's
         simple-scan
-        librepcb
+        # librepcb
         webcamoid
 
         # NOTE: current version from unstable is broken
@@ -45,6 +45,10 @@ in {
         #     nix run github:nixos/nixpkgs/nixos-24.05#openshot-qt
         #
         # openshot-qt
+      ])
+
+      (enableFor hosts.laptop [
+        light
       ])
 
       (enableFor hosts.pc.users.kotfind [

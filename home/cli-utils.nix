@@ -10,7 +10,7 @@ in {
     curl
     bat
     xclip
-    xorg.xkill
+    xkill
     ncdu
     killall
     file
@@ -33,7 +33,7 @@ in {
     ueberzugpp # for yazi image preview
     sshpass
 
-    wineWowPackages.stable # TODO: move to other file?
+    wineWow64Packages.stable # TODO: move to other file?
   ];
 
   programs = {
@@ -59,5 +59,6 @@ in {
   programs.yazi = {
     enable = true;
     enableFishIntegration = true;
+    shellWrapperName = "y";
   };
 }
