@@ -4,24 +4,28 @@
   lib,
   ...
 }: let
-  inherit (lib) getExe;
+  inherit (lib) getExe escapeShellArg;
+  inherit (lib.strings) concatMapStringsSep;
+  inherit (lib.attrsets) mapAttrsToList;
+  inherit (pkgs) writeShellScript;
+  inherit (config.cfgLib) enableFor hosts;
 
   activeThemeFile = "${config.home.homeDirectory}/.config/alacritty/active-theme.toml";
 
   toml = (pkgs.formats.toml {}).generate;
 
   themes =
-    lib.attrsets.mapAttrsToList
+    mapAttrsToList
     (themeName: colors: toml "${themeName}.toml" {inherit colors;})
     (import ./themes.nix);
 
   themesStr =
-    lib.strings.concatMapStringsSep
+    concatMapStringsSep
     " "
     (themeFile: "'${themeFile}'")
     themes;
 
-  toggleScript = pkgs.writeShellScript "alacritty-toggle-theme" ''
+  toggleScript = writeShellScript "alacritty-toggle-theme" ''
     set -euo pipefail
     set -x
 
@@ -39,17 +43,16 @@
     exit 1
   '';
 in {
-  programs.alacritty = (with config.cfgLib; enableFor users.kotfind) {
+  programs.alacritty = {
     enable = true;
     settings = {
-      terminal.shell = getExe pkgs.fish;
+      terminal.shell = getExe pkgs.bash;
 
       general.import = [activeThemeFile];
 
-      # TODO: enableFor -> matchCfg
       font.size = lib.mkMerge [
-        ((with config.cfgLib; enableFor hosts.pc) 11.0)
-        ((with config.cfgLib; enableFor hosts.laptop) 8.0)
+        (enableFor hosts.pc 11.0)
+        (enableFor hosts.laptop 8.0)
       ];
 
       window.padding = {
@@ -73,19 +76,11 @@ in {
   };
 
   home.activation.linkAlacrittyTheme = let
-    themeFileArg = lib.escapeShellArg (builtins.elemAt themes 0);
-    activeThemeFileArg = lib.escapeShellArg activeThemeFile;
+    themeFileArg = escapeShellArg (builtins.elemAt themes 0);
+    activeThemeFileArg = escapeShellArg activeThemeFile;
   in
-    (with config.cfgLib; enableFor users.kotfind)
-    (config.lib.dag.entryAfter ["writeBoundary"]
-      /*
-      bash
-      */
-      ''
-        # create directory if it does not exist
-        mkdir -p $(dirname ${activeThemeFileArg})
-
-        # link theme file
-        ln -sf ${themeFileArg} ${activeThemeFileArg}
-      '');
+    config.lib.dag.entryAfter ["writeBoundary"] ''
+      mkdir -p $(dirname ${activeThemeFileArg})
+      ln -sf ${themeFileArg} ${activeThemeFileArg}
+    '';
 }

@@ -2,13 +2,14 @@
   inherit (config.cfgLib) user;
 in {
   imports = [
+    # ./fish
     ./alacritty
     ./backup.nix
+    ./bash
     ./beet.nix
     ./cli-utils.nix
     ./downloaders.nix
     ./firefox.nix
-    ./fish
     ./fonts.nix
     ./git
     ./gui-utils.nix
@@ -24,8 +25,8 @@ in {
     ./sqlite.nix
     ./ssh.nix
     ./tmux
-    ./xorg
     ./topiary
+    ./xorg
   ];
 
   home = {
