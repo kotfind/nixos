@@ -1,64 +1,61 @@
 {pkgs, ...}: let
-  nolink =
-    pkgs.writeShellScriptBin "nolink"
-    /*
-    bash
-    */
-    ''
-      set -euo pipefail
+  inherit (pkgs) writeShellScriptBin;
 
-      exec_name="$0"
+  nolink = writeShellScriptBin "nolink" ''
+    set -euo pipefail
 
-      usage() {
-      cat << END 1>&2
-      Usage:
-          ''${exec_name} -h
-          ''${exec_name} <LINK_FILE>
+    exec_name="$0"
 
-      Description:
-          Turns <LINK_FILE> symlink into normal file by copying it.
-      END
-      }
+    usage() {
+    cat << END 1>&2
+    Usage:
+        ''${exec_name} -h
+        ''${exec_name} <LINK_FILE>
 
-      while getopts ":h" arg; do
-          case "$arg" in
-              "h")
-                  usage
-                  exit 0
-                  ;;
+    Description:
+        Turns <LINK_FILE> symlink into normal file by copying it.
+    END
+    }
 
-              *)
-                  usage
-                  exit 1
-                  ;;
-          esac
-      done
-      shift $((OPTIND - 1))
+    while getopts ":h" arg; do
+        case "$arg" in
+            "h")
+                usage
+                exit 0
+                ;;
 
-      if [ ! -z "''${1+set}" ]; then
-          link_file="$1"
-      else
-          usage
-          exit 1
-      fi
+            *)
+                usage
+                exit 1
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
 
-      # https://stackoverflow.com/a/36180056
-      if [ -L "$link_file" ]; then
-          if [ ! -e "$link_file" ]; then
-              echo "error: symlink '$link_file' points to a non-existant file" 1>&2
-          fi
-      elif [ -e "$link_file" ]; then
-          echo "error: file '$link_file' is not a symlink" 1>&2
-      else
-          echo "error: file '$link_file' does not exist" 1>&2
-      fi
+    if [ ! -z "''${1+set}" ]; then
+        link_file="$1"
+    else
+        usage
+        exit 1
+    fi
 
-      tmp_file="$(mktemp "$(dirname "$link_file")/tmp-link.XXXXXXXX")"
+    # https://stackoverflow.com/a/36180056
+    if [ -L "$link_file" ]; then
+        if [ ! -e "$link_file" ]; then
+            echo "error: symlink '$link_file' points to a non-existant file" 1>&2
+        fi
+    elif [ -e "$link_file" ]; then
+        echo "error: file '$link_file' is not a symlink" 1>&2
+    else
+        echo "error: file '$link_file' does not exist" 1>&2
+    fi
 
-      cp "$(readlink "$link_file")" "$tmp_file"
-      unlink "$link_file"
-      mv "$tmp_file" "$link_file"
-    '';
+    tmp_file="$(mktemp "$(dirname "$link_file")/tmp-link.XXXXXXXX")"
+
+    cp "$(readlink "$link_file")" "$tmp_file"
+    unlink "$link_file"
+    mv "$tmp_file" "$link_file"
+  '';
 in {
   home.packages = [nolink];
 }
