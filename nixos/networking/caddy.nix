@@ -1,9 +1,12 @@
 {config, ...}: let
   inherit (config.cfgLib) matchFor hosts;
 
+  domain = "kotfind.mywire.org";
+
   bareCert = "kotfind.mywire.org";
   wildCert = "_.kotfind.mywire.org";
-  domain = "kotfind.mywire.org";
+
+  navidromePort = config.services.navidrome.settings.Port;
 in {
   services.caddy = {
     enable = matchFor hosts.pc;
@@ -22,10 +25,10 @@ in {
         '';
       };
 
-      "*.${domain}" = {
+      "music.${domain}" = {
         useACMEHost = wildCert;
         extraConfig = ''
-          respond "This is {host}"
+          reverse_proxy :${toString navidromePort}
         '';
       };
     };
