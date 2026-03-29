@@ -24,6 +24,7 @@
     proxy-groups = groupsConfig;
 
     rules = rulesConfig;
+    listeners = listenersConfig;
   };
 
   dnsConfig = rec {
@@ -61,6 +62,16 @@
 
   rulesConfig = [
     "MATCH,GLOBAL"
+  ];
+
+  listenersConfig = [
+    {
+      name = "passthrough-listener";
+      type = "mixed";
+      port = "1111";
+      proxy = "DIRECT";
+      listen = "127.0.0.1";
+    }
   ];
 
   # -------------------- Group Helpers --------------------
