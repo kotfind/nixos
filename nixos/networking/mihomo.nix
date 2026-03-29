@@ -1,16 +1,3 @@
-# Generate CA's key & cert:
-# $ openssl ecparam -genkey -name prime256v1 -out ca.key
-# $ openssl req -subj "/CN=kotfindCA" -new -x509 -key ca.key -out ca.crt
-#
-# Generate mihomo's key:
-# $ openssl req \
-#       -subj "/CN=localhost" -addext "subjectAltName=DNS:localhost,DNS:*.localhost,IP:127.0.0.1" \
-#       -new -key mihomo.key -out mihomo.csr
-# $ openssl x509 \
-#       -CA ca.crt -CAkey ca.key -CAserial ca.srl \
-#       -copy_extensions copy -days 365 \
-#       -req -in mihomo.csr -out mihomo.crt
-#
 {
   pkgs,
   config,
@@ -20,28 +7,23 @@
   inherit (config) sops;
 
   ph = sops.placeholder;
-  sec = sops.secrets;
 
   mihomoConfig = {
-    mode = "global";
+    mode = "rule";
     secret = ph.mihomoSecret;
 
-    external-controller = "localhost:0"; # FIXME: disable
-    external-controller-tls = "localhost:4343";
+    external-controller = "localhost:4343";
 
     allow-lan = false;
+    find-process-mode = "always";
 
-    tls = tlsConfig;
     tun = tunConfig;
     dns = dnsConfig;
 
     proxy-providers = providersConfig;
     proxy-groups = groupsConfig;
-  };
 
-  tlsConfig = {
-    certificate = "${credDir}/mihomo.crt";
-    private-key = "${credDir}/mihomo.key";
+    rules = rulesConfig;
   };
 
   dnsConfig = rec {
@@ -75,6 +57,10 @@
     (urlTestGroup "auto-all-group" {include-all = true;})
     (selectGroup "manual-all-group" {include-all = true;})
     (balanceGroup "balance-all-group" {include-all = true;})
+  ];
+
+  rulesConfig = [
+    "MATCH,GLOBAL"
   ];
 
   # -------------------- Group Helpers --------------------
@@ -111,10 +97,6 @@
 
   mins = m: m * 6;
 
-  # The $CREDENTIALS_DIRECTORY env var won't eval in some contexts,
-  # so I'm hardcoding it.
-  credDir = "/run/credentials/mihomo.service";
-
   sampleUrl = "https://youtube.com";
 
   rawConfigFile = toYaml "mihomo-config-raw.yml" mihomoConfig;
@@ -122,6 +104,7 @@ in {
   services.mihomo = {
     enable = true;
     tunMode = true;
+    processesInfo = true;
     webui = pkgs.metacubexd;
     configFile = sops.templates."mihomo-config.yml".path;
   };
@@ -131,11 +114,6 @@ in {
       mihomoSecret = {
         sopsFile = ./mihomo.enc.yml;
         key = "secret";
-      };
-
-      mihomoTlsKey = {
-        sopsFile = ./mihomo.enc.key;
-        format = "binary";
       };
 
       mihomoProvider1Url = {
@@ -169,14 +147,4 @@ in {
       restartUnits = ["mihomo.service"];
     };
   };
-
-  systemd.services.mihomo = {
-    environment.SAFE_PATHS = credDir;
-    serviceConfig.LoadCredential = [
-      "mihomo.crt:${./mihomo.crt}"
-      "mihomo.key:${sec.mihomoTlsKey.path}"
-    ];
-  };
-
-  security.pki.certificateFiles = [./ca.crt];
 }
