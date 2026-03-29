@@ -10,11 +10,14 @@ in {
     secretsFile = config.sops.secrets.ddclientSecrets.path;
   };
 
-  # manually setting a passthrough listener,
-  # as config's `proxy` option does not seem work
+  # ddclient's proxy option only seems to work with
+  # https proxies (NOT http ones)
   systemd.services.ddclient.environment = {
-    http_proxy = "127.0.0.1:1111";
-    https_proxy = "127.0.0.1:1111";
+    http_proxy = "http://127.0.0.1:1111";
+    https_proxy = "http://127.0.0.1:1111";
+
+    # only use proxy for getting an ip address
+    no_proxy = "kotfind.mywire.org,api.dynu.com";
   };
 
   sops.secrets.ddclientSecrets = enableFor hosts.pc {

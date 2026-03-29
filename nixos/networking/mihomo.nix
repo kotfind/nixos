@@ -67,7 +67,7 @@
   listenersConfig = [
     {
       name = "passthrough-listener";
-      type = "mixed";
+      type = "http";
       port = "1111";
       proxy = "DIRECT";
       listen = "127.0.0.1";
