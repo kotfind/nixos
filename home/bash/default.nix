@@ -1,6 +1,6 @@
 {...}: {
   imports = [
-    ./blesh.nix
+    ./blesh
     ./funcs.nix
     ./general.nix
     ./starship.nix

@@ -24,6 +24,6 @@ in {
     gb = "${gitBin} branch";
     gm = "${gitBin} merge";
 
-    root = "cd (${gitBin} rev-parse --show-toplevel)";
+    root = ''cd "$(${gitBin} rev-parse --show-toplevel)"'';
   };
 }
