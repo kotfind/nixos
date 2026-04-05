@@ -92,7 +92,6 @@ local function setup_tree()
 
     local api = require 'nvim-tree.api'
 
-    Map('n', '<leader>tt', api.tree.toggle)
     require('nvim-tree').setup {
         hijack_cursor = true,
         disable_netrw = true,
@@ -121,6 +120,7 @@ local function setup_tree()
             enable = true,
         },
     }
+    Map('n', '<leader>tt', api.tree.toggle)
 end
 
 ---@return nil
