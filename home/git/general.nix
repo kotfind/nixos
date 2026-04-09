@@ -27,6 +27,8 @@ in {
       push = {
         autoSetupRemote = true;
       };
+
+      init.defaultBranch = "master";
     };
   };
 
