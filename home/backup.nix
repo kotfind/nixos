@@ -40,6 +40,8 @@
               ".gradle"
               "venv"
               ".direnv"
+              "cache"
+              ".cache"
             ];
           };
 
