@@ -1,9 +1,10 @@
 {...}: {
   home.file.".blerc".text = ''
-    ble-bind -m 'emacs' -f 'C-w' 'kill-region-or kill-backward-cword'
+    ble-bind -f 'C-w' 'kill-region-or kill-backward-cword'
+    ble-bind -f 'M-e' 'edit-and-execute-command'
+    ble-bind -f 'C-RET' 'accept-line'
 
-    ble-bind -m 'emacs' -f 'M-e' 'edit-and-execute-command'
-
-    ble-bind -m emacs -f 'C-RET' 'accept-line'
+    ble-bind -f 'up'   'history-search-backward hide-status point=match-end'
+    ble-bind -f 'down' 'history-search-forward  hide-status point=match-end'
   '';
 }
