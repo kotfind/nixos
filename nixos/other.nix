@@ -16,13 +16,25 @@
   # Time Zone
   time.timeZone = "Europe/Moscow";
 
-  # Man Pages
-  environment.systemPackages = with pkgs; [
-    man-pages
-    man-pages-posix
-  ];
-
-  documentation.dev.enable = true;
+  # Documentation
+  documentation = {
+    enable = true;
+    dev.enable = true;
+    doc.enable = true;
+    info.enable = true;
+    man = {
+      enable = true;
+      cache.enable = true;
+      man-db.enable = false;
+      mandoc.enable = true;
+    };
+    nixos = {
+      enable = true;
+      includeAllModules = true;
+    };
+    # cfgLib build fails (no option descriptions)
+    nixos.options.warningsAreErrors = false;
+  };
 
   # Security Agents
   programs.gnupg.agent = {
