@@ -10,7 +10,7 @@
 
   mihomoConfig = {
     mode = "rule";
-    secret = ph.mihomoSecret;
+    secret = ph."mihomo-secret";
 
     external-controller = "localhost:4343";
 
@@ -48,16 +48,21 @@
   };
 
   providersConfig = {
-    ${ph.mihomoProvider1Name} = httpProvider (mins 30) ph.mihomoProvider1Url {};
-    ${ph.mihomoProvider2Name} = httpProvider (mins 5) ph.mihomoProvider2Url {};
+    "💰🔗" = {
+      type = "http";
+      url = ph."mihomo-💰🔗-url";
+      override.udp = true;
+      header.${ph."mihomo-💰🔗-header-name"} = [ph."mihomo-💰🔗-header-value"];
+    };
   };
 
   groupsConfig = [
-    (urlTestGroup ph.mihomoGroup1Name {use = [ph.mihomoProvider1Name];})
-    (urlTestGroup ph.mihomoGroup2Name {use = [ph.mihomoProvider2Name];})
-    (urlTestGroup "auto-all-group" {include-all = true;})
-    (selectGroup "manual-all-group" {include-all = true;})
-    (balanceGroup "balance-all-group" {include-all = true;})
+    {
+      name = "💰📦";
+      type = "select";
+      url = testUrl;
+      use = ["💰🔗"];
+    }
   ];
 
   rulesConfig = [
@@ -74,41 +79,11 @@
     }
   ];
 
-  # -------------------- Group Helpers --------------------
-
-  baseGroup = type: name: extra:
-    {
-      inherit name type;
-
-      url = sampleUrl;
-      interval = 6;
-    }
-    // extra;
-
-  selectGroup = baseGroup "select";
-  urlTestGroup = baseGroup "url-test";
-  balanceGroup = baseGroup "load-balance";
-
-  # -------------------- Provider Helpers --------------------
-
-  baseProvider = type: interval: extra:
-    {
-      inherit type interval;
-
-      override.udp = true;
-    }
-    // extra;
-
-  httpProvider = interval: url: extra:
-    baseProvider "http" interval ({inherit url;} // extra);
-
   # -------------------- Other Helpers --------------------
 
   toYaml = (pkgs.formats.yaml {}).generate;
 
-  mins = m: m * 6;
-
-  sampleUrl = "https://youtube.com";
+  testUrl = "http://www.gstatic.com/generate_204";
 
   rawConfigFile = toYaml "mihomo-config-raw.yml" mihomoConfig;
 in {
@@ -122,35 +97,21 @@ in {
 
   sops = {
     secrets = {
-      mihomoSecret = {
+      "mihomo-secret" = {
         sopsFile = ./mihomo.enc.yml;
         key = "secret";
       };
-
-      mihomoProvider1Url = {
+      "mihomo-💰🔗-url" = {
         sopsFile = ./mihomo.enc.yml;
-        key = "providers/1/url";
+        key = "💰🔗/url";
       };
-      mihomoProvider1Name = {
+      "mihomo-💰🔗-header-name" = {
         sopsFile = ./mihomo.enc.yml;
-        key = "providers/1/name";
+        key = "💰🔗/header/name";
       };
-      mihomoProvider2Url = {
+      "mihomo-💰🔗-header-value" = {
         sopsFile = ./mihomo.enc.yml;
-        key = "providers/2/url";
-      };
-      mihomoProvider2Name = {
-        sopsFile = ./mihomo.enc.yml;
-        key = "providers/2/name";
-      };
-
-      mihomoGroup1Name = {
-        sopsFile = ./mihomo.enc.yml;
-        key = "groups/1/name";
-      };
-      mihomoGroup2Name = {
-        sopsFile = ./mihomo.enc.yml;
-        key = "groups/2/name";
+        key = "💰🔗/header/value";
       };
     };
     templates."mihomo-config.yml" = {
