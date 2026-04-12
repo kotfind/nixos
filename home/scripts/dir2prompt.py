@@ -16,6 +16,28 @@ def is_path_ignored(path: Path):
     return False
 
 
+def is_path_contents_hidden(path: Path):
+    exclude_exts = [
+        ".zip",
+        ".rar",
+        ".bin",
+        ".sqlite",
+        ".db",
+        ".pdf",
+        ".jpg",
+        ".png",
+        ".jpeg",
+        ".webp",
+        ".gz",
+        ".tar",
+    ]
+
+    if path.suffix in exclude_exts:
+        return True
+
+    return False
+
+
 def print_tree(path: Path, depth: int = 0):
     indent = " " * 4 * depth
     for entry_path in sorted(path.iterdir()):
@@ -33,7 +55,7 @@ def print_file_contents_rec(path: Path, base_path: Path):
         if is_path_ignored(entry_path):
             continue
 
-        if entry_path.is_file():
+        if entry_path.is_file() and not is_path_contents_hidden(entry_path):
             rel_path = entry_path.relative_to(base_path)
             print(f"The contents of `{rel_path}`:")
 
@@ -51,7 +73,7 @@ def print_file_contents_rec(path: Path, base_path: Path):
 
 
 if __name__ == "__main__":
-    print("I have the following file structure:")
+    print("The file structure:")
     print("```")
     print_tree(Path.cwd(), 0)
     print("```")
