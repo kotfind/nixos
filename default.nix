@@ -13,10 +13,11 @@
 
   unfreePkgs = pkgs:
     with pkgs; [
-      zoom-us
+      claude-code
       codeium
-      steam-unwrapped
       hplipWithPlugin
+      steam-unwrapped
+      zoom-us
     ];
 
   homeMod = {

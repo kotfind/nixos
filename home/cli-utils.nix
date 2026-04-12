@@ -33,6 +33,7 @@ in {
     sshpass
     dig
     claude-code
+    pdftk
 
     wineWow64Packages.stable # TODO: move to other file?
   ];
