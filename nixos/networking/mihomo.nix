@@ -9,6 +9,8 @@
   ph = sops.placeholder;
 
   mihomoConfig = {
+    log-level = "warning";
+
     mode = "rule";
     secret = ph."mihomo-secret";
 
@@ -50,9 +52,24 @@
   providersConfig = {
     "💰🔗" = {
       type = "http";
+
       url = ph."mihomo-💰🔗-url";
-      override.udp = true;
       header.${ph."mihomo-💰🔗-header-name"} = [ph."mihomo-💰🔗-header-value"];
+
+      health-check = {
+        enable = true;
+        url = testUrl;
+        interval = 30; # 30s
+        timeout = 500; # 0.5s
+        lazy = false;
+        expected-status = 204; # 204 No Content
+      };
+
+      override = {
+        tls = true;
+        udp = true;
+        ech-options.enable = true;
+      };
     };
   };
 
@@ -79,7 +96,7 @@
     }
   ];
 
-  # -------------------- Other Helpers --------------------
+  # -------------------- Helpers --------------------
 
   toYaml = (pkgs.formats.yaml {}).generate;
 
