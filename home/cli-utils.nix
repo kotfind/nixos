@@ -32,6 +32,7 @@ in {
     ueberzugpp # for yazi image preview
     sshpass
     dig
+    claude-code
 
     wineWow64Packages.stable # TODO: move to other file?
   ];
