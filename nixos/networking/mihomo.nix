@@ -8,25 +8,31 @@
 
   ph = sops.placeholder;
 
-  mihomoConfig = {
-    log-level = "warning";
+  mihomoConfig =
+    generalConfig
+    // {
+      tun = tunConfig;
+      dns = dnsConfig;
 
+      proxy-providers = providersConfig;
+      proxy-groups = groupsConfig;
+
+      rules = rulesConfig;
+      listeners = listenersConfig;
+    };
+
+  generalConfig = {
     mode = "rule";
     secret = ph."mihomo-secret";
 
     external-controller = "localhost:4343";
-
     allow-lan = false;
+
     find-process-mode = "always";
+    log-level = "warning";
 
-    tun = tunConfig;
-    dns = dnsConfig;
-
-    proxy-providers = providersConfig;
-    proxy-groups = groupsConfig;
-
-    rules = rulesConfig;
-    listeners = listenersConfig;
+    geo-auto-update = true;
+    geo-update-interval = 24; # 24h
   };
 
   dnsConfig = rec {
@@ -83,7 +89,34 @@
   ];
 
   rulesConfig = [
-    "MATCH,GLOBAL"
+    "DOMAIN-REGEX,(\\bmts.*)|(.*mts\\b),DIRECT"
+    "DOMAIN-REGEX,(\\bsber.*)|(.*sber\\b),DIRECT"
+    "DOMAIN-REGEX,(\\btbank.*)|(.*stbank\\b),DIRECT"
+    "DOMAIN-REGEX,(\\bwildberries.*)|(.*wildberries\\b),DIRECT"
+    "DOMAIN-REGEX,(\\bkinopoisk.*)|(.*kinopoisk\\b),DIRECT"
+    "DOMAIN-REGEX,(\\bozon.*)|(.*ozon\\b),DIRECT"
+    "DOMAIN-REGEX,(\\bvtb.*)|(.*vtb\\b),DIRECT"
+    "DOMAIN-REGEX,(\\bavito.*)|(.*avito\\b),DIRECT"
+    "DOMAIN-REGEX,(\\brutube.*)|(.*rutube\\b),DIRECT"
+    "DOMAIN-REGEX,(\\bmos.*)|(.*mos\\b),DIRECT"
+    "DOMAIN-REGEX,(\\bgosuslugi.*)|(.*gosuslugi\\b),DIRECT"
+
+    "GEOSITE,category-gov-ru,DIRECT"
+    "GEOSITE,category-media-ru,DIRECT"
+    "GEOSITE,category-ru,DIRECT"
+    "GEOSITE,yandex,DIRECT"
+    "GEOSITE,vk,DIRECT"
+    "GEOSITE,ozon,DIRECT"
+
+    "GEOSITE,telegram,💰📦"
+    "GEOSITE,google,💰📦"
+    "GEOSITE,youtube,💰📦"
+
+    "GEOIP,ru,DIRECT"
+
+    "GEOIP,telegram,💰📦"
+
+    "MATCH,💰📦" # or GLOBAL ?
   ];
 
   listenersConfig = [
