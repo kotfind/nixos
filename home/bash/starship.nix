@@ -14,7 +14,7 @@ in {
       # -------------------- General --------------------
 
       add_newline = true;
-      command_timeout = 50; # ms
+      command_timeout = 200; # ms
 
       # -------------------- Left --------------------
 

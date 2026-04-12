@@ -49,6 +49,9 @@ in {
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
+
+    # see ./bash/blesh/general.nix for details
+    enableBashIntegration = false;
   };
 
   programs.bash.shellAliases = {
