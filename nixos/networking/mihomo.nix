@@ -1,10 +1,13 @@
 {
   pkgs,
   config,
+  lib,
   ...
 }: let
   inherit (builtins) readFile;
   inherit (config) sops;
+  inherit (config.cfgLib) enableFor hosts;
+  inherit (lib) mkMerge;
 
   ph = sops.placeholder;
 
@@ -161,7 +164,10 @@ in {
       };
       "mihomo-💰🔗-header-value" = {
         sopsFile = ./mihomo.enc.yml;
-        key = "💰🔗/header/value";
+        key = mkMerge [
+          (enableFor hosts.pc "💰🔗/header/value/pc")
+          (enableFor hosts.laptop "💰🔗/header/value/laptop")
+        ];
       };
     };
     templates."mihomo-config.yml" = {
