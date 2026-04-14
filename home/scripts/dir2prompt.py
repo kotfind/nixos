@@ -2,7 +2,7 @@ from pathlib import Path
 
 
 def is_path_ignored(path: Path):
-    exclude_names = [".git", ".direnv", "build", "target", ".gitignore"]
+    exclude_names = [".git", ".direnv", "build", "target", ".gitignore", ".gradle"]
 
     if path.name in exclude_names:
         return True
