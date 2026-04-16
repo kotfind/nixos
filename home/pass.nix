@@ -4,41 +4,42 @@
   pkgs,
   ...
 }: let
-  storeDir = "${config.home.homeDirectory}/.password-store";
-in {
-  programs = {
-    password-store = (with config.cfgLib; enableFor users.kotfind) {
-      enable = true;
-      settings = {
-        # it's not the default for whatever reason
-        PASSWORD_STORE_DIR = storeDir;
-      };
-    };
+  inherit (config.home) homeDirectory;
+  inherit (config.cfgLib) enableFor users;
+  inherit (lib) getExe;
+  inherit (config.lib.dag) entryAfter;
 
-    rofi.pass = (with config.cfgLib; enableFor users.kotfind) {
-      enable = true;
-      extraConfig = ''
-        default_do='typePass'
-      '';
-    };
+  storeDir = "${homeDirectory}/.password-store";
+in {
+  programs.password-store = enableFor users.kotfind {
+    enable = true;
+    # it's not the default for whatever reason
+    settings.PASSWORD_STORE_DIR = storeDir;
+  };
+
+  programs.rofi.pass = enableFor users.kotfind {
+    enable = true;
+    extraConfig = ''
+      default_do='typePass'
+    '';
+  };
+
+  services.pass-secret-service = {
+    enable = true;
+    storePath = storeDir;
   };
 
   home.activation.downloadPassswordStore = let
-    storeGitRepoArg = lib.escapeShellArg "git@github.com:kotfind/pass";
-    storeDirArg = lib.escapeShellArg storeDir;
-    git = lib.getExe pkgs.git;
+    storeGitRepo = "git@github.com:kotfind/pass";
+    gitBin = getExe pkgs.git;
   in
-    (with config.cfgLib; enableFor users.kotfind)
-    (config.lib.dag.entryAfter ["writeBoundary"]
-      /*
-      bash
-      */
+    enableFor users.kotfind (entryAfter ["writeBoundary"]
       ''
         if [ ! -d ${storeDir} ]; then
             # Note: checking for git fail is usefull for initial
             # installation, when keys are not installed yet
             PATH="${pkgs.openssh}/bin:$PATH" \
-                ${git} clone ${storeGitRepoArg} ${storeDirArg} \
+                ${gitBin} clone ${storeGitRepo} ${storeDir} \
                     || "WARN: failed to fetch password-store from git"
         fi
       '');

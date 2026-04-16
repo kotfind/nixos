@@ -44,6 +44,9 @@
 
   security.polkit.enable = true;
 
+  # Dbus
+  programs.dconf.enable = true;
+
   # Virtual Camera plugin (for OBS Studio)
   boot.extraModulePackages = with config.boot.kernelPackages; [
     v4l2loopback
