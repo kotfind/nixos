@@ -13,7 +13,7 @@
   inputs = {
     # -------------------- General --------------------
 
-    nixpkgs.url = "nixpkgs";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
     home-manager = {
