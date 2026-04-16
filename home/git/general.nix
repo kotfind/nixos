@@ -29,6 +29,8 @@ in {
       };
 
       init.defaultBranch = "master";
+
+      diff.tool = "nvimdiff";
     };
   };
 
