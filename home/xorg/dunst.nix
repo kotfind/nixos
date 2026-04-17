@@ -4,18 +4,29 @@
   lib,
   ...
 }: let
+  inherit (pkgs) writeShellScript;
   inherit (config.cfgLib) matchFor users;
   inherit (lib) getExe getExe';
 
   xkbbellBin = getExe' pkgs.xkbutils "xkbbell";
   rofiBin = getExe pkgs.rofi;
+
+  # suppresses cli args, provided by dunst
+  beepBin = writeShellScript "beep" xkbbellBin;
 in {
   services.dunst = {
     enable = matchFor users.kotfind;
     settings = {
-      # -------------------- General --------------------
-      global = {
-        # -------------------- General.Layout --------------------
+      # -------------------- Global --------------------
+
+      # NOTE: It seems, that `global` section can override stuff,
+      # provided in the rules. So every global setting, that
+      # can be specified with a rule, should be defined in
+      # `00-global` instead of normal `global`.
+
+      "global" = {
+        # -------------------- Global.Layout --------------------
+
         width = 350;
 
         padding = 5;
@@ -26,34 +37,40 @@ in {
         progress_bar_min_width = 10000;
         progress_bar_max_width = 10000;
 
-        # -------------------- General.Positioning --------------------
+        min_icon_size = 64;
+        max_icon_size = 64;
+
+        line_height = 1;
+
+        font = "DejaVu Sans 11";
+
+        # -------------------- Global.Positioning --------------------
+
         origin = "bottom-right";
         offset = "(5, 5)";
 
         gap_size = 5;
 
-        # -------------------- General.Actions --------------------
+        # -------------------- Global.Actions --------------------
+
         mouse_left_click = "do_action,close_current";
         mouse_middle_click = "close_all";
         mouse_right_click = "close_current";
 
-        # -------------------- General.Looks --------------------
-        background = "#000000";
-        foreground = "#ffffff";
+        # -------------------- Global.Other --------------------
 
-        min_icon_size = 64;
-        max_icon_size = 64;
-
-        font = "DejaVu Sans 11";
-
-        line_height = 1;
-
-        # -------------------- General.Other --------------------
         notification_limit = 7;
 
         enable_posix_regex = true;
 
         dmenu = "${rofiBin} -dmenu -p dunst";
+      };
+
+      "00-global" = {
+        # -------------------- Global.Looks --------------------
+
+        background = "#000000";
+        foreground = "#ffffff";
       };
 
       # -------------------- Rules --------------------
@@ -62,7 +79,8 @@ in {
       # NOTE: This enforces their order in resulting config file.
 
       # -------------------- Rules.Urgencies --------------------
-      "00-urgency-critical" = {
+
+      "01-urgency-critical" = {
         msg_urgency = "critical";
 
         fullscreen = "show";
@@ -71,14 +89,14 @@ in {
         timeout = "0s";
       };
 
-      "00-urgency-normal" = {
+      "01-urgency-normal" = {
         msg_urgency = "normal";
 
         fullscreen = "delay";
         frame_color = "#dddddd";
       };
 
-      "00-urgency-low" = {
+      "01-urgency-low" = {
         msg_urgency = "low";
 
         fullscreen = "delay";
@@ -86,6 +104,7 @@ in {
       };
 
       # -------------------- Rules.Custom --------------------
+
       fcitx5 = {
         appname = "^Input Method$";
 
@@ -135,7 +154,7 @@ in {
         min_icon_size = 50;
         max_icon_size = 50;
 
-        script = xkbbellBin;
+        script = "${beepBin}";
 
         timeout = "5s";
       };
@@ -143,14 +162,13 @@ in {
       command-failed = {
         appname = "^command-failed$";
 
-        # FIXME: seems to be overriden by `general` section
         foreground = "#ff0000";
 
         new_icon = "${./icons/cmd-fail.svg}";
         min_icon_size = 50;
         max_icon_size = 50;
 
-        script = xkbbellBin;
+        script = "${beepBin}";
 
         timeout = "5s";
       };
