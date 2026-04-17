@@ -3,6 +3,7 @@
     ./bind.nix
     ./general.nix
     ./theme.nix
-    ./opt.nix
+    ./opts.nix
+    ./hooks.nix
   ];
 }
