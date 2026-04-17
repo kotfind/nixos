@@ -6,15 +6,9 @@
 }: let
   inherit (config.cfgLib) matchFor users;
   inherit (lib) getExe getExe';
-  inherit (pkgs) writeShellScriptBin;
 
-  xkbbell = getExe' pkgs.xkbutils "xkbbell";
-
-  just-beep = writeShellScriptBin "just-beep" ''
-    ${xkbbell}
-  '';
-
-  rofi = getExe pkgs.rofi;
+  xkbbellBin = getExe' pkgs.xkbutils "xkbbell";
+  rofiBin = getExe pkgs.rofi;
 in {
   services.dunst = {
     enable = matchFor users.kotfind;
@@ -59,7 +53,7 @@ in {
 
         enable_posix_regex = true;
 
-        dmenu = "${rofi} -dmenu -p dunst";
+        dmenu = "${rofiBin} -dmenu -p dunst";
       };
 
       # -------------------- Rules --------------------
@@ -132,14 +126,31 @@ in {
         timeout = "1s";
       };
 
-      fish-command-executed = {
-        appname = "^fish-command-executed$";
+      # -------------------- Rules.notify-on-finish --------------------
 
-        new_icon = "${./icons/cmd.svg}";
+      command-executed = {
+        appname = "^command-executed$";
+
+        new_icon = "${./icons/cmd-ok.svg}";
         min_icon_size = 50;
         max_icon_size = 50;
 
-        script = "${getExe just-beep}";
+        script = xkbbellBin;
+
+        timeout = "5s";
+      };
+
+      command-failed = {
+        appname = "^command-failed$";
+
+        # FIXME: seems to be overriden by `general` section
+        foreground = "#ff0000";
+
+        new_icon = "${./icons/cmd-fail.svg}";
+        min_icon_size = 50;
+        max_icon_size = 50;
+
+        script = xkbbellBin;
 
         timeout = "5s";
       };
