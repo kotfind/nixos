@@ -34,6 +34,7 @@ in {
     dig
     claude-code
     pdftk
+    nvtopPackages.intel
 
     wineWow64Packages.stable # TODO: move to other file?
   ];
