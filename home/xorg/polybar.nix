@@ -2,10 +2,12 @@
 {
   pkgs,
   lib,
+  config,
   ...
 }: let
   inherit (pkgs) writeShellScript;
   inherit (lib) getExe;
+  inherit (config.cfgLib) matchFor users;
 
   xrandrBin = getExe pkgs.xrandr;
   awkBin = getExe pkgs.gawk;
@@ -28,7 +30,7 @@
   crit = "#ff0000";
 in {
   services.polybar = {
-    enable = true;
+    enable = matchFor users.kotfind;
 
     package = pkgs.polybar.override {
       pulseSupport = true;
