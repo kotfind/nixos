@@ -123,7 +123,7 @@ ${B}Examples:${C}
 
 Install a POSTEXE hook for ble.sh:
 
-    ${B}blehook${C} POSTEXEC+='/path/to/notify-on-exit.sh --notify \$BLE_PIPESTATUS \"\$@\"'
+    ${B}blehook${C} POSTEXEC+='/path/to/notify-on-exit.sh --notify -- \$BLE_PIPESTATUS \"\$@\"'
 
 " 2>&1
 }
@@ -139,7 +139,7 @@ main() {
     local parsed_opts
     if ! parsed_opts="$(getopt -n "$0" -o "$short_opts" -l "$long_opts" -- "$@")"
     then
-        echo -e "\n${BR}Failed to parse command line arguments${C}"
+        echo -e "\n${BR}failed to parse command line arguments${C}"
         usage
         exit 1
     fi
