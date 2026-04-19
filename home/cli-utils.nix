@@ -35,6 +35,7 @@ in {
     claude-code
     pdftk
     nvtopPackages.intel
+    noogle-search
 
     wineWow64Packages.stable # TODO: move to other file?
   ];
@@ -57,6 +58,7 @@ in {
 
   programs.bash.shellAliases = {
     "unrar" = getExe pkgs.unrar-free;
+    "ns" = getExe pkgs.noogle-search;
   };
 
   programs.yazi = {
