@@ -93,6 +93,7 @@ in {
 
         label-occupied = "%name%";
         label-occupied-padding = 1;
+        label-occupied-underline = fg;
 
         label-empty = "%name%";
         label-empty-padding = 1;
