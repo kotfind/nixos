@@ -21,7 +21,6 @@
     "info"
     "missing"
     "web"
-    "whatlastgenre"
   ];
 in {
   programs.beets = {
