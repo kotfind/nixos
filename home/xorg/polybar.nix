@@ -66,7 +66,7 @@ in {
         foreground = fg;
         background = bg;
 
-        # margin-bottom = 1;
+        margin-bottom = 1;
         module-margin = 1;
 
         underline-size = 1;
@@ -74,7 +74,7 @@ in {
 
         font-0 = "FiraCode Nerd Font:size=12;2";
 
-        wm-restack = "bspwm";
+        wm-restack = "ewmh";
       };
 
       # -------------------- Left --------------------
@@ -87,6 +87,7 @@ in {
         occupied-scroll = true;
 
         format = "<label-state>";
+        format-underline = bg;
 
         label-focused = "%name%";
         label-focused-padding = 1;
