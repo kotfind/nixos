@@ -33,8 +33,8 @@
     SUBSYSTEM=="usb", \
     ATTR{idVendor}=="${customDeviceVendorId}", \
     ATTR{idProduct}=="${customDeviceProductId}", \
-    GROUP="plugdev", \
-    MODE="0660"
+    GROUP="dialout", \
+    MODE="0666"
   '';
 in {
   services.udev.extraRules = concatStringsSep "\n" [
