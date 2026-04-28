@@ -16,7 +16,7 @@ in {
     certs."_.kotfind.mywire.org".domain = "*.kotfind.mywire.org";
   };
 
-  sops.secrets.acmeEnv = enableFor hosts.pc {
+  sops.secrets.acmeEnv = {
     sopsFile = ./acme.enc.env;
     format = "dotenv";
   };

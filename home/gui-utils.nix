@@ -48,7 +48,7 @@ in {
       ])
 
       (enableFor hosts.laptop [
-        light
+        brightnessctl
       ])
 
       (enableFor hosts.pc.users.kotfind [

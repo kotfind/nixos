@@ -22,7 +22,7 @@
   alacritty = getExe pkgs.alacritty;
   rofi = getExe pkgs.rofi;
   pactl = getExe' pkgs.pulseaudio "pactl";
-  light = getExe pkgs.light;
+  brightnessctlBin = getExe pkgs.brightnessctl;
   playerctl = getExe pkgs.playerctl;
   systemctl = getExe' pkgs.systemd "systemctl";
   loginctl = getExe' pkgs.systemd "loginctl";
@@ -48,7 +48,7 @@
   '';
 
   changeBrightness = writeShellScriptBin "change-brightness" ''
-    ${light} $1 5
+    ${brightnessctlBin} "5%$1" 1>/dev/null 2>&1
     ${showBrightnessNotify}
   '';
 
@@ -170,7 +170,7 @@ in {
       # brightness up / down
       "XF86MonBrightness{Up,Down}" =
         if matchFor hosts.laptop
-        then "${getExe changeBrightness} {-A,-U}"
+        then "${getExe changeBrightness} {-,+}"
         else "";
 
       # media keys

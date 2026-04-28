@@ -14,17 +14,17 @@ in
 
       runtimeInputs = with pkgs; [
         libnotify
-        light
+        brightnessctl
         toybox
       ];
 
       text = ''
-        brightness="$(printf '%.*f\n' 0 "$(light)")"
+        val="$(brightnessctl -m | cut -d ',' -f4)"
 
         notify-send \
             -u 'critical' \
             -a 'brightness' \
-            -h "int:value:$brightness" \
+            -h "int:value:$val" \
             'Brightness'
       '';
     })
