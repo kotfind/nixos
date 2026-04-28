@@ -1,4 +1,3 @@
-# TODO: add backlight and battery modules
 {
   pkgs,
   lib,
@@ -111,7 +110,7 @@ in {
 
       # -------------------- Right --------------------
 
-      "bar/master".modules-right = "time volume cpu memory tray";
+      "bar/master".modules-right = "time battery brightness volume cpu memory tray";
 
       "module/time" = {
         type = "internal/date";
@@ -123,6 +122,33 @@ in {
 
         date-alt = "";
         time-alt = "%s";
+      };
+
+      "module/battery" = {
+        type = "internal/battery";
+
+        battery = "BAT0";
+        adapter = "AC0";
+
+        poll-interval = 1;
+
+        format-charging = "<label-charging>";
+        format-discharging = "<label-discharging>";
+
+        label-charging = "󰢟 %percentage%%";
+        label-discharging = "󰂎 %percentage%%";
+      };
+
+      "module/brightness" = {
+        type = "internal/backlight";
+
+        card = "intel_backlight";
+
+        enable-scroll = true;
+
+        format = "<label>";
+
+        label = " %percentage%%";
       };
 
       "module/volume" = {
