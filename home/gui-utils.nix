@@ -53,6 +53,7 @@ in {
 
       (enableFor hosts.pc.users.kotfind [
         steam-run
+        kicad
       ])
     ];
 
