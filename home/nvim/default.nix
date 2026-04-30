@@ -117,9 +117,9 @@
           abs = getExe pkgs.nixd;
         };
 
-        pyright = rec {
-          rel = "pyright-langserver";
-          abs = getExe' pkgs.pyright rel;
+        ty = {
+          rel = "ty";
+          abs = getExe pkgs.ty;
         };
 
         bashls = {
@@ -176,9 +176,9 @@
 
         leptosfmt.rel = "leptosfmt";
 
-        black = {
-          rel = "black";
-          abs = getExe pkgs.black;
+        ruff = {
+          rel = "ruff";
+          abs = getExe pkgs.ruff;
         };
 
         djlint = {
