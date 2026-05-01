@@ -6,6 +6,7 @@ in {
     ./backup.nix
     ./bash
     ./beet.nix
+    ./bluetooth.nix
     ./cli-utils.nix
     ./downloaders.nix
     ./eza.nix
