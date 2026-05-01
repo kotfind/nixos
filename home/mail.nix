@@ -1,9 +1,5 @@
-{
-  pkgs,
-  config,
-  ...
-}: let
-  inherit (config.cfgLib) enableFor matchFor users;
+{config, ...}: let
+  inherit (config.cfgLib) matchFor users;
 in {
   programs.thunderbird = {
     enable = matchFor users.kotfind;
@@ -18,8 +14,4 @@ in {
       # TODO: options and login
     };
   };
-
-  home.packages = enableFor users.kotfind (with pkgs; [
-    birdtray
-  ]);
 }
