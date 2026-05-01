@@ -20,7 +20,7 @@ in {
 
   services.picom.enable = matchFor users.kotfind;
 
-  services.blueman-applet.enable = matchFor users.kotfind;
+  # services.blueman-applet.enable = matchFor users.kotfind;
 
   services.batsignal = {
     enable = matchFor hosts.laptop.users.kotfind;
