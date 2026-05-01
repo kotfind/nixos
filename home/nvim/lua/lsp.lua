@@ -150,6 +150,7 @@ local lsps = {
     nixd = { on_attach = on_attach },
     bashls = { on_attach = on_attach },
     ty = { on_attach = on_attach },
+    ruff = { on_attach = on_attach },
     dotls = { on_attach = on_attach },
     kotlin_language_server = { on_attach = on_attach },
     arduino_language_server = { on_attach = on_attach },

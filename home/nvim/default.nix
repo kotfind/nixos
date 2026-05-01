@@ -122,6 +122,11 @@
           abs = getExe pkgs.ty;
         };
 
+        ruff = {
+          rel = "ruff";
+          abs = getExe pkgs.ruff;
+        };
+
         bashls = {
           rel = "bash-language-server";
           abs = getExe pkgs.bash-language-server;
