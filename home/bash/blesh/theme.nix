@@ -21,7 +21,7 @@
     ble-face filename_link=fg=cyan,underline
     ble-face filename_ls_colors=underline
     ble-face filename_orphan=fg=magenta,bold
-    ble-face filename_other=fg=252
+    ble-face filename_other=fg=white
     ble-face filename_pipe=fg=yellow,bold
     ble-face filename_setgid=fg=black,bg=green
     ble-face filename_setuid=fg=black,bg=red
@@ -37,8 +37,8 @@
     ble-face syntax_brace=fg=blue
     ble-face syntax_command=fg=green
     ble-face syntax_comment=fg=242
-    ble-face syntax_default=fg=252
-    ble-face syntax_delimiter=fg=252
+    ble-face syntax_default=fg=white
+    ble-face syntax_delimiter=fg=white
     ble-face syntax_document=fg=cyan
     ble-face syntax_document_begin=fg=cyan,bold
     ble-face syntax_error=fg=red,bold
