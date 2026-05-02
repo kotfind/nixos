@@ -37,6 +37,7 @@ in {
     nvtopPackages.intel
     noogle-search
     playerctl
+    qrencode
 
     wineWow64Packages.stable # TODO: move to other file?
   ];
@@ -60,6 +61,8 @@ in {
   programs.bash.shellAliases = {
     "unrar" = getExe pkgs.unrar-free;
     "ns" = getExe pkgs.noogle-search;
+    "qr" = getExe pkgs.qrencode |> (it: "${it} -t ansiutf8");
+    "xcp" = getExe pkgs.xclip |> (it: "${it} -selection clipboard");
   };
 
   programs.yazi = {
