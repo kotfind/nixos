@@ -4,15 +4,19 @@
   config,
   ...
 }: let
-  inherit (pkgs) writeShellScript;
+  inherit (builtins) readFile;
+  inherit (pkgs) writeShellScript writeShellApplication;
   inherit (lib) getExe;
   inherit (config.cfgLib) matchFor users;
+
+  # -------------------- Bin --------------------
 
   xrandrBin = getExe pkgs.xrandr;
   awkBin = getExe pkgs.gawk;
   pavucontrolBin = getExe pkgs.pavucontrol;
   alacrittyBin = getExe pkgs.alacritty;
   htopBin = getExe pkgs.htop;
+  playerctlBin = getExe pkgs.playerctl;
 
   htopByMemBin = writeShellScript "htop-by-mem" ''
     ${alacrittyBin} -e ${htopBin} -s PERCENT_MEM
@@ -22,11 +26,38 @@
     ${alacrittyBin} -e ${htopBin} -s PERCENT_CPU
   '';
 
+  playerctlInfoBin =
+    writeShellApplication {
+      name = "polybar-playerctl-info";
+
+      runtimeInputs = with pkgs; [
+        playerctl
+      ];
+
+      text = readFile ./scripts/polybar-playerctl-info.sh;
+    }
+    |> getExe;
+
+  # -------------------- Colors --------------------
+
   fg = "#ffffff";
   bg = "#000000";
 
   pale = "#dddddd";
   crit = "#ff0000";
+
+  # -------------------- Fmt --------------------
+
+  setfg = fg: txt: "%{F${fg}}${txt}%{F-}";
+
+  act = btn: cmd: txt: "%{A${btn}:${cmd}:}${txt}%{A}";
+
+  clamp = min: max: end: token: "%${token}:${toString min}:${toString max}:${end}%";
+
+  btn = {
+    l = "1"; # left click
+    r = "3"; # right click
+  };
 in {
   services.polybar = {
     enable = matchFor users.kotfind;
@@ -106,7 +137,20 @@ in {
 
       # -------------------- Center --------------------
 
-      "bar/master".modules-center = "";
+      "bar/master".modules-center = "music";
+
+      "module/music" = {
+        type = "custom/script";
+
+        interval = 1;
+        exec = playerctlInfoBin;
+
+        label = let
+          output = "%output%" |> act btn.l "${playerctlBin} play-pause";
+          prev = "󰒮" |> act btn.l "${playerctlBin} previous";
+          next = "󰒭" |> act btn.l "${playerctlBin} next";
+        in "${prev} ${output} ${next}";
+      };
 
       # -------------------- Right --------------------
 
@@ -171,8 +215,8 @@ in {
       "module/cpu" = rec {
         type = "internal/cpu";
 
-        format = "%{A3:${htopByCpuBin}:}<label>%{A}";
-        format-warn = "%{A3:${htopByCpuBin}:}<label-warn>%{A}";
+        format = "<label>" |> act btn.r htopByCpuBin;
+        format-warn = "<label-warn>" |> act btn.r htopByCpuBin;
 
         label = "%percentage:3:3%%";
 
@@ -188,8 +232,8 @@ in {
 
         warn-percentage = 80;
 
-        format = "%{A3:${htopByMemBin}:}<label>%{A}";
-        format-warn = "%{A3:${htopByMemBin}:}<label-warn>%{A}";
+        format = "<label>" |> act btn.r htopByMemBin;
+        format-warn = "<label-warn>" |> act btn.r htopByMemBin;
 
         label = "%percentage_used:3:3%% 󱛟%percentage_swap_used:3:3%%";
 

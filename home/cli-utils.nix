@@ -36,6 +36,7 @@ in {
     pdftk
     nvtopPackages.intel
     noogle-search
+    playerctl
 
     wineWow64Packages.stable # TODO: move to other file?
   ];
