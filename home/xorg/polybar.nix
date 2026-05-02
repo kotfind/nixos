@@ -4,8 +4,7 @@
   config,
   ...
 }: let
-  inherit (builtins) readFile;
-  inherit (pkgs) writeShellScript writeShellApplication;
+  inherit (pkgs) writeShellScript;
   inherit (lib) getExe;
   inherit (config.cfgLib) matchFor users;
 
@@ -16,7 +15,6 @@
   pavucontrolBin = getExe pkgs.pavucontrol;
   alacrittyBin = getExe pkgs.alacritty;
   htopBin = getExe pkgs.htop;
-  playerctlBin = getExe pkgs.playerctl;
 
   htopByMemBin = writeShellScript "htop-by-mem" ''
     ${alacrittyBin} -e ${htopBin} -s PERCENT_MEM
@@ -25,18 +23,6 @@
   htopByCpuBin = writeShellScript "htop-by-cpu" ''
     ${alacrittyBin} -e ${htopBin} -s PERCENT_CPU
   '';
-
-  playerctlInfoBin =
-    writeShellApplication {
-      name = "polybar-playerctl-info";
-
-      runtimeInputs = with pkgs; [
-        playerctl
-      ];
-
-      text = readFile ./scripts/polybar-playerctl-info.sh;
-    }
-    |> getExe;
 
   # -------------------- Colors --------------------
 
@@ -137,20 +123,7 @@ in {
 
       # -------------------- Center --------------------
 
-      "bar/master".modules-center = "music";
-
-      "module/music" = {
-        type = "custom/script";
-
-        interval = 1;
-        exec = playerctlInfoBin;
-
-        label = let
-          output = "%output%" |> act btn.l "${playerctlBin} play-pause";
-          prev = "󰒮" |> act btn.l "${playerctlBin} previous";
-          next = "󰒭" |> act btn.l "${playerctlBin} next";
-        in "${prev} ${output} ${next}";
-      };
+      "bar/master".modules-center = "";
 
       # -------------------- Right --------------------
 
