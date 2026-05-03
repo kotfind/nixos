@@ -15,6 +15,7 @@
   pavucontrolBin = getExe pkgs.pavucontrol;
   alacrittyBin = getExe pkgs.alacritty;
   htopBin = getExe pkgs.htop;
+  playerctlBin = getExe pkgs.playerctl;
 
   htopByMemBin = writeShellScript "htop-by-mem" ''
     ${alacrittyBin} -e ${htopBin} -s PERCENT_MEM
@@ -127,7 +128,7 @@ in {
 
       # -------------------- Right --------------------
 
-      "bar/master".modules-right = "time battery brightness volume cpu memory tray";
+      "bar/master".modules-right = "time battery brightness music volume cpu memory tray";
 
       "module/time" = {
         type = "internal/date";
@@ -152,8 +153,10 @@ in {
         format-charging = "<label-charging>";
         format-discharging = "<label-discharging>";
 
-        label-charging = "󰢟 %percentage%%";
-        label-discharging = "󰂎 %percentage%%";
+        label-full = "󱈑 %percentage%%";
+        label-charging = "󰂄 %percentage%%";
+        label-discharging = "󰁹 %percentage%%";
+        label-low = "󰂃 %percentage%%";
       };
 
       "module/brightness" = {
@@ -166,6 +169,34 @@ in {
         format = "<label>";
 
         label = " %percentage%%";
+      };
+
+      "module/music" = rec {
+        type = "custom/script";
+
+        format = "<label>";
+        format-fail = "<label-fail>";
+
+        interval = 1;
+        exec = writeShellScript "polybar-playerctl-info" ''
+          if [ "$(${playerctlBin} status)" == 'Playing' ]
+          then
+            echo -n '󰏤'
+            exit 0
+          else
+            echo -n '󰐊'
+            exit 1
+          fi
+        '';
+
+        label = let
+          play = "%output%" |> act btn.l "${playerctlBin} play-pause";
+          prev = "󰒮" |> act btn.l "${playerctlBin} previous";
+          next = "󰒭" |> act btn.l "${playerctlBin} next";
+        in "${prev} ${play} ${next}";
+
+        label-fail = label;
+        label-fail-foreground = pale;
       };
 
       "module/volume" = {
