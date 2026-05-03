@@ -1,6 +1,5 @@
-{config, ...}: let
-  inherit (config.cfgLib) matchFor users;
+{...}: let
 in {
-  # services.blueman-applet.enable = matchFor users.kotfind;
-  services.mpris-proxy.enable = matchFor users.kotfind;
+  # services.blueman-applet.enable = true;
+  services.mpris-proxy.enable = true;
 }
