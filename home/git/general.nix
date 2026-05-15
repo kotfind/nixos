@@ -14,6 +14,8 @@ in {
 
     signing.format = null;
 
+    lfs.enable = true;
+
     settings = {
       core = {
         quotePath = false;
