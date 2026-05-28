@@ -179,7 +179,13 @@ in {
 
         interval = 1;
         exec = writeShellScript "polybar-playerctl-info" ''
-          if [ "$(${playerctlBin} status)" == 'Playing' ]
+          if ! status="$(${playerctlBin} status 2>/dev/null)"
+          then
+            echo -n '󰓛'
+            exit 1
+          fi
+
+          if [ "$status" == 'Playing' ]
           then
             echo -n '󰏤'
             exit 0
