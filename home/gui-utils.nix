@@ -33,18 +33,8 @@ in {
         kdePackages.gwenview
         flacon # cutting flac's
         simple-scan
-        # librepcb
         webcamoid
-
-        # NOTE: current version from unstable is broken
-        # See
-        #     https://github.com/NixOS/nixpkgs/pull/348263
-        # and
-        #     https://github.com/NixOS/nixpkgs/issues/345314
-        # Current workarround:
-        #     nix run github:nixos/nixpkgs/nixos-24.05#openshot-qt
-        #
-        # openshot-qt
+        kicad
       ])
 
       (enableFor hosts.laptop [
@@ -53,7 +43,6 @@ in {
 
       (enableFor hosts.pc.users.kotfind [
         steam-run
-        kicad
       ])
     ];
 
