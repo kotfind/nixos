@@ -30,8 +30,6 @@
       };
     };
 
-    psysonic.url = "github:Psychotoxical/psysonic";
-
     # -------------------- Toki Pona --------------------
 
     fcitx5-ilo-sitelen = {

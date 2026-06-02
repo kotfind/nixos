@@ -2,12 +2,9 @@
   pkgs,
   config,
   lib,
-  inputs,
-  system,
   ...
 }: let
   inherit (config.cfgLib) users hosts enableFor matchFor;
-  inherit (inputs.psysonic.packages.${system}) psysonic;
 in {
   home.packages = with pkgs;
     lib.mkMerge [
@@ -38,7 +35,6 @@ in {
         simple-scan
         # librepcb
         webcamoid
-        psysonic
 
         # NOTE: current version from unstable is broken
         # See
