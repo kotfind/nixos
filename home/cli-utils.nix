@@ -32,7 +32,6 @@ in {
     ueberzugpp # for yazi image preview
     sshpass
     dig
-    claude-code
     pdftk
     nvtopPackages.intel
     noogle-search

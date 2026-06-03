@@ -2,6 +2,7 @@
   inherit (config.cfgLib) user;
 in {
   imports = [
+    ./ai
     ./alacritty
     ./backup.nix
     ./bash
