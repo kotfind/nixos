@@ -10,6 +10,9 @@
 
   claudeCodeBin = getExe pkgs.claude-code;
 
+  notifySend = getExe pkgs.libnotify;
+  xdotool = getExe pkgs.xdotool;
+
   claudeCodeWithToken = writeShellScriptBin "claude" ''
     export ANTHROPIC_AUTH_TOKEN="$(cat ${sops.secrets.deepseekKey.path} | xargs)"
     exec ${claudeCodeBin} "$@"
@@ -29,6 +32,28 @@ in {
         CLAUDE_CODE_EFFORT_LEVEL = "max";
       };
       alwaysThinkingEnabled = false;
+      hooks = {
+        Notification = [
+          {
+            hooks = [
+              {
+                type = "command";
+                command = ''[ "$WINDOWID" != "$(${xdotool} getactivewindow)" ] && ${notifySend} "Claude Code" "Input required" || true'';
+              }
+            ];
+          }
+        ];
+        Stop = [
+          {
+            hooks = [
+              {
+                type = "command";
+                command = ''[ "$WINDOWID" != "$(${xdotool} getactivewindow)" ] && ${notifySend} "Claude Code" "Done" || true'';
+              }
+            ];
+          }
+        ];
+      };
     };
   };
 }
