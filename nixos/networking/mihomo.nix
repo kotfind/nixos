@@ -89,6 +89,14 @@
       url = testUrl;
       use = ["💰🔗"];
     }
+    {
+      name = "💰🚀";
+      type = "url-test";
+      url = testUrl;
+      interval = 300;
+      tolerance = 50;
+      use = ["💰🔗"];
+    }
   ];
 
   rulesConfig = [
