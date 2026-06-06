@@ -4,20 +4,37 @@
   config,
   ...
 }: let
-  inherit (pkgs) writeShellScriptBin;
+  inherit (builtins) readFile;
+  inherit (pkgs) writeShellScriptBin writeShellApplication;
   inherit (lib) getExe;
   inherit (config) sops;
 
   claudeCodeBin = getExe pkgs.claude-code;
 
-  notifySend = getExe pkgs.libnotify;
-  xdotool = getExe pkgs.xdotool;
-
   claudeCodeWithToken = writeShellScriptBin "claude" ''
     export ANTHROPIC_AUTH_TOKEN="$(cat ${sops.secrets.deepseekKey.path} | xargs)"
     exec ${claudeCodeBin} "$@"
   '';
+
+  claudeNotify = writeShellApplication {
+    name = "claude-notify";
+    text = readFile ./claude-notify.sh;
+    runtimeInputs = with pkgs; [
+      xdotool
+      libnotify
+    ];
+  };
+
+  claudeNotifyBin = getExe claudeNotify;
 in {
+  services.dunst.settings.claude-code = {
+    appname = "^claude-code$";
+    new_icon = "${./claude.svg}";
+    min_icon_size = 50;
+    max_icon_size = 50;
+    timeout = "5s";
+  };
+
   programs.claude-code = {
     enable = true;
     package = claudeCodeWithToken;
@@ -38,7 +55,7 @@ in {
             hooks = [
               {
                 type = "command";
-                command = ''[ "$WINDOWID" != "$(${xdotool} getactivewindow)" ] && ${notifySend} "Claude Code" "Input required" || true'';
+                command = ''${claudeNotifyBin} 'Input required' '';
               }
             ];
           }
@@ -48,7 +65,7 @@ in {
             hooks = [
               {
                 type = "command";
-                command = ''[ "$WINDOWID" != "$(${xdotool} getactivewindow)" ] && ${notifySend} "Claude Code" "Done" || true'';
+                command = ''${claudeNotifyBin} 'Done' '';
               }
             ];
           }
