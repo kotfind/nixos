@@ -32,7 +32,7 @@
     allow-lan = false;
 
     find-process-mode = "always";
-    log-level = "warning";
+    log-level = "error";
 
     geo-auto-update = true;
     geo-update-interval = 24; # 24h
