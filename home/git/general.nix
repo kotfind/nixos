@@ -50,7 +50,7 @@ in {
     ]);
 
   sops = {
-    secrets = enableFor users.kotfind {
+    secrets = {
       gh_oauth_token = {
         sopsFile = ./gh_oauth_token.enc;
         format = "binary";
@@ -58,7 +58,7 @@ in {
     };
 
     templates.gh_hosts = {
-      content = enableFor users.kotfind ''
+      content = ''
         github.com:
           users:
             kotfind:

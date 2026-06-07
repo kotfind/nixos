@@ -4,7 +4,7 @@
   inputs = {
     # -------------------- General --------------------
 
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
     home-manager = {

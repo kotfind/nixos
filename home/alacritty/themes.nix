@@ -1,10 +1,8 @@
-# based on cyberdream theme
 {
   dark = {
     primary = {
       foreground = "#ffffff";
       background = "#16181a";
-      dim_foreground = null;
     };
     normal = {
       black = "#16181a";
@@ -26,12 +24,16 @@
       cyan = "#5ef1ff";
       white = "#ffffff";
     };
+    cursor = {
+      text = "#000000";
+      cursor = "#ffffff";
+    };
   };
+
   light = {
     primary = {
       foreground = "#16181a";
       background = "#ffffff";
-      dim_foreground = null;
     };
     normal = {
       black = "#ffffff";
@@ -52,6 +54,10 @@
       magenta = "#a018ff";
       cyan = "#008c99";
       white = "#16181a";
+    };
+    cursor = {
+      text = "#ffffff";
+      cursor = "#000000";
     };
   };
 }
