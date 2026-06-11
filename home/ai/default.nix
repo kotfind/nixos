@@ -1,6 +1,6 @@
 {...}: {
   imports = [
-    ./claude.nix
+    ./claude
     ./deepseek.nix
   ];
 }

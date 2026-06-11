@@ -13,6 +13,8 @@ if [ "$WINDOWID" = "$(xdotool getactivewindow)" ]; then
     exit 0
 fi
 
+xkbbell
+
 user_action="$(notify-send \
     --app-name 'claude-code' \
     --action "default=Focus claude windows" \
