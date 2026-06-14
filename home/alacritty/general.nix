@@ -49,6 +49,8 @@ in {
     settings = {
       terminal.shell = getExe pkgs.bash;
 
+      env.TERM = "xterm-256color";
+
       general.import = [activeThemeFile];
 
       font.size = lib.mkMerge [
