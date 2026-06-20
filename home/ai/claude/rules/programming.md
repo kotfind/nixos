@@ -43,6 +43,10 @@
 - Prefer the latest stable version of packages and libraries.
 - Don't use deprecated or unmaintained packages. Check for alternatives.
 
+## Builds
+
+- Build and run in debug mode by default. Only use `--release` (or equivalent) when the user asks for it or when performance is required.
+
 ## File Size
 
 - Prefer small, focused files to large monolithic ones
