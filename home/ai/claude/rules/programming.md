@@ -31,6 +31,13 @@
   - `.jinja`: `djlint`
 - Run the formatter automatically. Do not ask for permission.
 
+## Shell Commands
+
+- When a command chains many operations with `&&`, `||`, `|`, or `;`, split it across multiple lines with `\` for readability.
+- Short commands with simple logic don't need splitting. E.g.:
+  - `cmd1 && cmd2 && cmd3` -- split it
+  - `do smth | tail -n 5` -- fine on one line
+
 ## File Size
 
 - Prefer small, focused files to large monolithic ones
