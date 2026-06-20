@@ -38,3 +38,4 @@ paths:
 - Keep all dependency versions in the workspace `Cargo.toml` under `[workspace.dependencies]`.
 - Use `cargo autoinherit` to migrate deps to the workspace.
 - Use `cargo clippy` instead of `cargo check` to verify code compiles. Clippy catches more issues.
+- Use `cargo machete` to find and remove unused dependencies.
