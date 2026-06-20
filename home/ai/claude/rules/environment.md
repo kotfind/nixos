@@ -1,9 +1,10 @@
 # NixOS & Flakes
 
-- This system runs NixOS with Nix flakes — all configuration is declarative
+- This system runs NixOS with Nix flakes. All configuration is declarative.
 - To install an app permanently, add it to a devShell (not `nix profile` or `nix-env`)
 - To try a command temporarily, use `nix run` or `nix shell`
-- devShells are loaded via `.envrc` files with `direnv` — run `direnv allow` to activate
+- devShells are loaded via `.envrc` files with `direnv`. `direnv allow` does not work from Claude Code.
+  - If a new flake needs activation: run `nix flake check`, then tell the user to `direnv allow` themselves.
 
 # Preinstalled Tools
 
