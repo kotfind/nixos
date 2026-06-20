@@ -20,6 +20,7 @@ in {
       "Bash(nix search:*)"
       "Bash(nix-locate:*)"
       "Bash(nix-instantiate:*)"
+      "Bash(man:*)"
       "WebSearch"
       "WebFetch"
     ];
