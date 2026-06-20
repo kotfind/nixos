@@ -18,3 +18,7 @@ These are always available — you can use those:
 | `xh` | `curl` (for APIs) | HTTPie-like, nicer JSON output |
 | `direnv` | — | Auto-loads `.envrc` on directory entry |
 | `htop` | `top` | Interactive process viewer |
+
+# Sudo
+
+- Always use `sudo -A` when running commands that need root. The `-A` flag makes sudo read the password from `$SUDO_ASKPASS` (a rofi prompt), which works without a TTY.
