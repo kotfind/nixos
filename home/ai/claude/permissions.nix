@@ -2,6 +2,9 @@
   homeDir = config.home.homeDirectory;
 in {
   programs.claude-code.settings.permissions = {
+    disableAutoMode = "disable";
+    disableBypassPermissionsMode = "disable";
+
     allow = [
       "Read"
       "Bash(git log:*)"
