@@ -12,6 +12,8 @@ When asked to rulify preferences:
 
 - Review what the user has asked for in this session: commit style, coding conventions, tool preferences, naming choices, workflow habits
 - Focus on preferences that are reusable -- things that would apply to other projects, not one-off tasks
+- Skip anything already covered by existing rules. Read the current rules first to avoid duplicates.
 - Rephrase each preference to be: precise, unambiguous, well-structured (headings, lists, examples)
-- Group related preferences into thematic rules files (e.g. git.md, rust.md, programming.md)
+- Group preferences into top-level sections by language or domain: General, Rust, Nix, Python, Git, etc.
+- Within a section, split into subsections when a topic grows beyond its primary concern. E.g. the Rust section might have subsections for Imports, Spacing, and Formatting.
 - Present the result as blocks ready to add to claude rules. Don't write them to disk unless asked.
