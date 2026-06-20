@@ -15,6 +15,7 @@ in {
         "Bash(fd:*)"
         "Bash(rg:*)"
         "Bash(nix build:*)"
+        "Bash(nix flake check:*)"
         "Bash(nix search:*)"
         "Bash(nix-locate:*)"
         "Bash(nix-instantiate:*)"
