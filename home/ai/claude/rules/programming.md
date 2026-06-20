@@ -38,6 +38,11 @@
   - `cmd1 && cmd2 && cmd3` -- split it
   - `do smth | tail -n 5` -- fine on one line
 
+## Dependencies
+
+- Prefer the latest stable version of packages and libraries.
+- Don't use deprecated or unmaintained packages. Check for alternatives.
+
 ## File Size
 
 - Prefer small, focused files to large monolithic ones
