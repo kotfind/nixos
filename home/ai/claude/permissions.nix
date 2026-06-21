@@ -25,6 +25,7 @@ in {
       "Bash(nix-locate:*)"
       "Bash(nix-instantiate:*)"
       "Bash(man:*)"
+      "Bash(readelf:*)"
       "WebSearch"
       "WebFetch"
     ];
