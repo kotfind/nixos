@@ -19,7 +19,8 @@
 
 ## Formatting
 
-- After editing code, run the formatter matching the file type:
+- Run the formatter matching the file type before committing. Do not ask for permission.
+- Formatter by file type:
   - `.rs`: `rustfmt`
   - `.nix`: `alejandra`
   - `.lua`: `stylua`
@@ -29,7 +30,6 @@
   - `.c`, `.cpp`: `clang-format`
   - `.elm`: `topiary`
   - `.jinja`: `djlint`
-- Run the formatter automatically. Do not ask for permission.
 
 ## Shell Commands
 
