@@ -109,3 +109,7 @@ description: Create or modify flake.nix files for project devShells or packages.
 - `camelCase` for variable bindings (e.g. `rustToolchain`, `runtimeLibs`)
 - `kebab-case` for derivations and shell names (e.g. `project-name-shell`, `my-package`)
 - When adding a prefix to an existing name, keep the original convention: `some-package` -> `some-package-src`, `someVariable` -> `someVariableOrig`
+
+## Envrc
+
+- After creating `flake.nix`, check if `.envrc` exists. If not, create one with `use flake`.
