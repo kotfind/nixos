@@ -34,6 +34,7 @@ in {
       "${homeDir}/nixos"
       "${homeDir}/.cargo/registry/cache"
       "${homeDir}/.cargo/registry/index"
+      "${homeDir}/.cargo/registry/src"
     ];
   };
 }
