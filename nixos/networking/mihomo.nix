@@ -100,6 +100,8 @@
   ];
 
   rulesConfig = [
+    ph."mihomo-rules"
+
     "DOMAIN-REGEX,(\\bmts.*)|(.*mts\\b),DIRECT"
     "DOMAIN-REGEX,(\\bsber.*)|(.*sber\\b),DIRECT"
     "DOMAIN-REGEX,(\\btbank.*)|(.*stbank\\b),DIRECT"
@@ -176,6 +178,10 @@ in {
           (enableFor hosts.pc "💰🔗/header/value/pc")
           (enableFor hosts.laptop "💰🔗/header/value/laptop")
         ];
+      };
+      "mihomo-rules" = {
+        sopsFile = ./mihomo.enc.yml;
+        key = "rules";
       };
     };
     templates."mihomo-config.yml" = {
