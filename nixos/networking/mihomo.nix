@@ -102,18 +102,6 @@
   rulesConfig = [
     ph."mihomo-rules"
 
-    "DOMAIN-REGEX,(\\bmts.*)|(.*mts\\b),DIRECT"
-    "DOMAIN-REGEX,(\\bsber.*)|(.*sber\\b),DIRECT"
-    "DOMAIN-REGEX,(\\btbank.*)|(.*stbank\\b),DIRECT"
-    "DOMAIN-REGEX,(\\bwildberries.*)|(.*wildberries\\b),DIRECT"
-    "DOMAIN-REGEX,(\\bkinopoisk.*)|(.*kinopoisk\\b),DIRECT"
-    "DOMAIN-REGEX,(\\bozon.*)|(.*ozon\\b),DIRECT"
-    "DOMAIN-REGEX,(\\bvtb.*)|(.*vtb\\b),DIRECT"
-    "DOMAIN-REGEX,(\\bavito.*)|(.*avito\\b),DIRECT"
-    "DOMAIN-REGEX,(\\brutube.*)|(.*rutube\\b),DIRECT"
-    "DOMAIN-REGEX,(\\bmos.*)|(.*mos\\b),DIRECT"
-    "DOMAIN-REGEX,(\\bgosuslugi.*)|(.*gosuslugi\\b),DIRECT"
-
     "GEOSITE,category-gov-ru,DIRECT"
     "GEOSITE,category-media-ru,DIRECT"
     "GEOSITE,category-ru,DIRECT"
