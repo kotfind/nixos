@@ -27,6 +27,7 @@ in {
         inkscape
         gimp
         localsend
+        valentina
         zoom-us
         moonlight-qt
         loupe
