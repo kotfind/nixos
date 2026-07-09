@@ -33,7 +33,6 @@ in {
         loupe
         kdePackages.gwenview
         flacon # cutting flac's
-        freecad
         simple-scan
         solvespace
         webcamoid
