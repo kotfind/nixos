@@ -165,17 +165,17 @@ in {
       };
       "mihomo-💰🔗-url" = {
         sopsFile = ./mihomo.enc.yml;
-        key = "💰🔗/url";
+        key = "provider/url";
       };
       "mihomo-💰🔗-header-name" = {
         sopsFile = ./mihomo.enc.yml;
-        key = "💰🔗/header/name";
+        key = "provider/header/name";
       };
       "mihomo-💰🔗-header-value" = {
         sopsFile = ./mihomo.enc.yml;
         key = mkMerge [
-          (enableFor hosts.pc "💰🔗/header/value/pc")
-          (enableFor hosts.laptop "💰🔗/header/value/laptop")
+          (enableFor hosts.pc "provider/header/value/pc")
+          (enableFor hosts.laptop "provider/header/value/laptop")
         ];
       };
       "mihomo-rules" = {
