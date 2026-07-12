@@ -25,7 +25,7 @@
   brightnessctlBin = getExe pkgs.brightnessctl;
   playerctl = getExe pkgs.playerctl;
   systemctl = getExe' pkgs.systemd "systemctl";
-  loginctl = getExe' pkgs.systemd "loginctl";
+  xlock = getExe' pkgs.xlockmore "xlock";
   rofi-pass = getExe pkgs.rofi-pass;
   pkill = getExe' pkgs.toybox "pkill";
   scrot = getExe pkgs.scrot;
@@ -177,7 +177,7 @@ in {
       "XF86{Play,Stop,Pause,Next,Prev}" = "${getExe doMediaAction} {play-pause,stop,pause,next,previous}";
 
       # lock / suspend / hibernate
-      "super + z" = "${loginctl} lock-session";
+      "super + z" = "${xlock} -echokeys";
       "super + shift + z" = "${systemctl} suspend -i";
       "super + shift + ctrl + z" = "${systemctl} hibernate -i";
 
