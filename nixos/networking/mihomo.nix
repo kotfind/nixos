@@ -68,7 +68,7 @@
       health-check = {
         enable = true;
         url = testUrl;
-        interval = 30; # 30s
+        interval = 5; # 5s
         timeout = 500; # 0.5s
         lazy = false;
         expected-status = 204; # 204 No Content
@@ -84,18 +84,29 @@
 
   groupsConfig = [
     {
-      name = "💰📦";
+      name = "Select";
       type = "select";
       url = testUrl;
       use = ["💰🔗"];
     }
     {
-      name = "💰🚀";
+      name = "Balance";
+      type = "load-balance";
+      url = testUrl;
+      use = ["💰🔗"];
+    }
+    {
+      name = "Fastest";
       type = "url-test";
       url = testUrl;
-      interval = 300;
+      interval = 5; # 5s
       tolerance = 50;
       use = ["💰🔗"];
+    }
+    {
+      name = "Entry";
+      type = "select";
+      proxies = ["Select" "Balance" "Fastest" "DIRECT"];
     }
   ];
 
@@ -109,15 +120,15 @@
     "GEOSITE,vk,DIRECT"
     "GEOSITE,ozon,DIRECT"
 
-    "GEOSITE,telegram,💰📦"
-    "GEOSITE,google,💰📦"
-    "GEOSITE,youtube,💰📦"
+    "GEOSITE,telegram,Entry"
+    "GEOSITE,google,Entry"
+    "GEOSITE,youtube,Entry"
 
     "GEOIP,ru,DIRECT"
 
-    "GEOIP,telegram,💰📦"
+    "GEOIP,telegram,Entry"
 
-    "MATCH,💰📦" # or GLOBAL ?
+    "MATCH,Entry" # or GLOBAL ?
   ];
 
   listenersConfig = [
