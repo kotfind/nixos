@@ -113,6 +113,8 @@
   rulesConfig = [
     ph."mihomo-rules"
 
+    "DOMAIN-SUFFIX,deepseek.com,DIRECT"
+
     "GEOSITE,category-gov-ru,DIRECT"
     "GEOSITE,category-media-ru,DIRECT"
     "GEOSITE,category-ru,DIRECT"
