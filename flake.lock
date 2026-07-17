@@ -98,6 +98,24 @@
         "type": "github"
       }
     },
+    "flake-utils_3": {
+      "inputs": {
+        "systems": "systems_3"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -138,6 +156,25 @@
       "original": {
         "owner": "kotfind",
         "repo": "nasin-nanpa",
+        "type": "github"
+      }
+    },
+    "nix-cached": {
+      "inputs": {
+        "flake-utils": "flake-utils_3",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1784287715,
+        "narHash": "sha256-om5bf1UXov7zJmQl6eI2C6xI/ePCIJHyluRe3QjQXT0=",
+        "owner": "kotfind",
+        "repo": "nix-cached",
+        "rev": "a36eac58cf61999ff2b300625d0cc851c97149c9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kotfind",
+        "repo": "nix-cached",
         "type": "github"
       }
     },
@@ -224,16 +261,18 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1782959384,
-        "narHash": "sha256-l57y2CK9dTSChgb6Edg7kkXu5DA4rucVbNFoQHUBjmw=",
-        "rev": "65179426c83bb3f6bc14898b42ea1c6f01d374b0",
-        "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1026231.65179426c83b/nixexprs.tar.xz"
+        "lastModified": 1751274312,
+        "narHash": "sha256-/bVBlRpECLVzjV19t5KMdMFWSwKLtb5RyXdjz3LJT+g=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "50ab793786d9de88ee30ec4e4c24fb4236fc2674",
+        "type": "github"
       },
       "original": {
-        "id": "nixpkgs",
-        "ref": "nixos-unstable",
-        "type": "indirect"
+        "owner": "nixos",
+        "ref": "nixos-24.11",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "nixpkgs-lib": {
@@ -249,6 +288,20 @@
         "owner": "nix-community",
         "repo": "nixpkgs.lib",
         "type": "github"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1782959384,
+        "narHash": "sha256-l57y2CK9dTSChgb6Edg7kkXu5DA4rucVbNFoQHUBjmw=",
+        "rev": "65179426c83bb3f6bc14898b42ea1c6f01d374b0",
+        "type": "tarball",
+        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1026231.65179426c83b/nixexprs.tar.xz"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-unstable",
+        "type": "indirect"
       }
     },
     "nvim-spl-en": {
@@ -306,10 +359,11 @@
         "flake-utils": "flake-utils_2",
         "home-manager": "home-manager",
         "nasin-nanpa": "nasin-nanpa",
+        "nix-cached": "nix-cached",
         "nix-dash-docsets": "nix-dash-docsets",
         "nix-index-database": "nix-index-database",
         "nixCats": "nixCats",
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": "nixpkgs_2",
         "nvim-spl-en": "nvim-spl-en",
         "nvim-spl-ru": "nvim-spl-ru",
         "nvim-sug-en": "nvim-sug-en",
@@ -353,6 +407,21 @@
       }
     },
     "systems_2": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_3": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",

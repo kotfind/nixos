@@ -30,6 +30,8 @@
       };
     };
 
+    nix-cached.url = "github:kotfind/nix-cached";
+
     # -------------------- Toki Pona --------------------
 
     fcitx5-ilo-sitelen = {

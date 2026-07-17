@@ -2,9 +2,11 @@
   pkgs,
   config,
   lib,
+  inputs,
   ...
 }: let
   inherit (config.cfgLib) users hosts enableFor matchFor;
+  freecad-patched = inputs.nix-cached.packages.x86_64-linux.freecad;
 in {
   home.packages = with pkgs;
     lib.mkMerge [
@@ -35,6 +37,7 @@ in {
         flacon # cutting flac's
         simple-scan
         solvespace
+        freecad-patched
         webcamoid
         kicad
       ])
