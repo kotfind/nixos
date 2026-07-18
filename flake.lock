@@ -165,11 +165,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1784287715,
-        "narHash": "sha256-om5bf1UXov7zJmQl6eI2C6xI/ePCIJHyluRe3QjQXT0=",
+        "lastModified": 1784321749,
+        "narHash": "sha256-wPdyTxuJpzzRTe6LZGKlPbHyJ6f9HTaW/6LYlz2CAIE=",
         "owner": "kotfind",
         "repo": "nix-cached",
-        "rev": "a36eac58cf61999ff2b300625d0cc851c97149c9",
+        "rev": "4327b33355f76b4fde874490b1605fbc7eb9215d",
         "type": "github"
       },
       "original": {
