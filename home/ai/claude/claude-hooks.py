@@ -11,6 +11,7 @@ import os
 import sys
 from time import sleep
 from abc import abstractmethod
+from enum import StrEnum
 from typing import Literal, NoReturn, Union
 
 import notify2
@@ -59,12 +60,23 @@ class BaseHook(BaseModel):
         notify(self.title, text)
 
 
+class NotificationType(StrEnum):
+    AGENT_COMPLETED = "agent_completed"
+    AUTH_SUCCESS = "auth_success"
+    ELICITATION_DIALOG = "elicitation_dialog"
+    IDLE_PROMPT = "idle_prompt"
+    PERMISSION_PROMPT = "permission_prompt"
+
+
 class NotificationHook(BaseHook):
     hook_event_name: Literal["Notification"]
     message: str
-    notification_type: str
+    notification_type: NotificationType
 
     def handle(self) -> None:
+        if self.notification_type == NotificationType.IDLE_PROMPT:
+            return
+
         self.notify_(f"{self.notification_type}\n{self.message}")
 
 
