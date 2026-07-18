@@ -40,7 +40,7 @@
 
   dnsConfig = rec {
     enable = true;
-    listen = "0.0.0.0:53";
+    listen = "0.0.0.0:1053";
     default-nameserver = nameserver;
     nameserver = [
       "8.8.8.8"
@@ -115,6 +115,7 @@
 
     "DOMAIN-SUFFIX,deepseek.com,DIRECT"
 
+    "DOMAIN-SUFFIX,kant.ru,DIRECT"
     "GEOSITE,category-gov-ru,DIRECT"
     "GEOSITE,category-media-ru,DIRECT"
     "GEOSITE,category-ru,DIRECT"
