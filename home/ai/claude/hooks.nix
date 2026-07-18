@@ -3,18 +3,19 @@
   lib,
   ...
 }: let
-  inherit (builtins) readFile;
   inherit (lib) getExe;
+  inherit (builtins) readFile;
+  inherit (pkgs.writers) writePython3Bin;
 
-  claudeNotify = pkgs.writeShellApplication {
-    name = "claude-notify";
-    text = readFile ./notify.sh;
-    runtimeInputs = with pkgs; [
-      xdotool
-      libnotify
-      xorg.xkbutils
+  claudeNotify = writePython3Bin "claude-hooks" {
+    libraries = with pkgs.python3Packages; [
+      notify2
+      ewmh
+      xlib
+      pydantic
+      systemd-python
     ];
-  };
+  } (readFile ./claude-hooks.py);
 
   claudeNotifyBin = getExe claudeNotify;
 in {
@@ -32,7 +33,7 @@ in {
         hooks = [
           {
             type = "command";
-            command = ''${claudeNotifyBin} 'Input required' &'';
+            command = "${claudeNotifyBin}";
           }
         ];
       }
@@ -42,7 +43,7 @@ in {
         hooks = [
           {
             type = "command";
-            command = ''${claudeNotifyBin} 'Done' &'';
+            command = "${claudeNotifyBin}";
           }
         ];
       }
