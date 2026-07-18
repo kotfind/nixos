@@ -1,9 +1,15 @@
-"""Notify about Claude Code status via desktop notification."""
+"""
+Notify about Claude Code status via desktop notification.
+
+Hook input model reference:
+https://code.claude.com/docs/en/hooks
+"""
 
 from __future__ import annotations
 
 import os
 import sys
+from time import sleep
 from abc import abstractmethod
 from typing import Literal, NoReturn, Union
 
@@ -15,6 +21,7 @@ from Xlib.display import Display
 
 SYSLOG_APP_NAME: str = "claude-hooks"
 NOTIFY_APP_NAME: str = "claude-code"
+DEBOUNCE_SECS: float = 0.3
 
 
 # -------------------- Logging helpers --------------------
@@ -83,6 +90,12 @@ def parse_hook(data: str) -> Hook:
 # -------------------- Desktop helpers --------------------
 
 
+def detach() -> None:
+    if os.fork() != 0:
+        sys.exit(0)
+    os.setsid()
+
+
 def is_gui() -> bool:
     return bool(os.environ.get("DISPLAY"))
 
@@ -92,11 +105,20 @@ def is_focused() -> bool:
     if not window_id:
         return False
 
-    active = EWMH().getActiveWindow()
-    if active is None:
+    def check() -> bool:
+        active = EWMH().getActiveWindow()
+        if active is None:
+            return False
+
+        return active.id == int(window_id)
+
+    if not check():
         return False
 
-    return active.id == int(window_id)
+    detach()
+    sleep(DEBOUNCE_SECS)
+
+    return check()
 
 
 def ring_bell() -> None:
