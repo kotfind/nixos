@@ -53,6 +53,8 @@ class BaseHook(BaseModel):
         return f"Claude ({session})"
 
     def notify_(self, text: str) -> None:
+        detach()
+
         if is_focused():
             return
 
@@ -112,24 +114,26 @@ def is_gui() -> bool:
     return bool(os.environ.get("DISPLAY"))
 
 
+def get_window_id() -> int:
+    try:
+        return int(os.environ["WINDOWID"])
+    except (KeyError, ValueError):
+        fatal("WINDOWID not set")
+
+
 def is_focused() -> bool:
-    window_id = os.environ.get("WINDOWID", "")
-    if not window_id:
-        return False
+    window_id = get_window_id()
 
     def check() -> bool:
         active = EWMH().getActiveWindow()
         if active is None:
             return False
-
-        return active.id == int(window_id)
+        return active.id == window_id
 
     if not check():
         return False
 
-    detach()
     sleep(DEBOUNCE_SECS)
-
     return check()
 
 
@@ -141,7 +145,6 @@ def ring_bell() -> None:
 
 
 def notify(title: str, text: str) -> None:
-    notify2.init(NOTIFY_APP_NAME)
     notify2.Notification(title, text).show()
 
 
@@ -152,6 +155,7 @@ def main() -> None:
     if not is_gui():
         sys.exit(0)
 
+    notify2.init(NOTIFY_APP_NAME)
     hook = parse_hook(sys.stdin.read())
     hook.handle()
 

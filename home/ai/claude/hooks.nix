@@ -9,11 +9,11 @@
 
   claudeNotify = writePython3Bin "claude-hooks" {
     libraries = with pkgs.python3Packages; [
-      notify2
       ewmh
-      xlib
+      notify2
       pydantic
       systemd-python
+      xlib
     ];
   } (readFile ./claude-hooks.py);
 
