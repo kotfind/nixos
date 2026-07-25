@@ -9,6 +9,7 @@
   inherit (pkgs) writeShellScript;
 
   xlockBin = getExe' pkgs.xlockmore "xlock";
+  touchBin = getExe' pkgs.coreutils "touch";
   xrandrBin = getExe' pkgs.xorg.xrandr "xrandr";
   awkBin = getExe' pkgs.gawk "awk";
   lockCmd = "${xlockBin} -echokeys";
@@ -47,11 +48,12 @@ in {
     Unit = {
       Description = "Lock screen on session start";
       After = [ "graphical-session.target" "xss-lock.service" ];
-      PartOf = [ "graphical-session.target" ];
+      ConditionPathExists = "!/tmp/lock-on-start-ran.lock";
     };
     Service = {
       Type = "oneshot";
       ExecStart = lockCmd;
+      ExecStartPost = "${touchBin} /tmp/lock-on-start-ran.lock";
     };
     Install.WantedBy = [ "graphical-session.target" ];
   };
