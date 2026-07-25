@@ -42,4 +42,17 @@ in {
     xautolock.enable = false;
     inactiveInterval = 0; # disabled
   };
+
+  systemd.user.services.lock-on-start = {
+    Unit = {
+      Description = "Lock screen on session start";
+      After = [ "graphical-session.target" "xss-lock.service" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = lockCmd;
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
 }
