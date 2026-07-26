@@ -6,7 +6,7 @@
   ...
 }: let
   inherit (config.cfgLib) users hosts enableFor matchFor;
-  freecad-patched = inputs.nix-cached.packages.x86_64-linux.freecad;
+  freecad-patched = inputs.freecad-no-avx.packages.x86_64-linux.freecad;
 in {
   home.packages = with pkgs;
     lib.mkMerge [

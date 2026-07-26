@@ -156,6 +156,25 @@
         "type": "github"
       }
     },
+    "freecad-no-avx": {
+      "inputs": {
+        "flake-utils": "flake-utils_3",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1784321749,
+        "narHash": "sha256-wPdyTxuJpzzRTe6LZGKlPbHyJ6f9HTaW/6LYlz2CAIE=",
+        "owner": "kotfind",
+        "repo": "freecad-no-avx",
+        "rev": "4327b33355f76b4fde874490b1605fbc7eb9215d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kotfind",
+        "repo": "freecad-no-avx",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -179,15 +198,15 @@
     "homepage": {
       "inputs": {
         "fenix": "fenix",
-        "flake-utils": "flake-utils_3",
-        "nixpkgs": "nixpkgs"
+        "flake-utils": "flake-utils_4",
+        "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1785091875,
-        "narHash": "sha256-cVSDd9zap8cVZkEJX4RWoESegemPNuRc0IW9qpeiYP0=",
+        "lastModified": 1785096208,
+        "narHash": "sha256-4hi/+FwMZkfVpXdQQlhDwezVRIhdJry3piVn3/ixt9w=",
         "owner": "kotfind",
         "repo": "homepage",
-        "rev": "6e9a29acc72cc5bf6c4c004359397f31260f6f64",
+        "rev": "ecc9c3eaed41443bc638ba6cabb49d068f2114e4",
         "type": "github"
       },
       "original": {
@@ -216,25 +235,6 @@
       "original": {
         "owner": "kotfind",
         "repo": "nasin-nanpa",
-        "type": "github"
-      }
-    },
-    "nix-cached": {
-      "inputs": {
-        "flake-utils": "flake-utils_4",
-        "nixpkgs": "nixpkgs_2"
-      },
-      "locked": {
-        "lastModified": 1784321749,
-        "narHash": "sha256-wPdyTxuJpzzRTe6LZGKlPbHyJ6f9HTaW/6LYlz2CAIE=",
-        "owner": "kotfind",
-        "repo": "nix-cached",
-        "rev": "4327b33355f76b4fde874490b1605fbc7eb9215d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "kotfind",
-        "repo": "nix-cached",
         "type": "github"
       }
     },
@@ -321,16 +321,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1784796856,
-        "narHash": "sha256-wWFrV5/Qbm+lyt5x20E/bSbfJiGKMo4RCxZV8cl/WZI=",
+        "lastModified": 1751274312,
+        "narHash": "sha256-/bVBlRpECLVzjV19t5KMdMFWSwKLtb5RyXdjz3LJT+g=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "e2587caef70cea85dd97d7daab492899902dbf5d",
+        "rev": "50ab793786d9de88ee30ec4e4c24fb4236fc2674",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixos-unstable",
+        "ref": "nixos-24.11",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -352,16 +352,16 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1751274312,
-        "narHash": "sha256-/bVBlRpECLVzjV19t5KMdMFWSwKLtb5RyXdjz3LJT+g=",
+        "lastModified": 1784796856,
+        "narHash": "sha256-wWFrV5/Qbm+lyt5x20E/bSbfJiGKMo4RCxZV8cl/WZI=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "50ab793786d9de88ee30ec4e4c24fb4236fc2674",
+        "rev": "e2587caef70cea85dd97d7daab492899902dbf5d",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixos-24.11",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -433,10 +433,10 @@
         "codeium": "codeium",
         "fcitx5-ilo-sitelen": "fcitx5-ilo-sitelen",
         "flake-utils": "flake-utils_2",
+        "freecad-no-avx": "freecad-no-avx",
         "home-manager": "home-manager",
         "homepage": "homepage",
         "nasin-nanpa": "nasin-nanpa",
-        "nix-cached": "nix-cached",
         "nix-dash-docsets": "nix-dash-docsets",
         "nix-index-database": "nix-index-database",
         "nixCats": "nixCats",

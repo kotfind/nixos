@@ -30,7 +30,7 @@
       };
     };
 
-    nix-cached.url = "github:kotfind/nix-cached";
+    freecad-no-avx.url = "github:kotfind/freecad-no-avx";
 
     homepage.url = "github:kotfind/homepage";
 
