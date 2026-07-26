@@ -21,7 +21,7 @@ in {
       ${domain} = {
         useACMEHost = bareCert;
         extraConfig = ''
-          respond "Hello, world!"
+          reverse_proxy :3333
         '';
       };
 

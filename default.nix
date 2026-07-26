@@ -5,6 +5,7 @@
   home-manager,
   sops-nix,
   nix-index-database,
+  homepage,
   ...
 } @ inputs: let
   specialArgs = {
@@ -57,6 +58,7 @@ in
       ./nixos
       ./profiles.nix
       nix-index-database.nixosModules.nix-index
+      homepage.nixosModules.default
       homeMod
       sops-nix.nixosModules.sops
 

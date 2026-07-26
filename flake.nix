@@ -32,6 +32,8 @@
 
     nix-cached.url = "github:kotfind/nix-cached";
 
+    homepage.url = "github:kotfind/homepage";
+
     # -------------------- Toki Pona --------------------
 
     fcitx5-ilo-sitelen = {
