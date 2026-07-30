@@ -48,7 +48,7 @@
   '';
 
   changeBrightness = writeShellScriptBin "change-brightness" ''
-    ${brightnessctlBin} "5%$1" 1>/dev/null 2>&1
+    ${brightnessctlBin} -q set "5%$1"
     ${showBrightnessNotify}
   '';
 
@@ -170,7 +170,7 @@ in {
       # brightness up / down
       "XF86MonBrightness{Up,Down}" =
         if matchFor hosts.laptop
-        then "${getExe changeBrightness} {-,+}"
+        then "${getExe changeBrightness} {+,-}"
         else "";
 
       # media keys

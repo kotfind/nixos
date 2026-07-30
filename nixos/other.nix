@@ -13,6 +13,8 @@
   i18n.defaultLocale = "en_US.UTF-8";
   services.libinput.enable = true;
 
+  services.udev.packages = [pkgs.brightnessctl];
+
   # Time Zone
   time.timeZone = "Europe/Moscow";
 
