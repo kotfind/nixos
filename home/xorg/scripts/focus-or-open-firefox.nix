@@ -34,7 +34,7 @@ pkgs.writeShellApplication {
     esac
 
     # shellcheck disable=SC2207
-    ids=($(bspc query -N -n '.local.window' | true))
+    ids=($(bspc query -N -n '.local.window' || true))
     for id in "''${ids[@]}"; do
       name="$(
         xprop -id "$id" -notype WM_NAME | \
