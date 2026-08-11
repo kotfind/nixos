@@ -16,6 +16,7 @@
     with pkgs; [
       claude-code
       codeium
+      hplipWithPlugin
       steam-unwrapped
       zoom-us
     ];

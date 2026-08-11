@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   hardware.sane = {
     enable = true;
-    extraBackends = [pkgs.hplip];
+    extraBackends = [pkgs.hplipWithPlugin];
   };
 
   # TODO: Using the scanner button

@@ -10,7 +10,7 @@ in {
       epson-escpr
       foomatic-db-ppds
       gutenprint
-      hplip
+      hplipWithPlugin
     ];
   };
 
