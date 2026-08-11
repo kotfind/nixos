@@ -1,7 +1,10 @@
 {pkgs, ...}: {
   hardware.sane = {
     enable = true;
-    extraBackends = [pkgs.hplipWithPlugin];
+    extraBackends = with pkgs; [
+      hplipWithPlugin
+      sane-airscan
+    ];
   };
 
   # TODO: Using the scanner button
