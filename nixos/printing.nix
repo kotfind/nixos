@@ -3,7 +3,7 @@
 in {
   services.printing = {
     enable = true;
-    drivers = [pkgs.hplipWithPlugin];
+    drivers = [pkgs.hplip];
   };
 
   hardware.printers.ensureDefaultPrinter = printerName;
