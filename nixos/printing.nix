@@ -3,7 +3,13 @@
 in {
   services.printing = {
     enable = true;
-    drivers = [pkgs.hplip];
+    drivers = with pkgs; [
+      brlaser
+      epson-escpr
+      foomatic-db-ppds
+      gutenprint
+      hplip
+    ];
   };
 
   hardware.printers.ensureDefaultPrinter = printerName;
