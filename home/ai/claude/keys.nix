@@ -8,6 +8,7 @@
         bindings = {
           "alt+e" = "chat:externalEditor";
           "ctrl+g" = null;
+          "ctrl+p" = "chat:cycleMode";
         };
       }
     ];
