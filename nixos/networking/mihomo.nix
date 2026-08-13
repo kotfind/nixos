@@ -113,6 +113,10 @@
   rulesConfig = [
     ph."mihomo-rules"
 
+    # seeding don't work otherwise
+    "PROCESS-NAME,.transmission-qt-wrapped,DIRECT"
+    "DST-PORT,51413,DIRECT"
+
     "DOMAIN-SUFFIX,deepseek.com,DIRECT"
 
     "DOMAIN-SUFFIX,kant.ru,DIRECT"
