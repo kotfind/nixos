@@ -6,5 +6,6 @@
     ./lock.nix
     ./polybar.nix
     ./sxhkd.nix
+    ./vnc.nix
   ];
 }
