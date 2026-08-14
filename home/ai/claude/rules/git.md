@@ -6,6 +6,7 @@
 
 ## Before Committing
 
-- Always run `git status` before `git commit` and read its output
+- Run `git status` right before `git commit` and read its output
+- Re-run it after any operation that changes the working tree or index (`git add`, `git rm`, file edits, formatters) -- an earlier check does not count
 - Confirm that only the intended changes are staged -- stop and investigate if anything unexpected is there
 - If `git status` shows untracked files that should not be committed (build artifacts, generated files, local-only files), add entries for them to `.gitignore`
