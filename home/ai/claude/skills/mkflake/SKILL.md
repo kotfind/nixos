@@ -113,3 +113,4 @@ description: Create or modify flake.nix files for project devShells or packages.
 ## Envrc
 
 - After creating `flake.nix`, check if `.envrc` exists. If not, create one with `use flake`.
+- After writing `flake.nix`, always run `nix develop -c true` so the shell is already built and cached when the user runs `direnv allow`.
