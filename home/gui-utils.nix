@@ -40,6 +40,7 @@ in {
         freecad-patched
         webcamoid
         kicad
+        tigervnc
       ])
 
       (enableFor hosts.laptop [
