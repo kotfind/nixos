@@ -10,7 +10,7 @@
 
   xlockBin = getExe' pkgs.xlockmore "xlock";
   touchBin = getExe' pkgs.coreutils "touch";
-  xrandrBin = getExe' pkgs.xorg.xrandr "xrandr";
+  xrandrBin = getExe' pkgs.xrandr "xrandr";
   awkBin = getExe' pkgs.gawk "awk";
   lockCmd = "${xlockBin} -echokeys";
 
@@ -47,7 +47,7 @@ in {
   systemd.user.services.lock-on-start = {
     Unit = {
       Description = "Lock screen on session start";
-      After = [ "graphical-session.target" "xss-lock.service" ];
+      After = ["graphical-session.target" "xss-lock.service"];
       ConditionPathExists = "!/tmp/lock-on-start-ran.lock";
     };
     Service = {
@@ -55,6 +55,6 @@ in {
       ExecStart = lockCmd;
       ExecStartPost = "${touchBin} /tmp/lock-on-start-ran.lock";
     };
-    Install.WantedBy = [ "graphical-session.target" ];
+    Install.WantedBy = ["graphical-session.target"];
   };
 }
