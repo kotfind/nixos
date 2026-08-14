@@ -31,7 +31,6 @@ in {
         localsend
         valentina
         zoom-us
-        moonlight-qt
         loupe
         kdePackages.gwenview
         flacon # cutting flac's
