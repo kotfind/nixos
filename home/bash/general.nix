@@ -10,5 +10,6 @@ in {
   programs.bash.shellAliases = {
     e = "exec";
     p3 = "python3";
+    tmx = "exec tmux attach || exec tmux new";
   };
 }
