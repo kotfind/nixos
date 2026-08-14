@@ -14,6 +14,7 @@
   - Curly/smart quotes. Use straight quotes `"` and `'` only.
   - Ellipsis. Use `...` instead.
   - Any other special unicode symbols.
+- **Never** use long dashes (em dashes, en dashes) in any text at all, including chat replies, rules files, docs, and commit messages. Use `--` or `---` instead.
 - Stick to plain ASCII for all code and adjacent prose.
 - The only exception is when explicitly asked by the user, or when the character is technically required (e.g. inside a string literal).
 

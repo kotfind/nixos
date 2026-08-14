@@ -8,16 +8,16 @@
 
 # Preinstalled Tools
 
-These are always available — you can use those:
+These are always available -- you can use those:
 
 | Tool | Use instead of | Notes |
 |------|---------------|-------|
 | `eza` | `ls`, `tree` | Modern ls replacement with tree support (`eza -T`) |
 | `fd` | `find` | Faster, friendlier file search |
 | `rg` (`ripgrep`) | `grep` | Recursive search by default, respects `.gitignore` |
-| `jq` | — | JSON processor |
+| `jq` | -- | JSON processor |
 | `xh` | `curl` (for APIs) | HTTPie-like, nicer JSON output |
-| `direnv` | — | Auto-loads `.envrc` on directory entry |
+| `direnv` | -- | Auto-loads `.envrc` on directory entry |
 | `htop` | `top` | Interactive process viewer |
 
 # Sudo
