@@ -1,5 +1,6 @@
 # Git Conventions
 
+- Never pass `-C` to `git` unless operating on a different directory
 - Remove `Co-Authored-By` lines from commit messages -- don't include them
 - Keep commit messages simple and single-line when possible
 - Only describe the general idea of the change, not implementation details

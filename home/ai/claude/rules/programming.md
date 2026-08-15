@@ -34,6 +34,7 @@
 
 ## Shell Commands
 
+- Never use `cd` when the shell is already in the right directory
 - When a command chains many operations with `&&`, `||`, `|`, or `;`, split it across multiple lines with `\` for readability.
 - Short commands with simple logic don't need splitting. E.g.:
   - `cmd1 && cmd2 && cmd3` -- split it
