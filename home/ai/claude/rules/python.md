@@ -23,3 +23,10 @@ paths:
   Details.
   """
   ```
+- Always separate the docstring from the body with a blank line:
+  ```python
+  def f() -> None:
+      """Summary."""
+
+      ...
+  ```
