@@ -1,16 +1,18 @@
 {pkgs, ...}: let
-  inherit (builtins) readFile;
-  inherit (pkgs) writeShellScriptBin writeShellApplication;
+  inherit (pkgs) writeShellScriptBin;
   inherit (pkgs.writers) writePython3Bin;
 
-  notify-on-exit = writeShellApplication {
-    name = "notify-on-exit";
-    text = readFile ./notify-on-exit.sh;
-    runtimeInputs = with pkgs; [
-      xdotool
-      libnotify
-    ];
-  };
+  notify-on-exit =
+    writePython3Bin "notify-on-exit" {
+      flakeIgnore = ["E265"];
+      libraries = with pkgs.python3Packages; [
+        click
+        desktop-notifier
+        platformdirs
+        python-xlib
+      ];
+    }
+    ./notify-on-exit.py;
 in {
   home.packages = [
     (writeShellScriptBin "nolink" ./nolink.sh)
