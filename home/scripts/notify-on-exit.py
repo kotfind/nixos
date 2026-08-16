@@ -4,10 +4,7 @@ import os
 from pathlib import Path
 
 from click import argument, echo, group, style
-from desktop_notifier import DesktopNotifierSync
 from platformdirs import PlatformDirs
-from Xlib import X, display
-from Xlib.error import DisplayConnectionError, DisplayNameError
 
 APP_NAME: str = "notify-on-exit"
 DIRS: PlatformDirs = PlatformDirs(appname=APP_NAME)
@@ -83,6 +80,9 @@ def get_terminal_wid() -> int | None:
 def get_focused_wid() -> int | None:
     """Return the focused window id, or None when unknown."""
 
+    from Xlib import X, display
+    from Xlib.error import DisplayConnectionError, DisplayNameError
+
     try:
         d = display.Display()
     except (DisplayConnectionError, DisplayNameError):
@@ -150,8 +150,11 @@ def hook(status: int, command: str) -> None:
         return
 
     terminal_wid = get_terminal_wid()
+    if terminal_wid is None:
+        return
+
     focused_wid = get_focused_wid()
-    if terminal_wid is None or focused_wid is None:
+    if focused_wid is None:
         return
 
     if terminal_wid == focused_wid:
@@ -163,6 +166,8 @@ def hook(status: int, command: str) -> None:
     else:
         app_name = "command-failed"
         title = f"Command failed (status: {status})"
+
+    from desktop_notifier import DesktopNotifierSync
 
     notifier = DesktopNotifierSync(app_name, app_icon=None)
     notifier.send(title=title, message=command)
