@@ -13,10 +13,20 @@
       ];
     }
     ./notify-on-exit.py;
+
+  xcp =
+    writePython3Bin "xcp" {
+      libraries = with pkgs.python3Packages; [
+        click
+        pyclip
+      ];
+    }
+    ./xcp.py;
 in {
   home.packages = [
     (writeShellScriptBin "nolink" ./nolink.sh)
     (writePython3Bin "dir2prompt" {flakeIgnore = ["E501"];} ./dir2prompt.py)
     notify-on-exit
+    xcp
   ];
 }

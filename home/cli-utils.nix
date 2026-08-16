@@ -61,7 +61,6 @@ in {
     "unrar" = getExe pkgs.unrar-free;
     "ns" = getExe pkgs.noogle-search;
     "qr" = getExe pkgs.qrencode |> (it: "${it} -t ansiutf8");
-    "xcp" = getExe pkgs.xclip |> (it: "${it} -selection clipboard");
   };
 
   programs.yazi = {
