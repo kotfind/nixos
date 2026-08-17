@@ -162,11 +162,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1784321749,
-        "narHash": "sha256-wPdyTxuJpzzRTe6LZGKlPbHyJ6f9HTaW/6LYlz2CAIE=",
+        "lastModified": 1786959936,
+        "narHash": "sha256-ww4rQ3PbKMPAhnsM4jQ9Me+Njpy3udOyH+DRUJpn7mk=",
         "owner": "kotfind",
         "repo": "freecad-no-avx",
-        "rev": "4327b33355f76b4fde874490b1605fbc7eb9215d",
+        "rev": "8e92d2160eca7e7b8424ab7bd43ea4d564c7b02b",
         "type": "github"
       },
       "original": {
@@ -321,16 +321,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1751274312,
-        "narHash": "sha256-/bVBlRpECLVzjV19t5KMdMFWSwKLtb5RyXdjz3LJT+g=",
+        "lastModified": 1786858016,
+        "narHash": "sha256-Vczr2zxD0orq6N2QQe5uqOGF7TRDcQJRRuAcsdHr4kg=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "50ab793786d9de88ee30ec4e4c24fb4236fc2674",
+        "rev": "54ba4bcec4043e72a4006d825e0d7aff5562008f",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixos-24.11",
+        "ref": "nixpkgs-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
