@@ -16,6 +16,9 @@
   alacrittyBin = getExe pkgs.alacritty;
   htopBin = getExe pkgs.htop;
   playerctlBin = getExe pkgs.playerctl;
+  curlBin = getExe pkgs.curl;
+  jqBin = getExe pkgs.jq;
+  firefoxBin = getExe pkgs.firefox;
 
   htopByMemBin = writeShellScript "htop-by-mem" ''
     ${alacrittyBin} -e ${htopBin} -s PERCENT_MEM
@@ -31,6 +34,7 @@
   bg = "#000000";
 
   pale = "#dddddd";
+  warn = "#ffff00";
   crit = "#ff0000";
 
   # -------------------- Fmt --------------------
@@ -128,7 +132,7 @@ in {
 
       # -------------------- Right --------------------
 
-      "bar/master".modules-right = "time battery brightness music volume cpu memory tray";
+      "bar/master".modules-right = "time battery brightness deepseek music volume cpu memory tray";
 
       "module/time" = {
         type = "internal/date";
@@ -169,6 +173,54 @@ in {
         format = "<label>";
 
         label = " %percentage%%";
+      };
+
+      "module/deepseek" = let
+        icon = "";
+      in {
+        type = "custom/script";
+
+        format = "<label>";
+        format-fail = "<label-fail>";
+
+        interval = 3600;
+
+        exec = writeShellScript "polybar-deepseek-balance" ''
+          set -euo pipefail
+
+          cache="$HOME/.cache/deepseek-balance"
+          key="$(< ${config.sops.secrets.deepseekKey.path})"
+
+          if response="$(${curlBin} --silent --fail --max-time 10 \
+            -H "Authorization: Bearer $key" \
+            https://api.deepseek.com/user/balance)" \
+            && balance="$(${jqBin} -r '.balance_infos[] | select(.currency == "USD") | .total_balance' <<< "$response")"
+          then
+            echo "$balance" > "$cache"
+
+            dollars="''${balance%%.*}"
+
+            if [ "$dollars" -lt 1 ]
+            then
+              color="${crit}"
+            elif [ "$dollars" -lt 5 ]
+            then
+              color="${warn}"
+            else
+              color="${fg}"
+            fi
+          else
+            balance="$(< "$cache")"
+            color="${pale}"
+          fi
+
+          echo "%{F$color}${icon} $balance%{F-}"
+        '';
+
+        click-left = "${firefoxBin} https://platform.deepseek.com/usage";
+        label = "%output%";
+        label-fail = icon;
+        label-fail-foreground = crit;
       };
 
       "module/music" = rec {
