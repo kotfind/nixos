@@ -2,6 +2,8 @@
   pkgs,
   config,
   lib,
+  inputs,
+  system,
   ...
 }: let
   inherit (lib) getExe escapeShellArg;
@@ -46,6 +48,7 @@
 in {
   programs.alacritty = {
     enable = true;
+    package = inputs.alacritty-fcitx-patch.packages.${system}.alacritty;
     settings = {
       terminal.shell = getExe pkgs.bash;
 

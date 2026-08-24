@@ -1,8 +1,27 @@
 {
   "nodes": {
-    "codeium": {
+    "alacritty-fcitx-patch": {
       "inputs": {
         "flake-utils": "flake-utils",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1787605443,
+        "narHash": "sha256-z6qpPOKwle9HXoUBY84iZscOTSSCRRfUvLXLjL7xqQA=",
+        "owner": "kotfind",
+        "repo": "alacritty-fcitx-patch",
+        "rev": "4895fbf9629f9439833064d6178a0b7338a9c767",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kotfind",
+        "repo": "alacritty-fcitx-patch",
+        "type": "github"
+      }
+    },
+    "codeium": {
+      "inputs": {
+        "flake-utils": "flake-utils_2",
         "nixpkgs": [
           "nixpkgs"
         ]
@@ -89,11 +108,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1701680307,
-        "narHash": "sha256-kAuep2h5ajznlPMD9rnQyffWG8EM/C73lejGofXvdM8=",
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "4022d587cbbfd70fe950c1e2083a02621806a725",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
         "type": "github"
       },
       "original": {
@@ -107,11 +126,11 @@
         "systems": "systems_2"
       },
       "locked": {
-        "lastModified": 1731533236,
-        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "lastModified": 1701680307,
+        "narHash": "sha256-kAuep2h5ajznlPMD9rnQyffWG8EM/C73lejGofXvdM8=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "rev": "4022d587cbbfd70fe950c1e2083a02621806a725",
         "type": "github"
       },
       "original": {
@@ -153,25 +172,6 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "freecad-no-avx": {
-      "inputs": {
-        "flake-utils": "flake-utils_3",
-        "nixpkgs": "nixpkgs"
-      },
-      "locked": {
-        "lastModified": 1786959936,
-        "narHash": "sha256-ww4rQ3PbKMPAhnsM4jQ9Me+Njpy3udOyH+DRUJpn7mk=",
-        "owner": "kotfind",
-        "repo": "freecad-no-avx",
-        "rev": "8e92d2160eca7e7b8424ab7bd43ea4d564c7b02b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "kotfind",
-        "repo": "freecad-no-avx",
         "type": "github"
       }
     },
@@ -321,11 +321,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1786858016,
-        "narHash": "sha256-Vczr2zxD0orq6N2QQe5uqOGF7TRDcQJRRuAcsdHr4kg=",
+        "lastModified": 1787394516,
+        "narHash": "sha256-pRGOQSClnXNI2iLUG6DYpsGvYcuw0drOutVZFTJNw90=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "54ba4bcec4043e72a4006d825e0d7aff5562008f",
+        "rev": "c8f90650c15282fa8656a041bfbbd2403997a9a7",
         "type": "github"
       },
       "original": {
@@ -430,10 +430,10 @@
     },
     "root": {
       "inputs": {
+        "alacritty-fcitx-patch": "alacritty-fcitx-patch",
         "codeium": "codeium",
         "fcitx5-ilo-sitelen": "fcitx5-ilo-sitelen",
-        "flake-utils": "flake-utils_2",
-        "freecad-no-avx": "freecad-no-avx",
+        "flake-utils": "flake-utils_3",
         "home-manager": "home-manager",
         "homepage": "homepage",
         "nasin-nanpa": "nasin-nanpa",

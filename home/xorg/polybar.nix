@@ -2,6 +2,8 @@
   pkgs,
   lib,
   config,
+  inputs,
+  system,
   ...
 }: let
   inherit (pkgs) writeShellScript;
@@ -13,7 +15,7 @@
   xrandrBin = getExe pkgs.xrandr;
   awkBin = getExe pkgs.gawk;
   pavucontrolBin = getExe pkgs.pavucontrol;
-  alacrittyBin = getExe pkgs.alacritty;
+  alacrittyBin = getExe inputs.alacritty-fcitx-patch.packages.${system}.alacritty;
   htopBin = getExe pkgs.htop;
   playerctlBin = getExe pkgs.playerctl;
   curlBin = getExe pkgs.curl;

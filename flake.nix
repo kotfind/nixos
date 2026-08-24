@@ -30,7 +30,7 @@
       };
     };
 
-    freecad-no-avx.url = "github:kotfind/freecad-no-avx";
+    alacritty-fcitx-patch.url = "github:kotfind/alacritty-fcitx-patch";
 
     homepage.url = "github:kotfind/homepage";
 

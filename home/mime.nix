@@ -2,6 +2,8 @@
   config,
   lib,
   pkgs,
+  inputs,
+  system,
   ...
 }: let
   inherit (builtins) readDir readFile attrNames length elemAt tryEval filter pathExists;
@@ -43,7 +45,7 @@
     else file;
 
   openDirectoryDesktopFile = let
-    alacrittyBin = getExe pkgs.alacritty;
+    alacrittyBin = getExe inputs.alacritty-fcitx-patch.packages.${system}.alacritty;
   in
     makeDesktopItem {
       name = "open-directory";

@@ -2,6 +2,8 @@
   pkgs,
   lib,
   config,
+  inputs,
+  system,
   ...
 }: let
   inherit (lib) getExe getExe' escapeShellArgs;
@@ -19,7 +21,7 @@
     else "";
 
   bspc = getExe' pkgs.bspwm "bspc";
-  alacritty = getExe pkgs.alacritty;
+  alacritty = getExe inputs.alacritty-fcitx-patch.packages.${system}.alacritty;
   rofi = getExe pkgs.rofi;
   pactl = getExe' pkgs.pulseaudio "pactl";
   brightnessctlBin = getExe pkgs.brightnessctl;

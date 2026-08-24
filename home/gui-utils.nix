@@ -2,11 +2,9 @@
   pkgs,
   config,
   lib,
-  inputs,
   ...
 }: let
   inherit (config.cfgLib) users hosts enableFor matchFor;
-  freecad-patched = inputs.freecad-no-avx.packages.x86_64-linux.freecad;
 in {
   home.packages = with pkgs;
     lib.mkMerge [
@@ -36,7 +34,7 @@ in {
         flacon # cutting flac's
         simple-scan
         solvespace
-        freecad-patched
+        freecad
         webcamoid
         kicad
         tigervnc
