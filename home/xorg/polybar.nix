@@ -183,7 +183,7 @@ in {
         format = "<label>";
         format-fail = "<label-fail>";
 
-        interval = 3600;
+        interval = 60;
 
         exec = writeShellScript "polybar-deepseek-balance" ''
           set -euo pipefail
