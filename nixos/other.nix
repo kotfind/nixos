@@ -34,7 +34,7 @@
       enable = true;
       includeAllModules = true;
     };
-    # cfgLib build fails (no option descriptions)
+    # undocumented options fail the build
     nixos.options.warningsAreErrors = false;
   };
 

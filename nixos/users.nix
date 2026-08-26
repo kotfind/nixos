@@ -3,7 +3,7 @@
   lib,
   ...
 }: let
-  inherit (config.cfgLib) enableFor users hosts;
+  inherit (config.hostlib) mkFor users hosts;
 in {
   users.users."${users.kotfind.name}" = {
     isNormalUser = true;
@@ -18,7 +18,7 @@ in {
         "scanner"
         "lp" # printing
       ]
-      (enableFor hosts.laptop [
+      (mkFor hosts.laptop [
         "video" # for light command
       ])
     ];

@@ -7,7 +7,7 @@
   ...
 }: let
   inherit (builtins) readDir readFile attrNames length elemAt tryEval filter pathExists;
-  inherit (config.cfgLib) matchFor users;
+  inherit (config.hostlib) trueFor users;
   inherit (getName) getName;
   inherit (lib.strings) concatMapStringsSep;
   inherit (lib) getExe;
@@ -61,7 +61,7 @@
   open-directory = getDesktop openDirectoryDesktopFile;
 in {
   xdg.mimeApps = {
-    enable = matchFor users.kotfind;
+    enable = trueFor users.kotfind;
 
     # Learn file mime-type:
     #     file --mime-type $FILE

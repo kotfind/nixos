@@ -1,4 +1,4 @@
-# This value is passed to outputs.nixosConfiguration.default
+# Returns nixosConfigurations.<host> for every host in ./profiles.nix
 {
   system,
   nixpkgs,
@@ -6,12 +6,9 @@
   sops-nix,
   nix-index-database,
   homepage,
+  hostlib,
   ...
 } @ inputs: let
-  specialArgs = {
-    inherit inputs system;
-  };
-
   unfreePkgs = pkgs:
     with pkgs; [
       claude-code
@@ -21,42 +18,25 @@
       zoom-us
     ];
 
-  homeMod = {
-    config,
-    lib,
-    ...
-  }: {
-    imports = [
-      home-manager.nixosModules.home-manager
-    ];
-
+  homeMod = {...}: {
     home-manager = {
-      sharedModules = [
-        sops-nix.homeManagerModules.sops
-        ./profiles.nix
-      ];
-
       useGlobalPkgs = true;
       useUserPackages = true;
-
-      extraSpecialArgs = specialArgs;
-
-      users =
-        lib.mapAttrs
-        (userName: _userOnHost: {
-          home.username = userName;
-          imports = [./home];
-        })
-        config.cfgLib.host.users;
+      extraSpecialArgs = {
+        inherit inputs system;
+      };
     };
   };
 in
-  nixpkgs.lib.nixosSystem {
-    inherit specialArgs system;
+  hostlib.lib.eachHostSystem {
+    nixosSystem = nixpkgs.lib.nixosSystem;
 
-    modules = [
+    homeManagerModule = home-manager.nixosModules.home-manager;
+
+    profiles = import ./profiles.nix;
+
+    systemModules = [
       ./nixos
-      ./profiles.nix
       nix-index-database.nixosModules.nix-index
       homepage.nixosModules.default
       homeMod
@@ -76,5 +56,10 @@ in
             (unfreePkgs pkgs)
           );
       })
+    ];
+
+    homeModules = [
+      ./home
+      sops-nix.homeManagerModules.sops
     ];
   }

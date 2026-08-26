@@ -1,7 +1,7 @@
 {config, ...}: let
   inherit (config.xdg) configHome;
 in {
-  programs.firefox = (with config.cfgLib; enableFor users.kotfind) {
+  programs.firefox = (with config.hostlib; mkFor users.kotfind) {
     enable = true;
     configPath = "${configHome}/mozilla/firefox";
 

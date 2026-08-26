@@ -8,7 +8,7 @@ Personal NixOS + Home Manager configuration as a single flake, shared by two x86
 
 ## Commands
 
-- Rebuild the system: `sudo nixos-rebuild switch --flake .#default`
+- Rebuild the system: `sudo nixos-rebuild switch --flake .#pc` (on laptop: `.#laptop`)
 - Validate the flake: `nix flake check`
 - Format Nix files: `alejandra .`
 - Decrypt a secret: `sops -d <file>`
@@ -19,16 +19,16 @@ The flake only sees git-tracked files: `git add` new or renamed files before reb
 
 ## Architecture
 
-Entry point: `flake.nix` -> `default.nix` builds `nixosSystem` from modules `./nixos` (system config), `./profiles.nix` (definitions), and `./home` (wired via Home Manager). `default.nix` also whitelists unfree packages with `unfreePkgs` -- add new unfree packages there.
+Entry point: `flake.nix` -> `default.nix` builds one `nixosConfiguration` per host via `hostlib.lib.eachHostSystem` from modules `./nixos` (system config), `./profiles.nix` (definitions), and `./home` (wired via Home Manager). `default.nix` also whitelists unfree packages with `unfreePkgs` -- add new unfree packages there.
 
-**cfgLib** (`cfgLib/`, `profiles.nix`) is the central abstraction for multi-host/multi-user config:
+**hostlib** (flake input `github:kotfind/hostlib`, options under `config.hostlib`) is the central abstraction for multi-host/multi-user config:
 
-- `profiles.nix` declares `cfgLib.usersDef` (users + per-user data like email) and `cfgLib.hostsDef` (hosts + their users + data like hostname).
-- `cfgLib/` generates typed objects `cfgLib.users`, `cfgLib.hosts`, `cfgLib.host`, `cfgLib.user`, plus `cfgLib.userOnHost` objects nested in `cfgLib.host.users`.
-- `cfgLib.enableFor <user|host|userOnHost|list> value` gates any config to matching users/hosts. This is the standard way to scope config: use it instead of hardcoding hostnames or usernames.
-- `current-host.nix` selects the host (`hosts: hosts.pc`). It is machine-specific and kept out of git with `--skip-worktree`, as is `nixos/hardware-configuration.nix` (generated per machine, gitignored).
+- `profiles.nix` declares `hostlib.users` (users + per-user data like email) and `hostlib.hosts` (hosts + `userNames` + data like hostname). Extra attrs on users/hosts are freeform.
+- hostlib generates `hostlib.users.<name>`, `hostlib.hosts.<name>` and resolves `hostlib._curHost` / `hostlib._curUser` from the selected configuration.
+- `hostlib.mkFor <user|host|userOnHost> value` gates any config to matching users/hosts (`hostlib.trueFor` returns just the bool; `hostlib.join user host` builds a userOnHost). This is the standard way to scope config: use it instead of hardcoding hostnames or usernames.
+- `nixos/hardware-configuration.nix` is generated per machine, gitignored and kept out of git with `--skip-worktree`.
 
-`home/` is imported once per user in `default.nix` (one Home Manager instance per user in `cfgLib.host.users`), with `sops-nix` shared modules and the same `cfgLib` available. So most user-scoped config lives under `home/` and is gated with `enableFor`.
+`home/` is imported once per user by hostlib (one Home Manager instance per user in the host's `userNames`), with `sops-nix` modules and the same `hostlib` available. So most user-scoped config lives under `home/` and is gated with `mkFor`.
 
 Secrets use sops-nix with a single age key. Key file paths are set in `nixos/secrets/default.nix` and `home/secrets/default.nix`.
 

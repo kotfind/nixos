@@ -215,6 +215,21 @@
         "type": "github"
       }
     },
+    "hostlib": {
+      "locked": {
+        "lastModified": 1787783436,
+        "narHash": "sha256-DESSTVn8ly21dVh2JrHvfCFhjHN96JIIIsIYGKsvp+0=",
+        "owner": "kotfind",
+        "repo": "hostlib",
+        "rev": "159cacbde488b2783c6fea4412a6fb27d8982120",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kotfind",
+        "repo": "hostlib",
+        "type": "github"
+      }
+    },
     "nasin-nanpa": {
       "inputs": {
         "flake-utils": [
@@ -436,6 +451,7 @@
         "flake-utils": "flake-utils_3",
         "home-manager": "home-manager",
         "homepage": "homepage",
+        "hostlib": "hostlib",
         "nasin-nanpa": "nasin-nanpa",
         "nix-dash-docsets": "nix-dash-docsets",
         "nix-index-database": "nix-index-database",

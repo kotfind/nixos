@@ -1,8 +1,8 @@
 {config, ...}: let
-  inherit (config.cfgLib) matchFor users;
+  inherit (config.hostlib) trueFor users;
 in {
   programs.thunderbird = {
-    enable = matchFor users.kotfind;
+    enable = trueFor users.kotfind;
     profiles.master = {
       isDefault = true;
 

@@ -3,7 +3,7 @@
   config,
   ...
 }: let
-  inherit (config.cfgLib) enableFor users;
+  inherit (config.hostlib) mkFor users;
   inherit (config.home) homeDirectory;
 in {
   sops = {
@@ -17,7 +17,7 @@ in {
   };
 
   home.packages =
-    enableFor users.kotfind
+    mkFor users.kotfind
     (with pkgs; [
       sops
       age

@@ -1,5 +1,5 @@
 {config, ...}: let
-  inherit (config.cfgLib) matchFor hosts;
+  inherit (config.hostlib) trueFor hosts;
 
   domain = "kotfind.mywire.org";
 
@@ -9,7 +9,7 @@
   navidromePort = config.services.navidrome.settings.Port;
 in {
   services.caddy = {
-    enable = matchFor hosts.pc;
+    enable = trueFor hosts.pc;
     enableReload = false;
 
     globalConfig = ''

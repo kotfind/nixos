@@ -4,25 +4,25 @@
   lib,
   ...
 }: let
-  inherit (config.cfgLib) enableFor hosts;
+  inherit (config.hostlib) users join mkFor hosts;
   inherit (lib) getExe;
 in {
   programs = {
-    gallery-dl = enableFor hosts.pc.users.kotfind {
+    gallery-dl = mkFor (join users.kotfind hosts.pc) {
       enable = true;
     };
 
-    yt-dlp = enableFor hosts.pc.users.kotfind {
+    yt-dlp = mkFor (join users.kotfind hosts.pc) {
       enable = true;
     };
 
-    bash.shellAliases = enableFor hosts.pc.users.kotfind (with pkgs; {
+    bash.shellAliases = mkFor (join users.kotfind hosts.pc) (with pkgs; {
       gdl = getExe gallery-dl;
       ydl = getExe yt-dlp;
     });
   };
 
-  home.packages = enableFor hosts.pc.users.kotfind (with pkgs; [
+  home.packages = mkFor (join users.kotfind hosts.pc) (with pkgs; [
     gdown
   ]);
 }

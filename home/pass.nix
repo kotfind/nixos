@@ -5,19 +5,19 @@
   ...
 }: let
   inherit (config.home) homeDirectory;
-  inherit (config.cfgLib) enableFor users;
+  inherit (config.hostlib) mkFor users;
   inherit (lib) getExe;
   inherit (config.lib.dag) entryAfter;
 
   storeDir = "${homeDirectory}/.password-store";
 in {
-  programs.password-store = enableFor users.kotfind {
+  programs.password-store = mkFor users.kotfind {
     enable = true;
     # it's not the default for whatever reason
     settings.PASSWORD_STORE_DIR = storeDir;
   };
 
-  programs.rofi.pass = enableFor users.kotfind {
+  programs.rofi.pass = mkFor users.kotfind {
     enable = true;
     extraConfig = ''
       default_do='typePass'
@@ -33,7 +33,7 @@ in {
     storeGitRepo = "git@github.com:kotfind/pass";
     gitBin = getExe pkgs.git;
   in
-    enableFor users.kotfind (entryAfter ["writeBoundary"]
+    mkFor users.kotfind (entryAfter ["writeBoundary"]
       ''
         if [ ! -d ${storeDir} ]; then
             # Note: checking for git fail is usefull for initial

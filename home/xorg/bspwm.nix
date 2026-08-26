@@ -5,10 +5,10 @@
   ...
 }: let
   inherit (lib) concatStringsSep genList;
-  inherit (config.cfgLib) matchFor users;
+  inherit (config.hostlib) trueFor users;
 in {
   xsession.windowManager.bspwm = {
-    enable = matchFor users.kotfind;
+    enable = trueFor users.kotfind;
 
     settings = {
       border_width = 2;

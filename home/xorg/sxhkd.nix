@@ -8,7 +8,7 @@
 }: let
   inherit (lib) getExe getExe' escapeShellArgs;
   inherit (pkgs) writeShellScriptBin;
-  inherit (config.cfgLib) matchFor hosts users;
+  inherit (config.hostlib) trueFor hosts users;
 
   focusOrOpenFirefox = getExe (import ./scripts/focus-or-open-firefox.nix {inherit pkgs;});
   bspcResizeNode = getExe (import ./scripts/bspc-resize-node.nix {inherit pkgs;});
@@ -16,7 +16,7 @@
   showVolumeNotify = getExe (import ./scripts/show-volume-notify.nix {inherit pkgs;});
   showMusicNotify = getExe (import ./scripts/show-music-notify.nix {inherit pkgs;});
   showBrightnessNotify =
-    if matchFor hosts.laptop
+    if trueFor hosts.laptop
     then (getExe (import ./scripts/show-brightness-notify.nix {inherit pkgs config;}))
     else "";
 
@@ -65,7 +65,7 @@
   '';
 in {
   services.sxhkd = {
-    enable = matchFor users.kotfind;
+    enable = trueFor users.kotfind;
     keybindings = {
       # -------------------- Launch --------------------
 
@@ -171,7 +171,7 @@ in {
 
       # brightness up / down
       "XF86MonBrightness{Up,Down}" =
-        if matchFor hosts.laptop
+        if trueFor hosts.laptop
         then "${getExe changeBrightness} {+,-}"
         else "";
 

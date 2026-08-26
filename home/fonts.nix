@@ -5,12 +5,12 @@
   system,
   ...
 }: let
-  inherit (config.cfgLib) enableFor users;
+  inherit (config.hostlib) mkFor users;
   inherit (inputs.nasin-nanpa.packages.${system}) nasin-nanpa-font-4-UCSUR;
 in {
   # List fonts:
   # fc-list : family style
-  fonts.fontconfig = enableFor users.kotfind {
+  fonts.fontconfig = mkFor users.kotfind {
     enable = true;
     defaultFonts = {
       monospace = [
@@ -31,7 +31,7 @@ in {
     };
   };
 
-  home.packages = enableFor users.kotfind (with pkgs; [
+  home.packages = mkFor users.kotfind (with pkgs; [
     ipafont
     kochi-substitute
     dejavu_fonts

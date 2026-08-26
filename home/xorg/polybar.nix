@@ -8,7 +8,7 @@
 }: let
   inherit (pkgs) writeShellScript;
   inherit (lib) getExe;
-  inherit (config.cfgLib) matchFor users;
+  inherit (config.hostlib) trueFor users;
 
   # -------------------- Bin --------------------
 
@@ -53,7 +53,7 @@
   };
 in {
   services.polybar = {
-    enable = matchFor users.kotfind;
+    enable = trueFor users.kotfind;
 
     package = pkgs.polybar.override {
       pulseSupport = true;

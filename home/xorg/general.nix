@@ -4,21 +4,21 @@
   lib,
   ...
 }: let
-  inherit (config.cfgLib) matchFor enableFor users hosts;
+  inherit (config.hostlib) join trueFor mkFor users hosts;
 
-  userName = config.cfgLib.user.name;
+  userName = config.hostlib._curUser.name;
   homeDir = config.home.homeDirectory;
 in {
-  xsession.enable = matchFor users.kotfind;
+  xsession.enable = trueFor users.kotfind;
 
-  services.lxqt-policykit-agent.enable = matchFor users.kotfind;
+  services.lxqt-policykit-agent.enable = trueFor users.kotfind;
 
-  services.network-manager-applet.enable = matchFor users.kotfind;
+  services.network-manager-applet.enable = trueFor users.kotfind;
 
-  services.picom.enable = matchFor users.kotfind;
+  services.picom.enable = trueFor users.kotfind;
 
   services.batsignal = {
-    enable = matchFor hosts.laptop.users.kotfind;
+    enable = trueFor (join users.kotfind hosts.laptop);
     extraArgs = [
       "-f"
       "99"
@@ -33,7 +33,7 @@ in {
   };
 
   services.gpg-agent = {
-    enable = matchFor users.kotfind;
+    enable = trueFor users.kotfind;
     pinentry.package = pkgs.pinentry-rofi;
   };
 
@@ -41,7 +41,7 @@ in {
   home.sessionVariables._JAVA_AWT_WM_NONREPARENTING = 1;
 
   systemd.user.tmpfiles.rules =
-    enableFor users.kotfind
+    mkFor users.kotfind
     [
       # Type  Path                  Mode  User         Group   Age  Argument
       "d      /tmp/downloads        0755  ${userName}  users   -    -"

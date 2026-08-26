@@ -1,8 +1,8 @@
 {config, ...}: let
-  inherit (config.cfgLib) hosts matchFor enableFor;
+  inherit (config.hostlib) hosts trueFor mkFor;
 in {
   services.ddclient = {
-    enable = matchFor hosts.pc;
+    enable = trueFor hosts.pc;
     domains = ["kotfind.mywire.org"];
     server = "api.dynu.com";
     usev6 = "";
@@ -20,7 +20,7 @@ in {
     no_proxy = "kotfind.mywire.org,api.dynu.com";
   };
 
-  sops.secrets.ddclientSecrets = enableFor hosts.pc {
+  sops.secrets.ddclientSecrets = mkFor hosts.pc {
     sopsFile = ./ddclient.enc.env;
     format = "dotenv";
   };

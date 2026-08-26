@@ -6,12 +6,12 @@
 }: let
   inherit (lib) getExe;
   inherit (config.home) homeDirectory;
-  inherit (config.cfgLib) enableFor users;
+  inherit (config.hostlib) mkFor users;
 
   x11vncBin = getExe pkgs.x11vnc;
 in {
   # attaches to the running X session, localhost-only (connect via SSH tunnel)
-  systemd.user.services.x11vnc = enableFor users.kotfind {
+  systemd.user.services.x11vnc = mkFor users.kotfind {
     Unit = {
       Description = "VNC server for the X session";
       After = ["graphical-session.target"];

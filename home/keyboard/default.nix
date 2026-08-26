@@ -5,10 +5,10 @@
   system,
   ...
 }: let
-  inherit (config.cfgLib) users enableFor;
+  inherit (config.hostlib) users mkFor;
   inherit (inputs.fcitx5-ilo-sitelen.packages.${system}) fcitx5-ilo-sitelen;
 in {
-  home.file = enableFor users.kotfind {
+  home.file = mkFor users.kotfind {
     ".config/fcitx5" = {
       source = ./config;
       force = true;
@@ -16,7 +16,7 @@ in {
     };
   };
 
-  i18n.inputMethod = enableFor users.kotfind {
+  i18n.inputMethod = mkFor users.kotfind {
     enable = true;
     type = "fcitx5";
     fcitx5 = {

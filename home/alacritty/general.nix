@@ -10,7 +10,7 @@
   inherit (lib.strings) concatMapStringsSep;
   inherit (lib.attrsets) mapAttrsToList;
   inherit (pkgs) writeShellScript;
-  inherit (config.cfgLib) enableFor hosts;
+  inherit (config.hostlib) mkFor hosts;
   inherit (config.home) homeDirectory;
 
   activeThemeFile = "${homeDirectory}/.config/alacritty/active-theme.toml";
@@ -57,8 +57,8 @@ in {
       general.import = [activeThemeFile];
 
       font.size = lib.mkMerge [
-        (enableFor hosts.pc 11.0)
-        (enableFor hosts.laptop 8.0)
+        (mkFor hosts.pc 11.0)
+        (mkFor hosts.laptop 8.0)
       ];
 
       window.padding = {

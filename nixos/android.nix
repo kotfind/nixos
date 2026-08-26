@@ -5,9 +5,9 @@
 }: let
   inherit (builtins) listToAttrs;
   inherit (lib.strings) concatMapStringsSep;
-  inherit (config) cfgLib;
+  inherit (config) hostlib;
 
-  users = with cfgLib.users; [
+  users = with hostlib.users; [
     kotfind
   ];
 

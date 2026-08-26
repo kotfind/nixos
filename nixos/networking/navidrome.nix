@@ -1,9 +1,9 @@
 {config, ...}: let
-  inherit (config.cfgLib) matchFor hosts;
+  inherit (config.hostlib) trueFor hosts;
   inherit (config) sops;
 in {
   services.navidrome = {
-    enable = matchFor hosts.pc;
+    enable = trueFor hosts.pc;
 
     user = "kotfind";
     group = "users";

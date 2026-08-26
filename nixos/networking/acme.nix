@@ -1,7 +1,7 @@
 {config, ...}: let
-  inherit (config.cfgLib) hosts enableFor;
+  inherit (config.hostlib) hosts mkFor;
 in {
-  security.acme = enableFor hosts.pc {
+  security.acme = mkFor hosts.pc {
     acceptTerms = true;
 
     defaults = {

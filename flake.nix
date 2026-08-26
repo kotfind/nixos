@@ -34,6 +34,8 @@
 
     homepage.url = "github:kotfind/homepage";
 
+    hostlib.url = "github:kotfind/hostlib";
+
     # -------------------- Toki Pona --------------------
 
     fcitx5-ilo-sitelen = {
@@ -81,6 +83,6 @@
     system = "x86_64-linux";
     args = inputs // {inherit system;};
   in {
-    nixosConfigurations.default = import ./default.nix args;
+    nixosConfigurations = import ./default.nix args;
   };
 }

@@ -5,7 +5,7 @@
   ...
 }: let
   inherit (config) sops;
-  inherit (config.cfgLib) enableFor hosts;
+  inherit (config.hostlib) users join mkFor hosts;
   inherit (lib) getExe;
   inherit (pkgs) writeShellApplication;
 
@@ -57,7 +57,7 @@
   localBackendPasswordEnvTemplate = "autorestic-local-restic-password";
 in {
   home.packages =
-    (enableFor hosts.pc.users.kotfind)
+    (mkFor (join users.kotfind hosts.pc))
     (with pkgs; [
       restic
       autorestic
@@ -72,7 +72,7 @@ in {
     '';
   };
 
-  systemd.user = enableFor hosts.pc.users.kotfind {
+  systemd.user = mkFor (join users.kotfind hosts.pc) {
     services."restic-${names.locations.prog}" = {
       Service = {
         Type = "oneshot";

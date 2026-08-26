@@ -21,7 +21,7 @@
       defaultSession = "xsession";
       autoLogin = {
         enable = true;
-        user = config.cfgLib.users.kotfind.name;
+        user = config.hostlib.users.kotfind.name;
       };
     };
   };

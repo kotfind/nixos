@@ -1,8 +1,24 @@
-{config, ...}: {
-  imports = [./cfgLib];
+{
+  hostlib = {
+    hosts = {
+      pc = {
+        userNames = [
+          "kotfind"
+          "root"
+        ];
+        hostname = "kotfindPC";
+      };
 
-  cfgLib = {
-    usersDef = {
+      laptop = {
+        userNames = [
+          "kotfind"
+          "root"
+        ];
+        hostname = "kotfindLT";
+      };
+    };
+
+    users = {
       kotfind = {
         email = "kotfind@yandex.ru";
       };
@@ -11,28 +27,5 @@
         homeDir = "/root";
       };
     };
-
-    hostsDef = {
-      pc = {
-        users = with config.cfgLib.users; [
-          kotfind
-          root
-        ];
-        data = {
-          hostname = "kotfindPC";
-        };
-      };
-      laptop = {
-        users = with config.cfgLib.users; [
-          kotfind
-          root
-        ];
-        data = {
-          hostname = "kotfindLT";
-        };
-      };
-    };
-
-    host = import ./current-host.nix config.cfgLib.hosts;
   };
 }

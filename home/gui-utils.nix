@@ -4,14 +4,14 @@
   lib,
   ...
 }: let
-  inherit (config.cfgLib) users hosts enableFor matchFor;
+  inherit (config.hostlib) join users hosts mkFor trueFor;
 in {
   home.packages = with pkgs;
     lib.mkMerge [
       [
         sxiv
       ]
-      (enableFor users.kotfind [
+      (mkFor users.kotfind [
         # Run this to make fcitx5 to work in telegram
         #   sudo dbus-update-activation-environment --all
         # or run telegram from terminal:
@@ -40,18 +40,18 @@ in {
         tigervnc
       ])
 
-      (enableFor hosts.laptop [
+      (mkFor hosts.laptop [
         brightnessctl
       ])
 
-      (enableFor hosts.pc.users.kotfind [
+      (mkFor (join users.kotfind hosts.pc) [
         steam-run
       ])
     ];
 
   programs = {
-    zathura.enable = matchFor users.kotfind;
-    obs-studio.enable = matchFor users.kotfind;
-    chromium.enable = matchFor users.kotfind;
+    zathura.enable = trueFor users.kotfind;
+    obs-studio.enable = trueFor users.kotfind;
+    chromium.enable = trueFor users.kotfind;
   };
 }

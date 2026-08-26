@@ -3,7 +3,7 @@
   pkgs,
   ...
 }: let
-  inherit (config.cfgLib) matchFor enableFor hosts users;
+  inherit (config.hostlib) join trueFor mkFor hosts users;
   inherit (config.home) homeDirectory;
 in {
   # XXX: secrets are installed for all users, though files
@@ -11,35 +11,35 @@ in {
   sops.secrets = {
     "kotfind@kotfindPC/ssh/id_rsa" = {
       path =
-        (enableFor hosts.pc.users.kotfind)
+        (mkFor (join users.kotfind hosts.pc))
         "${homeDirectory}/.ssh/id_rsa";
     };
 
     "kotfind@kotfindPC/ssh/id_rsa.pub" = {
       path =
-        (enableFor hosts.pc.users.kotfind)
+        (mkFor (join users.kotfind hosts.pc))
         "${homeDirectory}/.ssh/id_rsa.pub";
     };
 
     "kotfind@kotfindLT/ssh/id_rsa" = {
       path =
-        (enableFor hosts.laptop.users.kotfind)
+        (mkFor (join users.kotfind hosts.laptop))
         "${homeDirectory}/.ssh/id_rsa";
     };
 
     "kotfind@kotfindLT/ssh/id_rsa.pub" = {
       path =
-        (enableFor hosts.laptop.users.kotfind)
+        (mkFor (join users.kotfind hosts.laptop))
         "${homeDirectory}/.ssh/id_rsa.pub";
     };
   };
 
   programs.ssh = {
-    enable = matchFor users.kotfind;
+    enable = trueFor users.kotfind;
     enableDefaultConfig = false;
   };
 
-  home.packages = enableFor users.kotfind (with pkgs; [
+  home.packages = mkFor users.kotfind (with pkgs; [
     sshfs
   ]);
 }

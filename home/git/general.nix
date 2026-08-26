@@ -4,13 +4,13 @@
   ...
 }: let
   inherit (config) sops;
-  inherit (config.cfgLib) users enableFor matchFor;
+  inherit (config.hostlib) users mkFor trueFor;
   inherit (config.home) homeDirectory;
 
   ph = sops.placeholder;
 in {
   programs.git = {
-    enable = matchFor users.kotfind;
+    enable = trueFor users.kotfind;
 
     signing.format = null;
 
@@ -23,7 +23,7 @@ in {
 
       user = with users.kotfind; {
         inherit name;
-        inherit (data) email;
+        inherit email;
       };
 
       push = {
@@ -44,7 +44,7 @@ in {
   programs.lazygit.enable = true;
 
   home.packages =
-    enableFor users.kotfind
+    mkFor users.kotfind
     (with pkgs; [
       gh
     ]);
@@ -68,7 +68,7 @@ in {
           oauth_token: ${ph.gh_oauth_token}
       '';
 
-      path = enableFor users.kotfind "${homeDirectory}/.config/gh/hosts.yml";
+      path = mkFor users.kotfind "${homeDirectory}/.config/gh/hosts.yml";
     };
   };
 }

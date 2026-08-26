@@ -3,10 +3,10 @@
   pkgs,
   ...
 }: let
-  inherit (config.cfgLib) host;
+  inherit (config.hostlib) _curHost;
 in {
   networking = {
-    hostName = host.data.hostname;
+    hostName = _curHost.hostname;
 
     networkmanager.enable = true;
 

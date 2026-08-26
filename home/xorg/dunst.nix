@@ -5,7 +5,7 @@
   ...
 }: let
   inherit (pkgs) writeShellScript;
-  inherit (config.cfgLib) matchFor users;
+  inherit (config.hostlib) trueFor users;
   inherit (lib) getExe getExe';
 
   xkbbellBin = getExe' pkgs.xkbutils "xkbbell";
@@ -15,7 +15,7 @@
   beepBin = writeShellScript "beep" xkbbellBin;
 in {
   services.dunst = {
-    enable = matchFor users.kotfind;
+    enable = trueFor users.kotfind;
     settings = {
       # -------------------- Global --------------------
 

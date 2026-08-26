@@ -1,5 +1,9 @@
-{pkgs, config, ...}: let
-  inherit (config.cfgLib) enableFor hosts;
+{
+  pkgs,
+  config,
+  ...
+}: let
+  inherit (config.hostlib) mkFor hosts;
 
   printerName = "HP_LaserJet_M1120_MFP";
 in {
@@ -14,7 +18,7 @@ in {
     ];
   };
 
-  hardware.printers = enableFor hosts.pc {
+  hardware.printers = mkFor hosts.pc {
     ensureDefaultPrinter = printerName;
     ensurePrinters = [
       {

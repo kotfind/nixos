@@ -1,5 +1,5 @@
 {config, ...}: let
-  inherit (config.cfgLib) user;
+  inherit (config.hostlib) _curUser;
 in {
   imports = [
     ./ai
@@ -34,7 +34,9 @@ in {
   home = {
     stateVersion = "24.11";
 
-    homeDirectory = user.data.homeDir or "/home/${user.name}";
+    username = _curUser.name;
+
+    homeDirectory = _curUser.homeDir or "/home/${_curUser.name}";
   };
 
   programs.home-manager.enable = true;

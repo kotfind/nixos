@@ -4,7 +4,7 @@
   config,
   ...
 }: let
-  inherit (config.cfgLib) matchFor hosts;
+  inherit (config.hostlib) users join trueFor hosts;
   inherit (lib) genAttrs const;
 
   builtinPlugins = [
@@ -24,7 +24,7 @@
   ];
 in {
   programs.beets = {
-    enable = matchFor hosts.pc.users.kotfind;
+    enable = trueFor (join users.kotfind hosts.pc);
 
     package = lib.pipe pkgs.python3.pkgs.beets [
       (it:

@@ -4,7 +4,7 @@
   lib,
   ...
 }: let
-  inherit (config.cfgLib) matchFor users;
+  inherit (config.hostlib) trueFor users;
   inherit (lib) getExe';
   inherit (pkgs) writeShellScript;
 
@@ -22,7 +22,7 @@
   '';
 in {
   services.xidlehook = {
-    enable = matchFor users.kotfind;
+    enable = trueFor users.kotfind;
     timers = [
       {
         delay = 900; # 15 min
@@ -38,7 +38,7 @@ in {
 
   # handles systemd events (e.g. suspend)
   services.screen-locker = {
-    enable = matchFor users.kotfind;
+    enable = trueFor users.kotfind;
     lockCmd = lockCmd;
     xautolock.enable = false;
     inactiveInterval = 0; # disabled

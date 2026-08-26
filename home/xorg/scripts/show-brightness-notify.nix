@@ -3,10 +3,10 @@
   pkgs,
   config,
 }: let
-  inherit (config.cfgLib) matchFor hosts;
+  inherit (config.hostlib) trueFor hosts;
   inherit (pkgs) writeShellApplication;
 in
-  if (! matchFor hosts.laptop)
+  if (! trueFor hosts.laptop)
   then (throw "brightness script is only available on a laptop")
   else
     (writeShellApplication {

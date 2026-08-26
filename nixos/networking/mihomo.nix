@@ -6,7 +6,7 @@
 }: let
   inherit (builtins) readFile;
   inherit (config) sops;
-  inherit (config.cfgLib) enableFor hosts;
+  inherit (config.hostlib) mkFor hosts;
   inherit (lib) mkMerge;
 
   ph = sops.placeholder;
@@ -181,8 +181,8 @@ in {
       "mihomo-💰🔗-header-value" = {
         sopsFile = ./mihomo.enc.yml;
         key = mkMerge [
-          (enableFor hosts.pc "provider/header/value/pc")
-          (enableFor hosts.laptop "provider/header/value/laptop")
+          (mkFor hosts.pc "provider/header/value/pc")
+          (mkFor hosts.laptop "provider/header/value/laptop")
         ];
       };
       "mihomo-rules" = {

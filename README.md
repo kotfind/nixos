@@ -72,29 +72,17 @@
     cd /root/nixos
     ```
 
-1. Define current host in `current-host.nix`:
-
-    ```bash
-    nvim ./cfg.nix
-    ```
-
-    Example configuration:
-
-    ```nix
-    hosts: hosts.pc
-    ```
-
 1. Ignore local files in git:
 
     ```bash
-    git update-index --skip-worktree current-host.nix nixos/hardware-configuration.nix
+    git update-index --skip-worktree nixos/hardware-configuration.nix
     ```
 
-1. Install:
+1. Install (use the host name of this machine, e.g. `.#pc`):
 
     ```bash
     cd /root/nixos
-    nixos-install --flake .#default --verbose
+    nixos-install --flake .#pc --verbose
     ```
 
 1. Move configuration dir to `kotfind` user:
@@ -120,5 +108,5 @@
 
     ```bash
     cd ~/nixos
-    sudo nixos-rebuild switch --flake .#default
+    sudo nixos-rebuild switch --flake .#pc
     ```
