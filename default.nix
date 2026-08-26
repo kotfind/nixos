@@ -36,7 +36,7 @@ in
     profiles = import ./profiles.nix;
 
     systemModules = [
-      ./nixos
+      ./system
       nix-index-database.nixosModules.nix-index
       homepage.nixosModules.default
       homeMod

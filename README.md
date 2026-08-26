@@ -68,14 +68,14 @@
 
     ```bash
     nixos-generate-config --root /mnt --dir /tmp
-    mv /tmp/hardware-configuration.nix /root/nixos/nixos
+    mv /tmp/hardware-configuration.nix /root/nixos/system
     cd /root/nixos
     ```
 
 1. Ignore local files in git:
 
     ```bash
-    git update-index --skip-worktree nixos/hardware-configuration.nix
+    git update-index --skip-worktree system/hardware-configuration.nix
     ```
 
 1. Install (use the host name of this machine, e.g. `.#pc`):
