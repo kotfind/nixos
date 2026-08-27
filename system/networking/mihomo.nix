@@ -38,11 +38,21 @@
     geo-update-interval = 24; # 24h
   };
 
-  dnsConfig = rec {
+  dnsConfig = {
     enable = true;
+
     listen = "0.0.0.0:1053";
-    default-nameserver = nameserver;
+
+    # DNS over HTTPS (DoH)
     nameserver = [
+      "https://dns.google/dns-query"
+      "https://cloudflare-dns.com/dns-query"
+    ];
+
+    # Unencrypted DNS
+    #
+    # Required to fetch DoH
+    default-nameserver = [
       "8.8.8.8"
       "1.1.1.1"
     ];
