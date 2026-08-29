@@ -23,8 +23,6 @@ in {
       ANTHROPIC_DEFAULT_OPUS_MODEL = "deepseek-v4-pro[1m]";
       ANTHROPIC_DEFAULT_SONNET_MODEL = "deepseek-v4-pro[1m]";
       ANTHROPIC_DEFAULT_HAIKU_MODEL = "deepseek-v4-flash[1m]";
-      CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC = "1";
-      CLAUDE_CODE_EFFORT_LEVEL = "max";
     };
   };
 }
