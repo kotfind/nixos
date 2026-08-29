@@ -10,13 +10,17 @@
   ...
 } @ inputs: let
   unfreePkgs = pkgs:
-    with pkgs; [
+    (with pkgs; [
       claude-code
       codeium
       hplipWithPlugin
       steam-unwrapped
       zoom-us
-    ];
+    ])
+    ++ (with pkgs.linuxPackages; [
+      nvidia_x11
+      nvidia_x11.settings
+    ]);
 
   homeMod = {...}: {
     home-manager = {
