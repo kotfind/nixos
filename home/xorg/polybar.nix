@@ -312,19 +312,42 @@ in {
         click-right = ''${alacrittyBin} -e '${htopBin} -s "PERCENT_CPU"' '';
       };
 
-      "module/memory" = rec {
-        type = "internal/memory";
+      "module/memory" = {
+        type = "custom/script";
 
-        warn-percentage = 80;
+        interval = 3;
 
         format = "<label>" |> act btn.r htopByMemBin;
-        format-warn = "<label-warn>" |> act btn.r htopByMemBin;
+        label = "%output%";
 
-        label = "%percentage_used:3:3%% 󱛟%percentage_swap_used:3:3%%";
+        exec = writeShellScript "polybar-memory" ''
+          set -euo pipefail
 
-        label-warn = label;
-        label-warn-foreground = crit;
-        label-warn-underline = crit;
+          warn="%{F${crit}}%{U${crit}}%{+u}"
+
+          read -r mem_total mem_avail swap_total swap_free < <(
+            ${awkBin} '/^MemTotal:/ { mt=$2 }
+              /^MemAvailable:/ { ma=$2 }
+              /^SwapTotal:/ { st=$2 }
+              /^SwapFree:/ { sf=$2 }
+              END { print mt, ma, st, sf }' /proc/meminfo
+          )
+
+          mem_pct=$(( (mem_total - mem_avail) * 100 / mem_total ))
+
+          if [ "$swap_total" -gt 0 ]; then
+            swap_pct=$(( (swap_total - swap_free) * 100 / swap_total ))
+            printf -v body '%3d%% 󱛟%3d%%' "$mem_pct" "$swap_pct"
+          else
+            printf -v body '%3d%%' "$mem_pct"
+          fi
+
+          if [ "$mem_pct" -ge 80 ]; then
+            printf '%s%s%%{-u}%%{F-}\n' "$warn" "$body"
+          else
+            printf '%s\n' "$body"
+          fi
+        '';
       };
 
       "module/tray" = {
