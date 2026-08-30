@@ -7,13 +7,14 @@
   ...
 }: let
   inherit (pkgs) writeShellScript;
-  inherit (lib) getExe;
-  inherit (config.hostlib) trueFor users;
+  inherit (lib) getExe getExe' concatStringsSep optionals;
+  inherit (config.hostlib) trueFor users hosts;
 
   # -------------------- Bin --------------------
 
   xrandrBin = getExe pkgs.xrandr;
   awkBin = getExe pkgs.gawk;
+  bspcBin = getExe' pkgs.bspwm "bspc";
   pavucontrolBin = getExe pkgs.pavucontrol;
   alacrittyBin = getExe inputs.alacritty-fcitx-patch.packages.${system}.alacritty;
   htopBin = getExe pkgs.htop;
@@ -61,6 +62,10 @@ in {
 
     script = ''
       set -euo pipefail
+
+      until ${bspcBin} query -M >/dev/null 2>&1; do
+        sleep 0.1
+      done
 
       readarray -t monitors \
         < <(${xrandrBin} --listactivemonitors | ${awkBin} 'NR>1 { print $4; }')
@@ -134,7 +139,23 @@ in {
 
       # -------------------- Right --------------------
 
-      "bar/master".modules-right = "time battery brightness deepseek music volume cpu memory tray";
+      "bar/master".modules-right = concatStringsSep " " (
+        [
+          "time"
+        ]
+        ++ optionals (trueFor hosts.laptop) [
+          "battery"
+          "brightness"
+        ]
+        ++ [
+          "deepseek"
+          "music"
+          "volume"
+          "cpu"
+          "memory"
+          "tray"
+        ]
+      );
 
       "module/time" = {
         type = "internal/date";
