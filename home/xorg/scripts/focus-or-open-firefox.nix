@@ -14,7 +14,6 @@ pkgs.writeShellApplication {
 
   text = ''
     set -euo pipefail
-    set -x
 
     case "$1" in
       'normal')
