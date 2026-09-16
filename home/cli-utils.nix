@@ -17,7 +17,7 @@ in {
     imagemagick
     ffmpeg
     age
-    p7zip
+    _7zip-zstd-rar
     unzip
     unrar-free
     gnutar

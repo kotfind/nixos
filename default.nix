@@ -16,6 +16,8 @@
       hplipWithPlugin
       steam-unwrapped
       zoom-us
+      _7zip-zstd
+      uasm
     ])
     ++ (with pkgs.linuxPackages; [
       nvidia_x11
