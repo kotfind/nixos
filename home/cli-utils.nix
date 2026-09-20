@@ -38,7 +38,7 @@ in {
     playerctl
     qrencode
 
-    wineWow64Packages.stable # TODO: move to other file?
+    wineWow64Packages.staging # TODO: move to other file?
   ];
 
   programs = {
