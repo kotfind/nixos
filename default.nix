@@ -11,13 +11,13 @@
 } @ inputs: let
   unfreePkgs = pkgs:
     (with pkgs; [
+      _7zip-zstd
       claude-code
       codeium
       hplipWithPlugin
       steam-unwrapped
-      zoom-us
-      _7zip-zstd
       uasm
+      zoom-us
     ])
     ++ (with pkgs.linuxPackages; [
       nvidia_x11
