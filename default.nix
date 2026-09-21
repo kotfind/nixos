@@ -22,6 +22,13 @@
     ++ (with pkgs.linuxPackages; [
       nvidia_x11
       nvidia_x11.settings
+    ])
+    ++ (with pkgs.cudaPackages; [
+      cuda_cudart
+      cuda_cccl
+      cuda_nvcc
+      cuda_nvrtc
+      libcublas
     ]);
 
   homeMod = {...}: {
