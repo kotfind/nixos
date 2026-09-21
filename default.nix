@@ -15,6 +15,7 @@
       claude-code
       codeium
       hplipWithPlugin
+      open-webui
       steam-unwrapped
       uasm
       zoom-us
