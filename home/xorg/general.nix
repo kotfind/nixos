@@ -15,7 +15,10 @@ in {
 
   services.network-manager-applet.enable = trueFor users.kotfind;
 
-  services.picom.enable = trueFor users.kotfind;
+  services.picom = {
+    enable = trueFor users.kotfind;
+    backend = "glx";
+  };
 
   services.batsignal = {
     enable = trueFor (join users.kotfind hosts.laptop);
