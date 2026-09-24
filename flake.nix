@@ -79,6 +79,19 @@
     };
   };
 
+  nixConfig = {
+    extra-substituters = [
+      "https://kotfind.cachix.org"
+      "https://nix-community.cachix.org"
+      "https://cache.nixos-cuda.org"
+    ];
+    extra-trusted-public-keys = [
+      "kotfind.cachix.org-1:cDNHNDd9T5j4Xpb5XOipX4CXoRhD/jPLGXVdlIa8g94="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
+    ];
+  };
+
   outputs = inputs: let
     system = "x86_64-linux";
     args = inputs // {inherit system;};
