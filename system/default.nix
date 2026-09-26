@@ -17,6 +17,7 @@
     ./scanning.nix
     ./secrets
     ./ssh.nix
+    ./swap.nix
     ./users.nix
     ./virtualization.nix
     ./xorg.nix
