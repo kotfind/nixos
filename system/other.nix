@@ -55,6 +55,9 @@
   # Dbus
   programs.dconf.enable = true;
 
+  # Fuse
+  programs.fuse.enable = true;
+
   # Virtual Camera plugin (for OBS Studio)
   boot.extraModulePackages = with config.boot.kernelPackages; [
     v4l2loopback

@@ -17,6 +17,7 @@ in {
     imagemagick
     ffmpeg
     age
+    gocryptfs
     _7zip-zstd-rar
     unzip
     unrar-free
