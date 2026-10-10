@@ -5,10 +5,13 @@
   ...
 }: let
   inherit (config.hostlib) users join trueFor hosts;
-  inherit (lib) genAttrs const;
+  inherit (lib) genAttrs const pipe getExe;
+
+  musicDir = "/home/kotfind/music";
 
   builtinPlugins = [
     "chroma"
+    "convert"
     "deezer"
     "edit"
     "fetchart"
@@ -22,11 +25,13 @@
     "missing"
     "web"
   ];
+
+  ffmpegBin = getExe pkgs.ffmpeg;
 in {
   programs.beets = {
     enable = trueFor (join users.kotfind hosts.pc);
 
-    package = lib.pipe pkgs.python3.pkgs.beets [
+    package = pipe pkgs.python3.pkgs.beets [
       (it:
         it.overrideAttrs {
           doCheck = false;
@@ -41,8 +46,8 @@ in {
     ];
 
     settings = {
-      directory = "/hdd/data/music/songs";
-      library = "/hdd/data/music/beet/beet.db";
+      directory = "${musicDir}/songs";
+      library = "${musicDir}/beets.db";
       path = "relative";
 
       terminal-encoding = "utf-8";
@@ -55,6 +60,17 @@ in {
         write = true;
         copy = false;
         move = true;
+      };
+
+      convert = {
+        auto = true;
+        format = "mp3";
+        formats = {
+          mp3 = {
+            command = "${ffmpegBin} -i $source -y -vn -b:a 192k $dest";
+            extension = "mp3";
+          };
+        };
       };
 
       plugins = builtinPlugins;
