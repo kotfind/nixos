@@ -117,14 +117,9 @@
           abs = getExe pkgs.nixd;
         };
 
-        ty = {
-          rel = "ty";
-          abs = getExe pkgs.ty;
-        };
-
-        ruff = {
-          rel = "ruff";
-          abs = getExe pkgs.ruff;
+        pyright = {
+          rel = "pyright-langserver";
+          abs = getExe' pkgs.pyright "pyright-langserver";
         };
 
         bashls = {
@@ -181,9 +176,14 @@
 
         leptosfmt.rel = "leptosfmt";
 
-        ruff = {
-          rel = "ruff";
-          abs = getExe pkgs.ruff;
+        black = {
+          rel = "black";
+          abs = getExe pkgs.black;
+        };
+
+        isort = {
+          rel = "isort";
+          abs = getExe pkgs.isort;
         };
 
         djlint = {

@@ -8,7 +8,7 @@ function M.setup()
             nix = { 'alejandra' },
             typst = { 'typstyle' },
             rust = { 'leptosfmt', 'rustfmt' },
-            python = { 'ruff' },
+            python = { 'isort', 'black' },
             jinja = { 'djlint' },
             toml = { 'tombi' },
             elm = { 'topiary_elm' },
