@@ -183,6 +183,11 @@ local lsps = {
             },
         },
     },
+    solidity = {
+        on_attach = on_attach,
+        filetypes = { 'solidity' },
+        cmd = { 'solidity-language-server', '--stdio' },
+    },
 }
 
 ---@return nil

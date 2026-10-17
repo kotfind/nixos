@@ -122,6 +122,8 @@
           abs = getExe' pkgs.pyright "pyright-langserver";
         };
 
+        solidity.rel = "solidity-language-server";
+
         bashls = {
           rel = "bash-language-server";
           abs = getExe pkgs.bash-language-server;
