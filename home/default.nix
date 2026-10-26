@@ -18,6 +18,7 @@ in {
     ./keyboard
     ./mail.nix
     ./mime.nix
+    ./mypaint.nix
     ./nix-docs.nix
     ./nvim
     ./pass.nix

@@ -11,6 +11,7 @@ in {
       [
         sxiv
       ]
+
       (mkFor users.kotfind [
         # Run this to make fcitx5 to work in telegram
         #   sudo dbus-update-activation-environment --all
