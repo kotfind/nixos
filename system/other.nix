@@ -15,8 +15,9 @@
   # Input
   services.libinput = {
     enable = true;
-    # swap the forward/back side buttons (8 and 9)
-    mouse.buttonMapping = "1 2 3 4 5 6 7 9 8 10 11 12";
+
+    ## swap the forward/back side buttons (8 and 9)
+    # mouse.buttonMapping = "1 2 3 4 5 6 7 9 8 10 11 12";
   };
 
   services.udev.packages = [pkgs.brightnessctl];
