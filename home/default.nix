@@ -28,6 +28,7 @@ in {
     ./ssh.nix
     ./tmux
     ./topiary
+    ./wacom.nix
     ./xorg
   ];
 
