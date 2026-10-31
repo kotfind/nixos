@@ -19,7 +19,6 @@ in {
     ./mail.nix
     ./mime.nix
     ./mypaint.nix
-    ./nix-docs.nix
     ./nvim
     ./pass.nix
     ./rust.nix

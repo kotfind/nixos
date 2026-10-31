@@ -17,13 +17,6 @@ in {
     settings.PASSWORD_STORE_DIR = storeDir;
   };
 
-  programs.rofi.pass = mkFor users.kotfind {
-    enable = true;
-    extraConfig = ''
-      default_do='typePass'
-    '';
-  };
-
   services.pass-secret-service = {
     enable = true;
     storePath = storeDir;

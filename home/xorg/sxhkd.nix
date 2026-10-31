@@ -28,7 +28,7 @@
   playerctl = getExe pkgs.playerctl;
   systemctl = getExe' pkgs.systemd "systemctl";
   loginctl = getExe' pkgs.systemd "loginctl";
-  rofi-pass = getExe pkgs.rofi-pass;
+  passmenu = getExe' pkgs.pass "passmenu";
   pkill = getExe' pkgs.toybox "pkill";
   scrot = getExe pkgs.scrot;
 
@@ -189,7 +189,7 @@ in {
       "super + {_, shift} + f" = "${focusOrOpenFirefox} {normal,private}";
 
       # password
-      "super + e" = rofi-pass;
+      "super + e" = "${passmenu} --type";
     };
   };
 }

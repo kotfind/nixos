@@ -15,7 +15,6 @@
       claude-code
       codeium
       hplipWithPlugin
-      open-webui
       steam-unwrapped
       uasm
       zoom-us
@@ -25,11 +24,13 @@
       nvidia_x11.settings
     ])
     ++ (with pkgs.cudaPackages; [
+      cuda_crt
       cuda_cudart
-      cuda_cccl
+      cccl
       cuda_nvcc
       cuda_nvrtc
       libcublas
+      libnvvm
     ]);
 
   homeMod = {...}: {

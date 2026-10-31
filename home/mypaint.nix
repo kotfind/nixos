@@ -12,7 +12,7 @@
       ++ [
         (pkgs.fetchpatch {
           url = "https://github.com/mypaint/mypaint/commit/8ebfaf6de916e9734d79a86dd598ed1c57dcc77d.patch";
-          hash = "sha256-+VaH3nt3ueLiwejCp7tpb/CpabC72Oey9aOhUM8+YTM=";
+          hash = "sha256-XUSzE0yZouMtU2weZYTNUpuiwKEvMfSYI/43bnOgHIA=";
         })
       ];
   });

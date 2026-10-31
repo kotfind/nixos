@@ -36,6 +36,7 @@ in {
         simple-scan
         solvespace
         freecad
+        rayforge
         webcamoid
         kicad
         tigervnc

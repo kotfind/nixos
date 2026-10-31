@@ -1,4 +1,8 @@
-{config, ...}: let
+{
+  config,
+  lib,
+  ...
+}: let
   inherit (config.hostlib) hosts trueFor mkFor;
 in {
   services.ddclient = {
@@ -18,6 +22,19 @@ in {
 
     # only use proxy for getting an ip address
     no_proxy = "kotfind.mywire.org,api.dynu.com";
+  };
+
+  # fixes random ddclient failures
+  users.users.ddclient = mkFor hosts.pc {
+    isSystemUser = true;
+    group = "ddclient";
+  };
+  users.groups.ddclient = mkFor hosts.pc {};
+
+  systemd.services.ddclient.serviceConfig = mkFor hosts.pc {
+    DynamicUser = lib.mkForce false;
+    User = "ddclient";
+    Group = "ddclient";
   };
 
   sops.secrets.ddclientSecrets = mkFor hosts.pc {

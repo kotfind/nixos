@@ -22,14 +22,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-dash-docsets = {
-      url = "github:boinkor-net/nix-dash-docsets";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        home-manager.follows = "home-manager";
-      };
-    };
-
     alacritty-fcitx-patch.url = "github:kotfind/alacritty-fcitx-patch";
 
     homepage.url = "github:kotfind/homepage";
