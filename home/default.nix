@@ -26,6 +26,7 @@ in {
     ./secrets
     ./sqlite.nix
     ./ssh.nix
+    ./svg2gcode.nix
     ./tmux
     ./topiary
     ./wacom.nix

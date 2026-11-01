@@ -28,6 +28,11 @@
 
     hostlib.url = "github:kotfind/hostlib";
 
+    svg2gcode = {
+      url = "github:sameer/svg2gcode";
+      flake = false;
+    };
+
     # -------------------- Toki Pona --------------------
 
     fcitx5-ilo-sitelen = {

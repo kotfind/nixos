@@ -381,7 +381,8 @@
         "nvim-spl-ru": "nvim-spl-ru",
         "nvim-sug-en": "nvim-sug-en",
         "nvim-sug-ru": "nvim-sug-ru",
-        "sops-nix": "sops-nix"
+        "sops-nix": "sops-nix",
+        "svg2gcode": "svg2gcode"
       }
     },
     "rust-analyzer-src": {
@@ -418,6 +419,22 @@
       "original": {
         "owner": "Mic92",
         "repo": "sops-nix",
+        "type": "github"
+      }
+    },
+    "svg2gcode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1793549250,
+        "narHash": "sha256-2pXRugIj5hJ5VyQRVjFz25FPlewTG+uhrF9pEuYCuvw=",
+        "owner": "sameer",
+        "repo": "svg2gcode",
+        "rev": "3cfbad7b38bdabf49bfdb28cb473a8fdc5cb4107",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sameer",
+        "repo": "svg2gcode",
         "type": "github"
       }
     },
