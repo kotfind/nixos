@@ -97,7 +97,7 @@ local function setup_textobjects()
         { 'f', 'function' },
         { 'l', 'loop' },
         { 'i', 'conditional' }, -- i for "if"
-        { 'c', 'class' },
+        { 'k', 'class' }, -- k for "klass"
         { 'n', 'comment' }, -- n for "note"
         { 'a', 'parameter' }, -- a for "argument"
         { 't', 'statement' }, -- t for "sTatement" (s is for spelling)
