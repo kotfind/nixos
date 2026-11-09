@@ -157,6 +157,7 @@ local lsps = {
     elmls = { on_attach = on_attach },
     tombi = { on_attach = on_attach },
     idris2_lsp = { on_attach = on_attach },
+    vtsls = { on_attach = on_attach },
     tailwindcss = {
         on_attach = on_attach,
         filetypes = {

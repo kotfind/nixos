@@ -82,7 +82,7 @@
       aliases = ["nvim" "vim"];
 
       hosts.python3.enable = false;
-      hosts.node.enable = false;
+      hosts.node.enable = true;
     };
 
     categories = {
@@ -156,6 +156,11 @@
         idris2_lsp.rel = "idris2-lsp";
 
         tailwindcss.rel = "tailwindcss-language-server";
+
+        vtsls = {
+          rel = "vtsls";
+          abs = getExe pkgs.vtsls;
+        };
       };
 
       formatters = {
