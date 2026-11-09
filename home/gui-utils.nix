@@ -40,6 +40,7 @@ in {
         webcamoid
         kicad
         tigervnc
+        lutris-free
       ])
 
       (mkFor hosts.laptop [
