@@ -12,6 +12,10 @@ function M.setup()
             jinja = { 'djlint' },
             toml = { 'tombi' },
             elm = { 'topiary_elm' },
+            javascript = { 'biome' },
+            javascriptreact = { 'biome' },
+            typescript = { 'biome' },
+            typescriptreact = { 'biome' },
             c = { 'clang-format' },
             cpp = { 'clang-format' },
         },
@@ -33,6 +37,13 @@ function M.setup()
 
             typstyle = {
                 append_args = { '--tab-width', '4' },
+            },
+
+            biome = {
+                append_args = {
+                    '--semicolons=as-needed',
+                    '--arrow-parentheses=as-needed',
+                },
             },
 
             topiary_elm = {

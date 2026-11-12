@@ -179,6 +179,11 @@
           abs = getExe pkgs.alejandra;
         };
 
+        biome = {
+          rel = "biome";
+          abs = getExe pkgs.biome;
+        };
+
         rustfmt.rel = "rustfmt";
 
         leptosfmt.rel = "leptosfmt";
