@@ -9,16 +9,16 @@ in {
   # XXX: secrets are installed for all users, though files
   # are linked correctly
   sops.secrets = {
-    "kotfind@kotfindPC/ssh/id_rsa" = {
+    "kotfind@kotfindPC/ssh/id_ed25519" = {
       path =
         (mkFor (join users.kotfind hosts.pc))
-        "${homeDirectory}/.ssh/id_rsa";
+        "${homeDirectory}/.ssh/id_ed25519";
     };
 
-    "kotfind@kotfindPC/ssh/id_rsa.pub" = {
+    "kotfind@kotfindPC/ssh/id_ed25519.pub" = {
       path =
         (mkFor (join users.kotfind hosts.pc))
-        "${homeDirectory}/.ssh/id_rsa.pub";
+        "${homeDirectory}/.ssh/id_ed25519.pub";
     };
 
     "kotfind@kotfindLT/ssh/id_rsa" = {
