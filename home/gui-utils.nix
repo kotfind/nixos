@@ -4,7 +4,7 @@
   lib,
   ...
 }: let
-  inherit (config.hostlib) join users hosts mkFor trueFor;
+  inherit (config.hostlib) users hosts mkFor;
 in {
   home.packages = with pkgs;
     lib.mkMerge [
@@ -47,14 +47,15 @@ in {
         brightnessctl
       ])
 
-      (mkFor (join users.kotfind hosts.pc) [
+      (mkFor hosts.pc [
+        kdePackages.kdenlive
         steam-run
       ])
     ];
 
   programs = {
-    zathura.enable = trueFor users.kotfind;
-    obs-studio.enable = trueFor users.kotfind;
-    chromium.enable = trueFor users.kotfind;
+    zathura.enable = true;
+    obs-studio.enable = true;
+    chromium.enable = true;
   };
 }
