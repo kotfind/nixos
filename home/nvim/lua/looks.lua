@@ -9,7 +9,12 @@ local function setup_theme()
             return {
                 CursorLine = { fg = 'NONE', bg = colors.bg_alt },
 
-                Comment = { fg = colors.magenta, bg = 'NONE', italic = true },
+                Comment = {
+                    fg = colors.magenta,
+                    bg = 'NONE',
+                    italic = false,
+                },
+
                 ['@note.comment'] = { fg = colors.cyan, bold = true },
 
                 -- for listchars

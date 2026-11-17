@@ -65,14 +65,17 @@ end
 
 ---@return nil
 local function setup_treesitter()
-    require('nvim-treesitter').setup {
-        auto_install = false,
-        indent = { enable = false },
-        highlight = {
-            enable = true,
-            additional_vim_regex_highlighting = true,
-        },
-    }
+    require('nvim-treesitter').setup {}
+
+    vim.api.nvim_create_autocmd('FileType', {
+        callback = function(args)
+            local buf = args.buf
+            local lang = vim.treesitter.language.get_lang(vim.bo[buf].filetype)
+            if lang and vim.treesitter.language.add(lang) then
+                vim.treesitter.start(buf, lang)
+            end
+        end,
+    })
 end
 
 ---@return nil
