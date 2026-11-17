@@ -147,6 +147,8 @@
 
     "DOMAIN-SUFFIX,deepseek.com,DIRECT"
 
+    "GEOSITE,github,DIRECT"
+
     "DOMAIN-SUFFIX,kant.ru,DIRECT"
     "GEOSITE,category-gov-ru,DIRECT"
     "GEOSITE,category-media-ru,DIRECT"
