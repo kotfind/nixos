@@ -90,6 +90,19 @@
         ech-options.enable = true;
       };
     };
+
+    "my" = {
+      type = "file";
+      path = sops.secrets."mihomo-proxies".path;
+      health-check = {
+        enable = true;
+        url = testUrl;
+        interval = 5; # 5s
+        timeout = 500; # 0.5s
+        lazy = false;
+        expected-status = 204; # 204 No Content
+      };
+    };
   };
 
   groupsConfig = [
@@ -97,13 +110,13 @@
       name = "Select";
       type = "select";
       url = testUrl;
-      use = ["💰🔗"];
+      use = ["💰🔗" "my"];
     }
     {
       name = "Balance";
       type = "load-balance";
       url = testUrl;
-      use = ["💰🔗"];
+      use = ["💰🔗" "my"];
     }
     {
       name = "Fastest";
@@ -111,12 +124,17 @@
       url = testUrl;
       interval = 5; # 5s
       tolerance = 50;
-      use = ["💰🔗"];
+      use = ["💰🔗" "my"];
     }
     {
       name = "Entry";
       type = "select";
-      proxies = ["Select" "Balance" "Fastest" "DIRECT"];
+      proxies = [
+        "Select"
+        "Balance"
+        "Fastest"
+        "DIRECT"
+      ];
     }
   ];
 
@@ -174,6 +192,10 @@ in {
     configFile = sops.templates."mihomo-config.yml".path;
   };
 
+  systemd.services.mihomo.serviceConfig.Environment = [
+    "SAFE_PATHS=/run/secrets"
+  ];
+
   sops = {
     secrets = {
       "mihomo-secret" = {
@@ -198,6 +220,11 @@ in {
       "mihomo-rules" = {
         sopsFile = ./mihomo.enc.yml;
         key = "rules";
+      };
+      "mihomo-proxies" = {
+        sopsFile = ./mihomo.enc.yml;
+        key = "proxies";
+        restartUnits = ["mihomo.service"];
       };
     };
     templates."mihomo-config.yml" = {
