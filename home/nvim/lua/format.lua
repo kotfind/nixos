@@ -38,7 +38,11 @@ function M.setup()
             },
 
             typstyle = {
-                append_args = { '--tab-width', '4' },
+                append_args = {
+                    '--tab-width',
+                    '4',
+                    '--wrap-text=fill',
+                },
             },
 
             biome = {

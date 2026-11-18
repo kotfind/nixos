@@ -82,6 +82,13 @@ function M.setup()
         end,
     })
 
+    vim.api.nvim_create_autocmd({ 'FileType' }, {
+        pattern = 'typst',
+        callback = function()
+            vim.wo.spell = true
+        end,
+    })
+
     -- signcolumn
     vim.opt.signcolumn = 'yes:2'
     vim.opt.updatetime = 10
