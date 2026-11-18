@@ -5,9 +5,10 @@
   ...
 }: let
   inherit (config.hostlib) users hosts mkFor;
+  inherit (lib) mkMerge getExe;
 in {
   home.packages = with pkgs;
-    lib.mkMerge [
+    mkMerge [
       [
         sxiv
       ]
@@ -20,27 +21,28 @@ in {
         # source: https://github.com/telegramdesktop/tdesktop/issues/26891
         telegram-desktop
 
-        vlc
-        transmission_4-qt
-        pavucontrol
-        libreoffice
-        pinta
-        inkscape
-        gimp
-        localsend
-        valentina
-        zoom-us
-        loupe
-        kdePackages.gwenview
         flacon # cutting flac's
+        freecad
+        gimp
+        inkscape
+        kdePackages.gwenview
+        kicad
+        libreoffice
+        localsend
+        loupe
+        lutris-free
+        pavucontrol
+        pinta
+        quadrapassel
+        rayforge
         simple-scan
         solvespace
-        freecad
-        rayforge
-        webcamoid
-        kicad
         tigervnc
-        lutris-free
+        transmission_4-qt
+        valentina
+        vlc
+        webcamoid
+        zoom-us
       ])
 
       (mkFor hosts.laptop [
@@ -57,5 +59,9 @@ in {
     zathura.enable = true;
     obs-studio.enable = true;
     chromium.enable = true;
+  };
+
+  programs.bash.shellAliases = {
+    tetris = getExe pkgs.quadrapassel;
   };
 }
