@@ -5,6 +5,7 @@
   home-manager,
   sops-nix,
   nix-index-database,
+  vscode-server,
   homepage,
   hostlib,
   ...
@@ -75,6 +76,7 @@ in
 
     homeModules = [
       ./home
+      vscode-server.homeModules.default
       sops-nix.homeManagerModules.sops
     ];
   }

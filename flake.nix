@@ -22,6 +22,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    vscode-server.url = "github:nix-community/nixos-vscode-server";
+
     alacritty-fcitx-patch.url = "github:kotfind/alacritty-fcitx-patch";
 
     homepage.url = "github:kotfind/homepage";

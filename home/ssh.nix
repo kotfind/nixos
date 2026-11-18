@@ -39,6 +39,8 @@ in {
     enableDefaultConfig = false;
   };
 
+  services.vscode-server.enable = trueFor users.kotfind;
+
   home.packages = mkFor users.kotfind (with pkgs; [
     sshfs
   ]);
